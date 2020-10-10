@@ -6,6 +6,7 @@ return array (
     'home' => 'Casa',
     'logout' => 'Cerrar sesión',
     'login' => 'Iniciar sesión',
+    'register' => 'Registro',
     'account' => 'Cuenta',
     'messages' => 'Mensajes',
     'no_messages' => 'Ningún mensaje',

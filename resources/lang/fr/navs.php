@@ -6,6 +6,7 @@ return array (
     'home' => 'Accueil',
     'logout' => 'Connectez - Out',
     'login' => 'S\'identifier',
+    'register' => 'Registre',
     'account' => 'Compte',
     'messages' => 'messages',
     'no_messages' => 'Pas de messages',

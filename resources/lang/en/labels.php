@@ -1214,7 +1214,7 @@ return array (
       'expired_password_box_title' => 'Your password has expired.',
       'update_password_button' => 'Update Password',
       'reset_password_button' => 'Reset Password',
-      'forgot_password' => 'Forgot Your Password?',
+      'forgot_password' => 'Forgot Password?',
     ),
     'blog' =>
     array (
@@ -1303,6 +1303,10 @@ return array (
       'keep_in_touch' => 'Keep<span> In Touch.</span>',
       'send_email' => 'Send Email',
       'send_message_now' => 'Send Message Now',
+      'send' => 'Send',
+        'name' => 'Name',
+        'email' => 'Email',
+        'address' => 'Address',
     ),
     'badges' =>
     array (
@@ -1396,6 +1400,7 @@ return array (
       'popular_teachers' => '<span>Popular</span> Teachers',
       'learn_new_skills' => 'Learn new skills',
       'search_course' => 'Search Course',
+      'search' => 'Search',
       'search_courses' => '<span>Search</span> Courses.',
       'students_enrolled' => 'Students Enrolled',
       'online_available_courses' => 'Online Available Courses',
@@ -1422,6 +1427,7 @@ return array (
         'course_detail' => 'Course detail',
         'contact_us' => 'Contact Us',
         'get_in_touch' => 'Get In Touch',
+        'get_in_touch_text' => 'Get In <span>Touch</span>',
         'primary' => 'Primary',
         'second' => 'Second',
         'courses_categories' => 'Courses Categories',
@@ -1430,6 +1436,7 @@ return array (
         'social_network' => 'Social Network',
         'subscribe_newsletter' => 'Subscribe Newsletter',
         'subscribe_now' => 'Subscribe Now',
+        'subscribe' => 'Subscribe',
         'latest_news_blog' => 'Latest <span>News Blog.</span>',
         'trending_courses' => 'Trending <span>Courses.</span>',
         'popular_courses' => 'Popular <span>Courses.</span>',
@@ -1460,6 +1467,13 @@ return array (
       'already_user_note' => 'Already a user? Login Here',
       'login_now' => 'LogIn Now',
       'register_now' => 'Register Now',
+        'login' => 'Login',
+        'login_with' => 'Login With',
+        'signup_with' => 'Sign Up With',
+        'signup' => 'Sign Up',
+        'keep_signin' => 'Kepp me Signed in',
+        'enter_y_username' => 'Enter your username',
+        'enter_y_password' => 'Enter your password',
     ),
     'search_result' =>
     array (

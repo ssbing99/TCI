@@ -579,6 +579,8 @@
                                         </option>
                                         <option value="4">{{__('labels.backend.general_settings.layout_label')}}4
                                         </option>
+                                        <option value="5">{{__('labels.backend.general_settings.layout_label')}}5
+                                        </option>
                                     </select>
                                     <span class="help-text font-italic">{{__('labels.backend.general_settings.layout_note')}}</span>
                                     <p id="sections_note"

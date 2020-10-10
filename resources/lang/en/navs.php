@@ -6,6 +6,7 @@ return array (
     'logout' => 'Logout',
     'home' => 'Home',
     'login' => 'LogIn',
+    'register' => 'Register',
     'messages' => 'Messages',
     'no_messages' => 'No messages',
     'account' => 'Account',

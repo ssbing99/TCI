@@ -26,6 +26,7 @@ return array (
     'login' => 'تسجيل الدخول',
     'logout' => 'الخروج',
     'account' => 'الحساب',
+    'register' => 'تسجيل',
     'messages' => 'رسائل',
     'no_messages' => 'لا توجد رسائل',
     'profile' => 'الملف الشخصي',
