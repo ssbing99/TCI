@@ -13,17 +13,17 @@ class MenuSeeder extends Seeder
     {
         $menus = [
             [
-                'url' => route('blogs.index'),
-                'name' => 'Blog'
+                'url' => '',
+                'name' => 'Courses & Events'
             ],
             [
                 'url' => route('courses.all'),
-                'name' => 'Courses'
+                'name' => 'Courses',
             ],
-            [
-                'url' => route('bundles.all'),
-                'name' => 'Bundles'
-            ],
+//            [
+//                'url' => route('bundles.all'),
+//                'name' => 'Bundles'
+//            ],
             [
                 'url' => asset('forums'),
                 'name' => 'Forums'
@@ -35,7 +35,11 @@ class MenuSeeder extends Seeder
             [
                 'url' => asset('about-us'),
                 'name' => 'About Us'
-            ]
+            ],
+            [
+                'url' => route('blogs.index'),
+                'name' => 'Article & Videos'
+            ],
         ];
 
         $nav_menu = \Harimayco\Menu\Models\Menus::where('name', '=', 'nav-menu')->first();

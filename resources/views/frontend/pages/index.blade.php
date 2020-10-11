@@ -23,23 +23,34 @@
 
     <!-- Start of breadcrumb section
         ============================================= -->
-    <section id="breadcrumb" class="breadcrumb-section relative-position backgroud-style">
-        <div class="blakish-overlay"></div>
-        <div class="container">
-            <div class="page-breadcrumb-content text-center">
-                <div class="page-breadcrumb-title">
-                    <h2 class="breadcrumb-head black bold">{{env('APP_NAME')}} <span>{{$page->title}}</span></h2>
+    @if(config('theme_layout') == 5)
+        <div class="banner custom-banner-bg">
+            <div class="container">
+                <div class="page-heading">
+                    {{$page->title}}
                 </div>
             </div>
         </div>
-    </section>
+    @else
+        <section id="breadcrumb" class="breadcrumb-section relative-position backgroud-style">
+            <div class="blakish-overlay"></div>
+            <div class="container">
+                <div class="page-breadcrumb-content text-center">
+                    <div class="page-breadcrumb-title">
+                        <h2 class="breadcrumb-head black bold">{{env('APP_NAME')}} <span>{{$page->title}}</span></h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
     <!-- End of breadcrumb section
         ============================================= -->
 
     <section id="about-page" class="about-page-section">
         <div class="container">
             <div class="row">
-                <div class="@if($page->sidebar == 1) col-md-9 @else col-md-12 @endif ">
+                <div class="@if($page->sidebar == 1 && config('theme_layout') != 5) col-md-9 @else col-md-12 @endif ">
                     <div class="about-us-content-item">
                         @if($page->image != "")
                         <div class="about-gallery w-100 text-center">
@@ -59,7 +70,7 @@
                         <!-- /about-text -->
                     </div>
                 </div>
-                @if($page->sidebar == 1)
+                @if($page->sidebar == 1 && config('theme_layout') != 5)
                     @include('frontend.layouts.partials.right-sidebar')
                 @endif
             </div>

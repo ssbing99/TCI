@@ -27,7 +27,7 @@ imperdiet congue blandit. Cras quis tortor quis nunc porttitor pulvinar id id la
             $page->slug = str_slug($item);
             $page->content = $content;
             $page->user_id = $user_id;
-            $page->sidebar = 1;
+            $page->sidebar = 0;
             $page->published = 1;
             $page->save();
         }

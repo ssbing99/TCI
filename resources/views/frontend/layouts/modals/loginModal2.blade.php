@@ -52,7 +52,7 @@
 
 {{--                                    <div class="group"><input id="user" type="text" class="input" placeholder="@lang('labels.frontend.modal.enter_y_username')"> </div>--}}
 {{--                                    <div class="group"><input id="pass" type="password" class="input" data-type="password" placeholder="@lang('labels.frontend.modal.enter_y_password')"> </div>--}}
-{{--                                    <div class="group"> <input id="check" type="checkbox" class="check" checked> <label for="check"><span class="icon"></span> @lang('labels.frontend.modal.keep_signin')</label> </div>--}}
+                                    <div class="group"> <input id="check" name="remember" type="checkbox" class="check" checked value="1"> <label for="check"><span class="icon"></span> @lang('labels.frontend.modal.keep_signin')</label> </div>
 
                                     @if(config('access.captcha.registration'))
                                         <div class="group text-center">

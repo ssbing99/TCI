@@ -88,9 +88,9 @@
                             <div class="form-group">
                                 <input type="email" class="form-control @if($errors->has('email')) border-bottom border-danger @endif" name="email" id="email" placeholder="@lang('labels.frontend.contact.email')" />
                             </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control @if($errors->has('address')) border-bottom border-danger @endif" name="address" id="address" placeholder="@lang('labels.frontend.contact.address')" />
-                            </div>
+{{--                            <div class="form-group">--}}
+{{--                                <input type="text" class="form-control @if($errors->has('address')) border-bottom border-danger @endif" name="address" id="address" placeholder="@lang('labels.frontend.contact.address')" />--}}
+{{--                            </div>--}}
                             <div class="form-group">
                                 <textarea class="form-control @if($errors->has('message')) border-bottom border-danger @endif" name="message" id="message" placeholder="@lang('labels.frontend.contact.message')"></textarea>
                             </div>

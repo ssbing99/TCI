@@ -174,7 +174,7 @@
         @yield('content')
         @include('cookieConsent::index')
         @if(!isset($no_footer))
-            @include('frontend.layouts.partials.footer')
+            @include('frontend.layouts.partials.footer2')
         @endif
 
     </div><!-- #app -->
@@ -227,12 +227,6 @@
                     }
                 });
 
-
-                //Do not include! This prevents the form from submitting for DEMO purposes only!
-                $('form').submit(function(event) {
-                    event.preventDefault();
-                    return false;
-                })
             });
             //OwlCarousel Js Starts
             $(document).ready(function() {

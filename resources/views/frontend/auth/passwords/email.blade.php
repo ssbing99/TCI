@@ -3,6 +3,15 @@
 @section('title', app_name() . ' | ' . __('labels.frontend.passwords.reset_password_box_title'))
 
 @section('content')
+    @if(config('theme_layout') == 5)
+    <div class="banner custom-banner-bg">
+        <div class="container">
+            <div class="page-heading">
+                {{__('labels.frontend.passwords.reset_password_box_title')}}
+            </div>
+        </div>
+    </div>
+    @else
     <section id="breadcrumb" class="breadcrumb-section relative-position backgroud-style">
         <div class="blakish-overlay"></div>
         <div class="container">
@@ -13,6 +22,7 @@
             </div>
         </div>
     </section>
+    @endif
     <section id="about-page" class="about-page-section pb-0">
         <div class="row justify-content-center align-items-center">
             <div class="col col-md-4 align-self-center">
@@ -53,7 +63,7 @@
                             <div class="col">
                                 <div class="form-group mb-0 clearfix">
                                     <div class="text-center  text-capitalize">
-                                        <button type="submit" class="nws-button btn-info btn "
+                                        <button type="submit" class="@if(config('theme_layout') == 5) btn-primary btn-lg @else nws-button btn-info @endif btn "
                                                 value="Submit">{{__('labels.frontend.passwords.send_password_reset_link_button')}}</button>
                                     </div>
                                 </div><!--form-group-->
