@@ -3,22 +3,34 @@
 @section('title', app_name() . ' | ' . __('labels.teacher.teacher_register_box_title'))
 
 @section('content')
-    <section id="breadcrumb" class="breadcrumb-section relative-position backgroud-style">
-        <div class="blakish-overlay"></div>
-        <div class="container">
-            <div class="page-breadcrumb-content text-center">
-                <div class="page-breadcrumb-title">
-                    <h2 class="breadcrumb-head black bold">{{__('labels.teacher.teacher_register_box_title')}}</h2>
+    @php $theme_5 = config('theme_layout') == 5;  @endphp
+    @if($theme_5)
+        <div class="banner custom-banner-bg">
+            <div class="container">
+                <div class="page-heading">
+                    @lang('labels.frontend.contact.title')
                 </div>
             </div>
         </div>
-    </section>
+    @else
+        <section id="breadcrumb" class="breadcrumb-section relative-position backgroud-style">
+            <div class="blakish-overlay"></div>
+            <div class="container">
+                <div class="page-breadcrumb-content text-center">
+                    <div class="page-breadcrumb-title">
+                        <h2 class="breadcrumb-head black bold">{{__('labels.teacher.teacher_register_box_title')}}</h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
     <section id="about-page" class="about-page-section pb-0">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card  border-0">
-                        <div class="card-body">
+                        <div class="card-body @if($theme_5) custom-form-style @endif">
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul class="list-inline list-style-none">
@@ -248,7 +260,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group mb-0 text-center mt-4 clearfix">
-                                        <button class="btn btn-info mx-auto btn-lg" type="submit">{{__('labels.frontend.modal.register_now')}}</button>
+                                        <button class="btn @if($theme_5) btn-primary @else btn-info mx-auto @endif btn-lg" type="submit">{{__('labels.frontend.modal.register_now')}}</button>
                                     </div><!--form-group-->
                                 </div><!--col-->
                             </div><!--row-->

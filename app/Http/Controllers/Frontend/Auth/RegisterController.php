@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Helpers\Frontend\Auth\Socialite;
 use App\Events\Frontend\Auth\UserRegistered;
 use App\Mail\Frontend\Auth\AdminRegistered;
+use App\Mail\WelcomeMail;
 use App\Models\Auth\User;
 use Arcanedev\NoCaptcha\Rules\CaptchaRule;
 use Illuminate\Auth\Events\Registered;
@@ -14,6 +15,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Repositories\Frontend\Auth\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ClosureValidationRule;
 
@@ -84,6 +86,12 @@ class RegisterController extends Controller
         if ($validator->passes()) {
             // Store your user in database
             event(new Registered($user = $this->create($request->all())));
+
+            try {
+                Mail::to($request->email)->queue(new WelcomeMail($user));
+            } catch (\Exception $e) {
+                \Log::info($e->getMessage());
+            }
             return response(['success' => true]);
 
         }

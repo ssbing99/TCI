@@ -66,8 +66,7 @@
                                     <div class="group"> <input type="submit" class="button" value="@lang('labels.frontend.modal.login')"> </div>
                                     <div class="hr"></div>
                                     <div class="foot">
-                                        <a class="text-info p-0 d-block text-right my-2"
-                                           href="{{ route('frontend.auth.password.reset') }}">@lang('labels.frontend.passwords.forgot_password')</a>
+                                        <a href="{{ route('frontend.auth.password.reset') }}">@lang('labels.frontend.passwords.forgot_password')</a>
                                     </div>
                                     </form>
                                 </div>
@@ -119,7 +118,6 @@
                                                     ->class('input')
                                                     ->placeholder(__('validation.attributes.frontend.password'))
                                                      }}
-                                                <span id="password-error" class="text-danger"></span>
                                             </div>
                                             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 group">
                                                 {{ html()->password('password_confirmation')
@@ -127,6 +125,10 @@
                                                     ->placeholder(__('validation.attributes.frontend.password_confirmation'))
                                                      }}
                                             </div>
+                                        </div>
+
+                                        <div class="group">
+                                            <span id="password-error" class="text-danger"></span>
                                         </div>
 
 
@@ -138,6 +140,11 @@
 {{--                                    </div>--}}
                                     <div class="group"> <input type="submit" class="button" value="@lang('labels.frontend.modal.signup')"> </div>
                                     <div class="hr"></div>
+                                    <div class="foot">
+                                        <a href="{{ route('frontend.auth.teacher.register') }}" >
+                                            @lang('labels.teacher.teacher_register')
+                                        </a>
+                                    </div>
                                     <div class="foot"> <label for="tab-1">Already Member?</label> </div>
                                     </form>
                                 </div>
@@ -242,7 +249,8 @@
                             var response = $.parseJSON(jqXHR.responseText);
                             console.log(jqXHR)
                             if (response.message) {
-                                $('#login').find('span.error-response').html(response.message)
+                                // $('#login').find('span.error-response').html(response.message)
+                                $('.error-response').empty().html(response.message);
                             }
                         }
                     });
