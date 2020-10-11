@@ -56,6 +56,54 @@ class Socialite
         return $socialite_links;
     }
 
+    public function getSocialLinks2()
+    {
+        $socialite_enable = [];
+        $socialite_links = '';
+
+        if (config('services.facebook.active')) {
+            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'facebook')."' ><img src='".asset("assets_new/images/fb-icon.jpg")."' alt='image' /></a>";
+        }
+
+
+        if (config('services.google.active')) {
+            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'google')."' ><img src='".asset("assets_new/images/google-icon.jpg")."' alt='image' /></a>";
+        }
+
+        if (config('services.twitter.active')) {
+            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'twitter')."' ><img src='".asset("assets_new/images/twitter-icon.jpg")."' alt='image' /></a>";
+        }
+
+        if (config('services.linkedin.active')) {
+            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'linkedin')."' ><img src='".asset("assets_new/images/linkedin-icon.jpg")."' alt='image' /></a>";
+        }
+
+
+        if (config('services.bitbucket.active')) {
+            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'bitbucket')."' ><img src='".asset("assets_new/images/bitbucket-icon.jpg")."' alt='image' /></a>";
+        }
+
+
+        if (config('services.github.active')) {
+            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'github')."' ><img src='".asset("assets_new/images/github-icon.jpg")."' alt='image' /></a>";
+        }
+
+
+        if ($count = count($socialite_enable)) {
+            $socialite_links .= '<div class="imgarea clearfix">';
+        }
+
+        for ($i = 0; $i < $count; $i++) {
+            $socialite_links .= ($socialite_links != '' ? ' ' : '').$socialite_enable[$i];
+        }
+
+        if ($count > 0) {
+            $socialite_links .= '</div>';
+        }
+
+        return $socialite_links;
+    }
+
     /**
      * List of the accepted third party provider types to login with.
      *

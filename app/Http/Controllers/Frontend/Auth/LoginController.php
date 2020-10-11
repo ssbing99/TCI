@@ -40,7 +40,11 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if(request()->ajax()){
-            return ['socialLinks' => (new Socialite)->getSocialLinks()];
+            $type = config('theme_layout');
+            if($type != 5)
+                return ['socialLinks' => (new Socialite)->getSocialLinks()];
+            else
+                return ['socialLinks' => (new Socialite)->getSocialLinks2()];
         }
 
         return redirect('/')->with('show_login', true);

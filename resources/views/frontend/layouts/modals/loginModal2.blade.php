@@ -21,10 +21,11 @@
                                 <div class="login" id="login">
                                     <div class="optbox clearfix">
                                         <h6>@lang('labels.frontend.modal.login_with')</h6>
-                                        <div class="imgarea clearfix">
-                                            <a href="#"><img src="{{asset("assets_new/images/fb-icon.jpg")}}" alt="Image goes here" /></a>
-                                            <a href="#"><img src="{{asset("assets_new/images/google-icon.jpg")}}" alt="Image goes here" /></a>
-                                        </div>
+                                        <div id="loginSocialLinks"></div>
+{{--                                        <div class="imgarea clearfix">--}}
+{{--                                            <a href="#"><img src="{{asset("assets_new/images/fb-icon.jpg")}}" alt="Image goes here" /></a>--}}
+{{--                                            <a href="#"><img src="{{asset("assets_new/images/google-icon.jpg")}}" alt="Image goes here" /></a>--}}
+{{--                                        </div>--}}
                                     </div>
                                     <form class="contact_form" id="loginForm" action="{{route('frontend.auth.login.post')}}"
                                           method="POST" enctype="multipart/form-data">
@@ -73,10 +74,11 @@
                                 <div class="sign-up-form" id="register">
                                     <div class="optbox clearfix">
                                         <h6>@lang('labels.frontend.modal.signup_with')</h6>
-                                        <div class="imgarea clearfix">
-                                            <a href="#"><img src="{{asset("assets_new/images/fb-icon.jpg")}}" alt="Image goes here" /></a>
-                                            <a href="#"><img src="{{asset("assets_new/images/google-icon.jpg")}}" alt="Image goes here" /></a>
-                                        </div>
+                                        <div id="signupSocialLinks"></div>
+{{--                                        <div class="imgarea clearfix">--}}
+{{--                                            <a href="#"><img src="{{asset("assets_new/images/fb-icon.jpg")}}" alt="Image goes here" /></a>--}}
+{{--                                            <a href="#"><img src="{{asset("assets_new/images/google-icon.jpg")}}" alt="Image goes here" /></a>--}}
+{{--                                        </div>--}}
                                     </div>
 
                                     <form id="registerForm" class="contact_form"
@@ -193,18 +195,22 @@
                     $('#register').addClass('active').removeClass('fade')
                 });
 
-                $(document).on('click', '#openLoginModal', function (e) {
-                    $('#tab-2').removeAttr('checked');
-                    $('#tab-1').prop('checked','checked');
+                function showLogin (tab1, tab2) {
+                    $(tab2).removeAttr('checked');
+                    $(tab1).prop('checked','checked');
                     $.ajax({
                         type: "GET",
                         url: "{{route('frontend.auth.login')}}",
                         success: function (response) {
-                            // $('#socialLinks').html(response.socialLinks)
+                            $('#loginSocialLinks').html(response.socialLinks)
+                            $('#signupSocialLinks').html(response.socialLinks)
                             $('#myModal').modal('show');
                         },
                     });
-                });
+                }
+
+                $(document).on('click', '#openLoginModal', function(e) {showLogin('#tab-1','#tab-2')});
+                $(document).on('click', '#openRegisterModal', function(e) {showLogin('#tab-2','#tab-1')});
 
                 $('#loginForm').on('submit', function (e) {
                     e.preventDefault();
