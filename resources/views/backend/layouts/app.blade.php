@@ -18,8 +18,13 @@
             <meta name="description" content="@yield('meta_description', 'Laravel 5 Boilerplate')">
             <meta name="author" content="@yield('meta_author', 'Anthony Rappa')">
             @if(config('favicon_image') != "")
-                <link rel="shortcut icon" type="image/x-icon"
-                      href="{{asset('storage/logos/'.config('favicon_image'))}}"/>
+{{--                <link rel="shortcut icon" type="image/x-icon"--}}
+{{--                      href="{{asset('storage/logos/'.config('favicon_image'))}}"/>--}}
+
+                <link rel="icon" type="image/x-icon" size="16x16" href="{{asset('assets_new/images/cropped-cropped-cropped-sop-fb-logo-150x150.jpg')}}" />
+                <link rel="icon" type="image/x-icon" href="{{asset('assets_new/images/cropped-cropped-cropped-sop-fb-logo-150x150.jpg')}}" sizes="32x32" />
+                <link rel="icon" type="image/x-icon" href="{{asset('assets_new/images/cropped-cropped-cropped-sop-fb-logo-300x300.jpg')}}" sizes="192x192" />
+                <link rel="apple-touch-icon-precomposed" href="{{asset('assets_new/images/cropped-cropped-cropped-sop-fb-logo-180x180.jpg')}}" sizes="32x32" />
             @endif
             @yield('meta')
             <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
