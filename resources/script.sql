@@ -2,10 +2,12 @@ INSERT INTO `SOP`.`configs`(`id`, `key`, `value`, `created_at`, `updated_at`) VA
 UPDATE `SOP`.`configs` set `value` = 5 where `key` = 'theme_layout';
 
 -- RUN iF NEED
-!
-UPDATE `SOP`.`admin_menu_items` SET `label` = 'Article & Videos', `link` = 'blog', `parent` = 1, `sort` = 5, `class` = NULL, `menu` = 1, `depth` = 0, `created_at` = '2020-08-21 09:04:01', `updated_at` = '2020-10-10 08:59:22' WHERE `id` = 1;
-UPDATE `SOP`.`admin_menu_items` SET `label` = 'Courses & Events', `link` = '', `parent` = 2, `sort` = 0, `class` = NULL, `menu` = 1, `depth` = 0, `created_at` = '2020-08-21 09:04:01', `updated_at` = '2020-10-10 08:58:42' WHERE `id` = 2;
-UPDATE `SOP`.`admin_menu_items` SET `label` = 'Forums', `link` = 'forums', `parent` = 4, `sort` = 2, `class` = NULL, `menu` = 1, `depth` = 0, `created_at` = '2020-08-21 09:04:01', `updated_at` = '2020-10-10 08:59:22' WHERE `id` = 4;
-UPDATE `SOP`.`admin_menu_items` SET `label` = 'Contact', `link` = 'contact', `parent` = 5, `sort` = 4, `class` = NULL, `menu` = 1, `depth` = 0, `created_at` = '2020-08-21 09:04:01', `updated_at` = '2020-10-10 08:59:36' WHERE `id` = 5;
-UPDATE `SOP`.`admin_menu_items` SET `label` = 'About Us', `link` = 'about-us', `parent` = 6, `sort` = 3, `class` = NULL, `menu` = 1, `depth` = 0, `created_at` = '2020-08-21 09:04:01', `updated_at` = '2020-10-10 08:59:36' WHERE `id` = 6;
-UPDATE `SOP`.`admin_menu_items` SET `label` = 'Courses', `link` = 'courses', `parent` = 2, `sort` = 1, `class` = NULL, `menu` = 1, `depth` = 1, `created_at` = '2020-10-10 08:57:10', `updated_at` = '2020-10-10 08:59:22' WHERE `id` = 7;
+DELETE FROM `admin_menu_items`;
+INSERT INTO `admin_menu_items` (`id`, `label`, `link`, `parent`, `sort`, `class`, `menu`, `depth`, `created_at`, `updated_at`)
+VALUES
+	(1, 'Article & Videos', 'blog', 1, 4, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:59:22'),
+	(2, 'Courses & Events', '', 2, 0, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:58:42'),
+	(4, 'Long Term Programs', 'forums', 4, 1, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:59:22'),
+	(5, 'Contact', 'contact', 5, 3, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:59:36'),
+	(6, 'About Us', 'about-us', 6, 2, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:59:36');
+

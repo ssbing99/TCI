@@ -6,6 +6,6 @@
     'forums' => 'Forums',
     'contact' => 'Contact',
     'about-us' => 'About Us',
-    'courses' => 'Courses',
+    'long-term-programs' => 'Long Term Programs',
   ),
 );
