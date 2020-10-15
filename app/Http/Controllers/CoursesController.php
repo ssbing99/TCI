@@ -64,7 +64,14 @@ class CoursesController extends Controller
             ->where('featured', '=', 1)->take(8)->get();
 
         $recent_news = Blog::orderBy('created_at', 'desc')->take(2)->get();
-        return view( $this->path.'.courses.index', compact('courses', 'purchased_courses', 'recent_news','featured_courses','categories'));
+
+
+        $view_path = $this->path.'.courses.index';
+
+        if(config('theme_layout') == 5)
+            $view_path = $this->path.'.courses.index-'.config('theme_layout');
+
+        return view( $view_path, compact('courses', 'purchased_courses', 'recent_news','featured_courses','categories'));
     }
 
     public function show($course_slug)

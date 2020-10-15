@@ -296,7 +296,12 @@ class HomeController extends Controller
         $q = $request->q;
         $recent_news = Blog::orderBy('created_at', 'desc')->take(2)->get();
 
-        return view($this->path . '.search-result.courses', compact('courses', 'q', 'recent_news', 'categories'));
+        $view_path = $this->path.'.search-result.courses';
+
+        if(config('theme_layout') == 5)
+            $view_path = $this->path.'.search-result.courses'.config('theme_layout');
+
+        return view($view_path, compact('courses', 'q', 'recent_news', 'categories'));
     }
 
 

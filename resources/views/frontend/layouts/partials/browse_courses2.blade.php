@@ -1,0 +1,51 @@
+<section class="grey-bg clearfix">
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="subheading clearfix">@lang('labels.frontend.layouts.partials.browse_our')</div>
+                <div class="heading clearfix">@lang('labels.frontend.layouts.partials.featured_courses')</div>
+            </div>
+        </div>
+        <div class="row clearfix">
+            @if($courses->count() > 0)
+                @foreach($courses as $course)
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <div class="coursegrid clearfix">
+                            <img src="{{asset('storage/uploads/'.$course->course_image)}}" alt="" />
+                            <div class="price">
+                                @if($course->free == 1)
+                                    {{trans('labels.backend.courses.fields.free')}}
+                                @else
+                                    {{$appCurrency['symbol'].' '.$course->price}}
+                                @endif
+                            </div>
+                            <h6><a href="{{ route('courses.show', [$course->slug]) }}">{{$course->title}}</a></h6>
+                            <p>{{substr($course->description, 0,200).'...'}}</p>
+                            <div class="row clearfix">
+                                <div class="col-8 col-sm-7 col-md-7 col-lg-8 col-xl-8">
+                                    <div class="user-img">
+                                        <img src="{{asset('storage/uploads/'.$course->course_image)}}" alt="Image goes here" />
+                                        <p class="username">By&nbsp;
+                                            @foreach($course->teachers as $teacher)
+                                                <a href="#">{{$teacher->first_name}}</a></span>
+                                            @endforeach</p>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <ul class="subicons" style="float: left;">
+                                        <li><i class="fa fa-users"></i> {{ $course->students()->count() }}</li>
+                                        <li><i class="fa fa-commenting-o"></i> {{count($course->reviews) }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                @endforeach
+            @else
+                <h3>@lang('labels.general.no_data_available')</h3>
+            @endif
+
+        </div>
+    </div>
+</section>

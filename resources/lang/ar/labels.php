@@ -1269,6 +1269,8 @@ return array (
       'progress' => 'تقدم',
       'ratings' => 'تصنيفات',
       'recent_news' => '<span> الأخيرة </span> الأخبار.',
+      'recent_blog_view' => 'Recent <span>Blogs</span>',
+      'popular_course' => 'Popular <span>Courses</span>',
       'sort_by' => '<b> فرز </b> حسب',
       'stars' => 'نجوم',
       'starts' => 'يبدأ',
