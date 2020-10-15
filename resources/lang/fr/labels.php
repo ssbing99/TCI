@@ -1312,6 +1312,8 @@ return array (
       'progress' => 'Le progrès',
       'ratings' => 'Évaluations',
       'recent_news' => '<span> Nouvelles </span> récentes.',
+      'recent_blog_view' => 'Recent <span>Blogs</span>',
+      'popular_course' => 'Popular <span>Courses</span>',
       'sort_by' => '<b> Trier </b> par',
       'stars' => 'Étoiles',
       'starts' => 'Départs',

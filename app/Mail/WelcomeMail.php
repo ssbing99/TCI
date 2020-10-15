@@ -12,15 +12,17 @@ class WelcomeMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public $user;
+    private $isTeacher = false;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($user, $teacher)
     {
         $this->user = $user;
+        $this->isTeacher = $teacher;
     }
 
     /**
@@ -30,7 +32,12 @@ class WelcomeMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->markdown('emails/userWelcomeEmail')
+        $emailPath = 'emails/userWelcomeEmail';
+
+        if($this->isTeacher)
+            $emailPath = 'emails/teacherWelcomeEmail';
+
+        return $this->markdown($emailPath)
             ->subject('Welcome to '.env('APP_NAME'))
             ->with('user',$this->user);
     }

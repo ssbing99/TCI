@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Auth;
 
+use App\Mail\WelcomeMail;
 use App\Models\Auth\User;
 use Illuminate\Http\Request;
 use App\Models\TeacherProfile;
@@ -31,8 +32,9 @@ class TeacherRegisterController extends Controller
         $user = User::create($request->all());
         $user->confirmed = 1;
         if ($request->has('image')) {
+            $file = $request->file('image');
             $user->avatar_type = 'storage';
-            $user->avatar_location = $request->image->store('/avatars', 'public');
+            $user->avatar_location = $file->store('/avatars', 'public');
         }
         $user->active = 0;
         $user->save();
@@ -54,6 +56,15 @@ class TeacherRegisterController extends Controller
             'description'       => request()->description,
         ];
         TeacherProfile::create($data);
+
+        if(isset($user->id)) {
+            try {
+                \Mail::to($user->email)->queue(new WelcomeMail($user, true));
+            } catch (\Exception $e) {
+                \Log::info($e->getMessage());
+            }
+        }
+
         return redirect()->route('frontend.index')->withFlashSuccess(trans('labels.frontend.modal.registration_message'))->with(['openModel' => true]);
     }
 

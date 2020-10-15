@@ -26,12 +26,12 @@
                                         @endif
                                     </div>
                                     <h6><a href="{{ route('courses.show', [$item->slug]) }}">{{$item->title}}</a></h6>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry, standard dummy text ever since.</p>
+                                    <p>{{substr($item->description, 0,200).'...'}}</p>
                                     <div class="row clearfix">
                                         <div class="col-8 col-sm-7 col-md-7 col-lg-8 col-xl-8">
                                             <div class="user-img">
                                                 <img src="{{asset('storage/uploads/'.$item->course_image)}}" alt="Image goes here" />
-                                                <p class="username">By
+                                                <p class="username">By&nbsp;
                                                     @foreach($item->teachers as $teacher)
                                                         <a href="#">{{$teacher->first_name}}</a></span>
                                                     @endforeach</p>

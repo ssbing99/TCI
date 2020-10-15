@@ -16,10 +16,10 @@
                             <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">@lang('labels.frontend.modal.login')</label>
                             <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">@lang('labels.frontend.modal.signup')</label>
                             <div class="login-space">
-                                <span class="error-response text-danger"></span>
-                                <span class="success-response text-success">{{(session()->get('flash_success'))}}</span>
                                 <div class="login" id="login">
-                                    <div class="optbox clearfix">
+                                    <span class="error-response text-danger"></span>
+                                    <span class="success-response text-success">{{(session()->get('flash_success'))}}</span>
+                                    <div id="loginSocial" class="optbox clearfix">
                                         <h6>@lang('labels.frontend.modal.login_with')</h6>
                                         <div id="loginSocialLinks"></div>
 {{--                                        <div class="imgarea clearfix">--}}
@@ -72,7 +72,7 @@
                                     </form>
                                 </div>
                                 <div class="sign-up-form" id="register">
-                                    <div class="optbox clearfix">
+                                    <div id="signupSocial" class="optbox clearfix">
                                         <h6>@lang('labels.frontend.modal.signup_with')</h6>
                                         <div id="signupSocialLinks"></div>
 {{--                                        <div class="imgarea clearfix">--}}
@@ -180,6 +180,9 @@
                 }
             });
 
+            $('#loginSocial').hide();
+            $('#signupSocial').hide();
+
             $(document).ready(function () {
                 $(document).on('click', '#openRegisterModal', function () {
                     $('#tab-1').removeAttr('checked');
@@ -202,6 +205,13 @@
                         type: "GET",
                         url: "{{route('frontend.auth.login')}}",
                         success: function (response) {
+                            if(response.socialLinks){
+                                $('#loginSocial').show();
+                                $('#signupSocial').show();
+                            }else{
+                                $('#loginSocial').hide();
+                                $('#signupSocial').hide();
+                            }
                             $('#loginSocialLinks').html(response.socialLinks)
                             $('#signupSocialLinks').html(response.socialLinks)
                             $('#myModal').modal('show');
@@ -211,6 +221,10 @@
 
                 $(document).on('click', '#openLoginModal', function(e) {showLogin('#tab-1','#tab-2')});
                 $(document).on('click', '#openRegisterModal', function(e) {showLogin('#tab-2','#tab-1')});
+
+                @if (session('openModel'))
+                    showLogin('#tab-1','#tab-2')
+                @endif
 
                 $('#loginForm').on('submit', function (e) {
                     e.preventDefault();

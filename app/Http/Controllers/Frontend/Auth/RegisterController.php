@@ -88,7 +88,7 @@ class RegisterController extends Controller
             event(new Registered($user = $this->create($request->all())));
 
             try {
-                Mail::to($request->email)->queue(new WelcomeMail($user));
+                Mail::to($request->email)->queue(new WelcomeMail($user, false));
             } catch (\Exception $e) {
                 \Log::info($e->getMessage());
             }
