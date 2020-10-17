@@ -125,13 +125,12 @@
                                         <p>{{substr($course->description, 0,200).'...'}}</p>
                                         <div class="row clearfix">
                                             <div class="col-8 col-sm-7 col-md-7 col-lg-8 col-xl-8">
-                                                <div class="user-img">
-                                                    <img src="{{asset('storage/uploads/'.$course->course_image)}}" alt="Image goes here" />
-                                                    <p class="username">By&nbsp;
-                                                        @foreach($course->teachers as $teacher)
-                                                            <a href="#">{{$teacher->first_name}}</a></span>
-                                                        @endforeach</p>
-                                                </div>
+                                                @foreach($course->teachers as $teacher)
+                                                    <div class="user-img">
+                                                        <img src="{{$teacher->picture}}" alt="Image goes here" />
+                                                        <p class="username">By <span><a href="#">{{$teacher->first_name}}</a></span></p>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <ul class="subicons" style="float: left;">

@@ -142,11 +142,11 @@
 {{--                                    </div>--}}
                                     <div class="group"> <input type="submit" class="button" value="@lang('labels.frontend.modal.signup')"> </div>
                                     <div class="hr"></div>
-                                    <div class="foot">
-                                        <a href="{{ route('frontend.auth.teacher.register') }}" >
-                                            @lang('labels.teacher.teacher_register')
-                                        </a>
-                                    </div>
+{{--                                    <div class="foot">--}}
+{{--                                        <a href="{{ route('frontend.auth.teacher.register') }}" >--}}
+{{--                                            @lang('labels.teacher.teacher_register')--}}
+{{--                                        </a>--}}
+{{--                                    </div>--}}
                                     <div class="foot"> <label for="tab-1">Already Member?</label> </div>
                                     </form>
                                 </div>

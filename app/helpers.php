@@ -390,3 +390,22 @@ if (!function_exists('menuList')) {
         return $temp_array;
     }
 }
+
+if (!function_exists('returnPathByTheme')) {
+
+
+    function returnPathByTheme($parentUrl, $numToEqual, $appendText)
+    {
+//        $this->path.'.courses.index-'.config('theme_layout');
+        return $parentUrl.(getThemeLayout() == $numToEqual? $appendText.getThemeLayout() : '');
+    }
+}
+
+if (!function_exists('getThemeLayout')) {
+
+
+    function getThemeLayout()
+    {
+        return config('theme_layout');
+    }
+}

@@ -26,6 +26,7 @@
         <link rel="stylesheet" href="{{asset('assets_new/css/owl.carousel.min.css')}}">
         <link rel="stylesheet" href="{{asset('assets_new/css/owl.theme.default.min.css')}}">
         <link rel="stylesheet" href="{{asset('assets_new/css/style.css')}}">
+        <link rel="stylesheet" href="{{asset('assets_new/css/custom_style.css')}}">
 {{--        @if(config('favicon_image') != "")--}}
 {{--            <link rel="shortcut icon" type="image/x-icon" href="{{asset('storage/logos/'.config('favicon_image'))}}"/>--}}
 {{--        @else--}}
