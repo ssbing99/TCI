@@ -64,8 +64,9 @@ class CartController extends Controller
         //Apply Tax
         $taxData = $this->applyTax('total');
 
+        $view_path = returnPathByTheme($this->path.'.cart.checkout', 5,'-');
 
-        return view($this->path . '.cart.checkout', compact('courses', 'bundles', 'total', 'taxData'));
+        return view($view_path, compact('courses', 'bundles', 'total', 'taxData'));
     }
 
     public function addToCart(Request $request)
@@ -149,6 +150,7 @@ class CartController extends Controller
         //Apply Tax
         $taxData = $this->applyTax('total');
 
+        $view_path = returnPathByTheme($this->path.'.cart.checkout', 5,'-');
 
         return view($this->path . '.cart.checkout', compact('courses', 'total', 'taxData'));
     }
@@ -449,7 +451,7 @@ class CartController extends Controller
                 //Apply Tax
                 $taxData = $this->applyTax('subtotal');
 
-                $html = view('frontend.cart.partials.order-stats', compact('total', 'taxData'))->render();
+                $html = view('frontend.cart.partials.order-stats'.(getThemeLayout()==5?'-5':''), compact('total', 'taxData'))->render();
                 return ['status' => 'success', 'html' => $html];
             }
 
@@ -483,7 +485,7 @@ class CartController extends Controller
         //Apply Tax
         $taxData = $this->applyTax('subtotal');
 
-        $html = view('frontend.cart.partials.order-stats', compact('total', 'taxData'))->render();
+        $html = view('frontend.cart.partials.order-stats'.(getThemeLayout()==5?'-5':''), compact('total', 'taxData'))->render();
         return ['status' => 'success', 'html' => $html];
 
     }

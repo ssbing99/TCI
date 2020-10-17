@@ -226,6 +226,18 @@ class Course extends Model
         return $chapters;
     }
 
+    public function quizCount()
+    {
+        $timeline = $this->courseTimeline;
+        $quiz = 0;
+        foreach ($timeline as $item) {
+            if(isset($item->model_type) && ($item->model->published == 1) && $item->model_type == 'App\Models\Test') {
+                $quiz++;
+            }
+        }
+        return $quiz;
+    }
+
     public function mediaVideo()
     {
         $types = ['youtube', 'vimeo', 'upload', 'embed'];

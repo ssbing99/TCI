@@ -7,6 +7,7 @@ use App\Models\Bundle;
 use App\Models\Category;
 use App\Models\Course;
 use App\Models\Review;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Stripe\Stripe;
@@ -45,6 +46,12 @@ class CoursesController extends Controller
         } else if (request('type') == 'featured') {
             $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('featured', '=', 1)->orderBy('id', 'desc')->paginate(9);
 
+        } else if (request('type') == 'past') {
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('start_date', '<', Carbon::today())->orderBy('id', 'desc')->paginate(9);
+
+        } else if (request('type') == 'future') {
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('start_date', '>', Carbon::today())->orderBy('id', 'desc')->paginate(9);
+
         } else {
             $courses = Course::withoutGlobalScope('filter')->where('published', 1)->orderBy('id', 'desc')->paginate(9);
         }
@@ -65,11 +72,7 @@ class CoursesController extends Controller
 
         $recent_news = Blog::orderBy('created_at', 'desc')->take(2)->get();
 
-
-        $view_path = $this->path.'.courses.index';
-
-        if(config('theme_layout') == 5)
-            $view_path = $this->path.'.courses.index-'.config('theme_layout');
+        $view_path = returnPathByTheme($this->path.'.courses.index', 5,'-');
 
         return view( $view_path, compact('courses', 'purchased_courses', 'recent_news','featured_courses','categories'));
     }
@@ -84,6 +87,7 @@ class CoursesController extends Controller
             abort(404);
         }
         $course_rating = 0;
+        $course_progress_perc = 0;
         $total_ratings = 0;
         $completed_lessons = "";
         $is_reviewed = false;
@@ -112,9 +116,12 @@ class CoursesController extends Controller
                     ->orderby('sequence','asc')->first();
             }
 
+            $course_progress_perc = (count($completed_lessons) / count($lessons)) * 100;
         }
 
-        return view( $this->path.'.courses.course', compact('course', 'purchased_course', 'recent_news', 'course_rating', 'completed_lessons','total_ratings','is_reviewed','lessons','continue_course'));
+        $view_path = returnPathByTheme($this->path.'.courses.course', 5,'-');
+
+        return view( $view_path, compact('course', 'purchased_course', 'recent_news', 'course_rating', 'completed_lessons','total_ratings','is_reviewed','lessons','continue_course', 'course_progress_perc'));
     }
 
 
@@ -151,8 +158,9 @@ class CoursesController extends Controller
                 $courses = $category->courses()->withoutGlobalScope('filter')->where('published', 1)->orderBy('id', 'desc')->paginate(9);
             }
 
+            $view_path = returnPathByTheme($this->path.'.courses.index', 5,'-');
 
-            return view( $this->path.'.courses.index', compact('courses', 'category', 'recent_news','featured_courses','categories'));
+            return view( $view_path, compact('courses', 'category', 'recent_news','featured_courses','categories'));
         }
         return abort(404);
     }
@@ -182,6 +190,7 @@ class CoursesController extends Controller
             $recent_news = Blog::orderBy('created_at', 'desc')->take(2)->get();
             $purchased_course = \Auth::check() && $course->students()->where('user_id', \Auth::id())->count() > 0;
             $course_rating = 0;
+            $course_progress_perc = 0;
             $total_ratings = 0;
             $lessons = $course->courseTimeline()->orderby('sequence','asc')->get();
 
@@ -197,8 +206,13 @@ class CoursesController extends Controller
                     $continue_course = $course->courseTimeline()->orderby('sequence','asc')->first();
                 }
 
+                $course_progress_perc = (count($completed_lessons) / count($lessons)) * 100;
+
             }
-            return view( $this->path.'.courses.course', compact('course', 'purchased_course', 'recent_news','completed_lessons','continue_course', 'course_rating', 'total_ratings','lessons', 'review'));
+
+            $view_path = returnPathByTheme($this->path.'.courses.course', 5,'-');
+
+            return view( $view_path, compact('course', 'purchased_course', 'recent_news','completed_lessons','continue_course', 'course_rating', 'total_ratings','lessons', 'review','course_progress_perc'));
         }
         return abort(404);
 
