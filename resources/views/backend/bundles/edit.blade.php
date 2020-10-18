@@ -75,7 +75,7 @@
                 </div>
                 <div class="col-12 col-lg-4 form-group">
                     {!! Form::label('start_date', trans('labels.backend.bundles.fields.start_date').' (yyyy-mm-dd)', ['class' => 'control-label']) !!}
-                    {!! Form::text('start_date', old('start_date'), ['class' => 'form-control date', 'pattern' => '(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))', 'placeholder' => trans('labels.backend.bundles.fields.start_date').' (Ex . 2019-01-01)']) !!}
+                    {!! Form::text('start_date', old('start_date'), ['class' => 'form-control date', 'required' => true, 'pattern' => '(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))', 'placeholder' => trans('labels.backend.bundles.fields.start_date').' (Ex . 2019-01-01)']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('start_date'))
                         <p class="help-block">
