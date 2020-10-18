@@ -49,6 +49,12 @@ class CartController extends Controller
         $ids = Cart::session(auth()->user()->id)->getContent()->keys();
         $course_ids = [];
         $bundle_ids = [];
+        $isCheckout = false;
+
+        if ($request->has('$isCheckout')) {
+            $isCheckout = true;
+        }
+
         foreach (Cart::session(auth()->user()->id)->getContent() as $item) {
             if ($item->attributes->type == 'bundle') {
                 $bundle_ids[] = $item->id;
@@ -65,6 +71,9 @@ class CartController extends Controller
         $taxData = $this->applyTax('total');
 
         $view_path = returnPathByTheme($this->path.'.cart.checkout', 5,'-');
+        if ($isCheckout) {
+            $view_path = returnPathByTheme($this->path.'.cart.checkout_confirm', 5,'-');
+        }
 
         return view($view_path, compact('courses', 'bundles', 'total', 'taxData'));
     }
@@ -110,6 +119,7 @@ class CartController extends Controller
         $type = "";
         $bundle_ids = [];
         $course_ids = [];
+
         if ($request->has('course_id')) {
             $product = Course::findOrFail($request->get('course_id'));
             $teachers = $product->teachers->pluck('id', 'name');
@@ -119,6 +129,10 @@ class CartController extends Controller
             $product = Bundle::findOrFail($request->get('bundle_id'));
             $teachers = $product->user->name;
             $type = 'bundle';
+        }
+
+        if ($request->has('isConfirm')) {
+            $isConfirm = true;
         }
 
         $cart_items = Cart::session(auth()->user()->id)->getContent()->keys()->toArray();
@@ -152,7 +166,8 @@ class CartController extends Controller
 
         $view_path = returnPathByTheme($this->path.'.cart.checkout', 5,'-');
 
-        return view($this->path . '.cart.checkout', compact('courses', 'total', 'taxData'));
+        // return view($this->path . '.cart.checkout', compact('courses', 'total', 'taxData'));
+        return view( $view_path, compact('courses', 'total', 'taxData'));
     }
 
     public function clear(Request $request)

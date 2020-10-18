@@ -115,6 +115,8 @@ Route::get('download', ['uses' => 'Frontend\HomeController@getDownload', 'as' =>
 
 Route::group(['middleware' => 'auth'], function () {
     Route::post('cart/checkout', ['uses' => 'CartController@checkout', 'as' => 'cart.checkout']);
+    Route::post('cart/cart-checkout', ['uses' => 'CartController@index', 'as' => 'cart.cartCheckOut']);
+    Route::get('cart/cart-checkout', ['uses' => 'CartController@index', 'as' => 'cart.cartCheckOut']);
     Route::post('cart/add', ['uses' => 'CartController@addToCart', 'as' => 'cart.addToCart']);
     Route::get('cart', ['uses' => 'CartController@index', 'as' => 'cart.index']);
     Route::get('cart/clear', ['uses' => 'CartController@clear', 'as' => 'cart.clear']);

@@ -40,5 +40,9 @@
             <li><div class="carts-text font-bold clearfix">@lang('labels.backend.coupons.fields.total')
                     <span>{{$appCurrency['symbol'].' '.number_format(Cart::session(auth()->user()->id)->getTotal(),2)}}</span></div></li>
         </ul>
-        <a href="checkout.html" class="btn btn-theme btn-lg btn-block">@lang('labels.frontend.cart.checkout')</a>
+        <form method="post" action="{{ route('cart.cartCheckOut') }}">
+            @csrf
+            <input type="hidden" name="$isCheckout" value="true">
+            <button type="submit" class="btn btn-theme btn-lg btn-block">@lang('labels.frontend.cart.checkout')</button>
+        </form>
     </div>
