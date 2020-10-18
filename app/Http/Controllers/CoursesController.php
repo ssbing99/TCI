@@ -35,26 +35,65 @@ class CoursesController extends Controller
         $this->path = $path;
     }
 
-    public function all()
+    public function all(Request $request)
     {
         if (request('type') == 'popular') {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('popular', '=', 1)->orderBy('id', 'desc')->paginate(9);
+                $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                    ->where('popular', '=', 1)
+                    ->where(function ($query) use ($request) {
+                        $isPast = request('filter') == 'past';
+                        $isUpcoming = request('filter') == 'upcoming';
+                        if($isPast)
+                            $query->where('start_date', '<', Carbon::today());
+                        if($isUpcoming)
+                            $query->where('start_date', '>', Carbon::today());
+
+                    })
+                    ->orderBy('id', 'desc')->paginate(9);
 
         } else if (request('type') == 'trending') {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('trending', '=', 1)->orderBy('id', 'desc')->paginate(9);
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('trending', '=', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->orderBy('id', 'desc')->paginate(9);
 
         } else if (request('type') == 'featured') {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('featured', '=', 1)->orderBy('id', 'desc')->paginate(9);
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('featured', '=', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
 
-        } else if (request('type') == 'past') {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('start_date', '<', Carbon::today())->orderBy('id', 'desc')->paginate(9);
-
-        } else if (request('type') == 'future') {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('start_date', '>', Carbon::today())->orderBy('id', 'desc')->paginate(9);
+                })
+                ->orderBy('id', 'desc')->paginate(9);
 
         } else {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->orderBy('id', 'desc')->paginate(9);
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->orderBy('id', 'desc')->paginate(9);
+
         }
+
         $purchased_courses = NULL;
         $purchased_bundles = NULL;
         $categories = Category::where('status','=',1)->get();
@@ -116,7 +155,8 @@ class CoursesController extends Controller
                     ->orderby('sequence','asc')->first();
             }
 
-            $course_progress_perc = (count($completed_lessons) / count($lessons)) * 100;
+            if(count($lessons) > 0)
+                $course_progress_perc = (count($completed_lessons) / count($lessons)) * 100;
         }
 
         $view_path = returnPathByTheme($this->path.'.courses.course', 5,'-');
@@ -146,16 +186,60 @@ class CoursesController extends Controller
                 ->where('featured', '=', 1)->take(8)->get();
 
             if (request('type') == 'popular') {
-                $courses = $category->courses()->withoutGlobalScope('filter')->where('published', 1)->where('popular', '=', 1)->orderBy('id', 'desc')->paginate(9);
+                $courses = $category->courses()->withoutGlobalScope('filter')->where('published', 1)
+                    ->where('popular', '=', 1)
+                    ->where(function ($query) use ($request) {
+                        $isPast = request('filter') == 'past';
+                        $isUpcoming = request('filter') == 'upcoming';
+                        if($isPast)
+                            $query->where('start_date', '<', Carbon::today());
+                        if($isUpcoming)
+                            $query->where('start_date', '>', Carbon::today());
+
+                    })
+                    ->orderBy('id', 'desc')->paginate(9);
 
             } else if (request('type') == 'trending') {
-                $courses = $category->courses()->withoutGlobalScope('filter')->where('published', 1)->where('trending', '=', 1)->orderBy('id', 'desc')->paginate(9);
+                $courses = $category->courses()->withoutGlobalScope('filter')->where('published', 1)
+                    ->where('trending', '=', 1)
+                    ->where(function ($query) use ($request) {
+                        $isPast = request('filter') == 'past';
+                        $isUpcoming = request('filter') == 'upcoming';
+                        if($isPast)
+                            $query->where('start_date', '<', Carbon::today());
+                        if($isUpcoming)
+                            $query->where('start_date', '>', Carbon::today());
+
+                    })
+                    ->orderBy('id', 'desc')->paginate(9);
 
             } else if (request('type') == 'featured') {
-                $courses = $category->courses()->withoutGlobalScope('filter')->where('published', 1)->where('featured', '=', 1)->orderBy('id', 'desc')->paginate(9);
+                $courses = $category->courses()->withoutGlobalScope('filter')->where('published', 1)
+                    ->where('featured', '=', 1)
+                    ->where(function ($query) use ($request) {
+                        $isPast = request('filter') == 'past';
+                        $isUpcoming = request('filter') == 'upcoming';
+                        if($isPast)
+                            $query->where('start_date', '<', Carbon::today());
+                        if($isUpcoming)
+                            $query->where('start_date', '>', Carbon::today());
+
+                    })
+                    ->orderBy('id', 'desc')->paginate(9);
 
             } else {
-                $courses = $category->courses()->withoutGlobalScope('filter')->where('published', 1)->orderBy('id', 'desc')->paginate(9);
+                $courses = $category->courses()->withoutGlobalScope('filter')->where('published', 1)
+                    ->where(function ($query) use ($request) {
+                        $isPast = request('filter') == 'past';
+                        $isUpcoming = request('filter') == 'upcoming';
+                        if($isPast)
+                            $query->where('start_date', '<', Carbon::today());
+                        if($isUpcoming)
+                            $query->where('start_date', '>', Carbon::today());
+
+                    })
+                    ->orderBy('id', 'desc')->paginate(9);
+
             }
 
             $view_path = returnPathByTheme($this->path.'.courses.index', 5,'-');
@@ -206,7 +290,8 @@ class CoursesController extends Controller
                     $continue_course = $course->courseTimeline()->orderby('sequence','asc')->first();
                 }
 
-                $course_progress_perc = (count($completed_lessons) / count($lessons)) * 100;
+                if(count($lessons) > 0)
+                    $course_progress_perc = (count($completed_lessons) / count($lessons)) * 100;
 
             }
 

@@ -82,7 +82,7 @@
                     @endif
                     <div class="page-title clearfix">
                         <div class="row clearfix">
-                            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                                 <label class="title">@lang('labels.frontend.search_result.sort_by')
                                     <select id="sortBy" class="form-control" style="margin-left: 10px;">
                                         <option value="">@lang('labels.frontend.search_result.none')</option>
@@ -92,7 +92,16 @@
                                     </select>
                                 </label>
                             </div>
-                            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                <label class="title">@lang('labels.frontend.course.filter_by')
+                                    <select id="filterBy" class="form-control" style="margin-left: 10px;">
+                                        <option value="">@lang('labels.frontend.course.none')</option>
+                                        <option value="past">@lang('labels.frontend.course.past')</option>
+                                        <option value="upcoming">@lang('labels.frontend.course.upcoming')</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                                 <div class="float-right">
                                     <div class="btn-group">
                                         <button class="btn btn-outline-secondary" id="list">
@@ -185,31 +194,90 @@
             $('#grid').click(function(event){event.preventDefault();$('#products .item').removeClass('list-group-item');$('#products .item').addClass('grid-group-item');});
 
             $(document).on('change', '#sortBy', function () {
+
+                var filterBy = $('#filterBy').val() != '' ? 'filter=' + $('#filterBy').val() : '';
+
                 if ($(this).val() != "") {
                     var url;
                     @if(request('type'))
                         url = '{{url()->full()}}';
 
-                    url = url.replace('type=' + '{{request('type')}}', 'type=' + $(this).val());
-                    url = url.replace(/&amp;/g, '&');
-                    location.href = url.replace('&amp;', '&');
+                        url = url.replace('type=' + '{{request('type')}}', 'type=' + $(this).val());
+                        url = url.replace(/&amp;/g, '&');
+
+                        @if(request('filter'))
+                        url = url.replace('filter=' + '{{request('filter')}}', (filterBy!=""?filterBy:''));
+                        @endif
+
+                        location.href = url.replace('&amp;', '&');
                     @else
                         url = '{{url()->full()}}&type=' + $(this).val();
-                    url = url.replace(/&amp;/g, '&');
+                        url = url.replace(/&amp;/g, '&');
 
-                    location.href = url;
+                        @if(request('filter'))
+                            url = url.replace('filter=' + '{{request('filter')}}', (filterBy!=""?filterBy:''));
+                        @endif
+
+                        location.href = url;
                     @endif
                 } else {
                     url = '{{url()->full()}}';
                     url = url.replace('type=' + '{{request('type')}}', '');
                     url = url.replace(/&amp;/g, '&');
 
+                        @if(request('filter'))
+                        url = url.replace('filter=' + '{{request('filter')}}', (filterBy!=""?filterBy:''));
+                        @endif
+
                     location.href = url;
                 }
-            })
+            });
+
+            $(document).on('change', '#filterBy', function () {
+
+                var sortBy = $('#sortBy').val() != '' ? 'type=' + $('#sortBy').val() : '';
+
+                if ($(this).val() != "") {
+                    var url;
+                    @if(request('filter'))
+                        url = '{{url()->full()}}';
+
+                        url = url.replace('filter=' + '{{request('filter')}}', 'filter=' + $(this).val());
+                        url = url.replace(/&amp;/g, '&');
+
+                        @if(request('type'))
+                        url = url.replace('type=' + '{{request('type')}}', (sortBy!=""?sortBy:''));
+                        @endif
+
+                        location.href = url.replace('&amp;', '&');
+                    @else
+                        url = '{{url()->full()}}&filter=' + $(this).val();
+                        url = url.replace(/&amp;/g, '&');
+
+                        @if(request('type'))
+                            url = url.replace('type=' + '{{request('type')}}', (sortBy!=""?sortBy:''));
+                        @endif
+
+                        location.href = url;
+                    @endif
+                } else {
+                    url = '{{url()->full()}}';
+                    url = url.replace('filter=' + '{{request('filter')}}', '');
+                    url = url.replace(/&amp;/g, '&');
+
+                        @if(request('type'))
+                        url = url.replace('type=' + '{{request('type')}}',  (sortBy!=""?sortBy:'{{request('type')}}'));
+                        @endif
+
+                    location.href = url;
+                }
+            });
 
             @if(request('type') != "")
             $('#sortBy').find('option[value="' + "{{request('type')}}" + '"]').attr('selected', true);
+            @endif
+            @if(request('filter') != "")
+            $('#filterBy').find('option[value="' + "{{request('filter')}}" + '"]').attr('selected', true);
             @endif
         });
 

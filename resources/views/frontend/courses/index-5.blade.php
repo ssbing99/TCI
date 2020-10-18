@@ -82,19 +82,26 @@
                     @endif
                     <div class="page-title clearfix">
                         <div class="row clearfix">
-                            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                                 <label class="title">@lang('labels.frontend.course.sort_by')
                                     <select id="sortBy" class="form-control" style="margin-left: 10px;">
                                         <option value="">@lang('labels.frontend.course.none')</option>
                                         <option value="popular">@lang('labels.frontend.course.popular')</option>
                                         <option value="trending">@lang('labels.frontend.course.trending')</option>
                                         <option value="featured">@lang('labels.frontend.course.featured')</option>
-                                        <option value="past">Past</option>
-                                        <option value="future">Future</option>
                                     </select>
                                 </label>
                             </div>
-                            <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                <label class="title">@lang('labels.frontend.course.filter_by')
+                                    <select id="filterBy" class="form-control" style="margin-left: 10px;">
+                                        <option value="">@lang('labels.frontend.course.none')</option>
+                                        <option value="past">@lang('labels.frontend.course.past')</option>
+                                        <option value="upcoming">@lang('labels.frontend.course.upcoming')</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                                 <div class="float-right">
                                     <div class="btn-group">
                                         <button class="btn btn-outline-secondary" id="list">
@@ -187,15 +194,32 @@
             $('#grid').click(function(event){event.preventDefault();$('#products .item').removeClass('list-group-item');$('#products .item').addClass('grid-group-item');});
 
             $(document).on('change', '#sortBy', function () {
+
+                var filterBy = $('#filterBy').val() != '' ? 'filter=' + $('#filterBy').val() : '';
+
                 if ($(this).val() != "") {
-                    location.href = '{{url()->current()}}?type=' + $(this).val();
+                    location.href = '{{url()->current()}}?type=' + $(this).val() + (filterBy!=""?'&'+filterBy:'');
                 } else {
-                    location.href = '{{route('courses.all')}}';
+                    location.href = '{{url()->current()}}'+(filterBy!=""?'?'+filterBy:'');
                 }
-            })
+            });
+
+            $(document).on('change', '#filterBy', function () {
+
+                var sortBy = $('#sortBy').val() != '' ? 'type=' + $('#sortBy').val() : '';
+
+                if ($(this).val() != "") {
+                    location.href = '{{url()->current()}}?filter=' + $(this).val() + (sortBy!=""?'&'+sortBy:'');
+                } else {
+                    location.href = '{{url()->current()}}'+(sortBy!=""?'?'+sortBy:'');
+                }
+            });
 
             @if(request('type') != "")
             $('#sortBy').find('option[value="' + "{{request('type')}}" + '"]').attr('selected', true);
+            @endif
+            @if(request('filter') != "")
+            $('#filterBy').find('option[value="' + "{{request('filter')}}" + '"]').attr('selected', true);
             @endif
         });
 

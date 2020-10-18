@@ -188,12 +188,12 @@
                 </div>
                 <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="featuregrid clearfix">
-                        <p><i class="fa fa-clock-o"></i> @lang('labels.frontend.course.duration')<span>2 Hours</span></p>
+                        <p><i class="fa fa-clock-o"></i> @lang('labels.frontend.course.duration')<span>{{$course->duration > 0 ? $course->duration : '0'}} @lang('labels.frontend.layouts.partials.hours')</span></p>
                     </div>
                 </div>
                 <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="featuregrid clearfix">
-                        <p><i class="fa fa-graduation-cap"></i> @lang('labels.frontend.course.skill_level')<span>All Level</span></p>
+                        <p><i class="fa fa-graduation-cap"></i> @lang('labels.frontend.course.skill_level')<span>{{isset($course->skill_level) ? mb_strtoupper($course->skill_level) : '-'}}</span></p>
                     </div>
                 </div>
                 <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -213,7 +213,7 @@
                 </div>
                 <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="featuregrid clearfix">
-                        <p><i class="fa fa-file-text"></i> @lang('labels.frontend.course.assessments')<span>{{count($course->quizCount()) > 0? 'Yes':'No'}}</span></p>
+                        <p><i class="fa fa-file-text"></i> @lang('labels.frontend.course.assessments')<span>{{$course->quizCount() > 0? 'Yes':'No'}}</span></p>
                     </div>
                 </div>
             </div>
