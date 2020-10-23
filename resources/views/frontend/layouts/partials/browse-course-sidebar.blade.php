@@ -36,7 +36,7 @@
 {{--                        @endif--}}
                         <div class="post-title clearfix"><a href="{{route('blogs.index',['slug'=>$item->slug.'-'.$item->id])}}">{{$item->title}}</a></div>
                         <dt><i class="fa fa-calendar"></i> {{$item->created_at->format('d M Y')}}</dt>
-{{--                        <p>{{substr($item->content,0, 200).'...'}}</p>--}}
+                        <p>{{substr($item->content,0, 100).'...'}}</p>
                     </li>
                 @endforeach
             </ul>
@@ -59,13 +59,12 @@
             <p>{{substr($global_featured_course->description, 0,200).'...'}}</p>
             <div class="row clearfix">
                 <div class="col-8 col-sm-7 col-md-7 col-lg-8 col-xl-8">
-                    <div class="user-img">
-                        <img src="{{asset('storage/uploads/'.$global_featured_course->course_image)}}" alt="Image goes here" />
-                        <p class="username">By&nbsp;
-                            @foreach($global_featured_course->teachers as $teacher)
-                                <a href="#">{{$teacher->first_name}}</a></span>
-                            @endforeach</p>
-                    </div>
+                    @foreach($global_featured_course->teachers as $teacher)
+                        <div class="user-img">
+                            <img src="{{$teacher->picture}}" alt="Image goes here" />
+                            <p class="username">By <span><a href="#">{{$teacher->first_name}}</a></span></p>
+                        </div>
+                    @endforeach
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <ul class="subicons" style="float: left;">
