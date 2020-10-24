@@ -1159,6 +1159,7 @@ return array (
       'card_number_placeholder' => 'أدخل رقم بطاقتك',
       'cart' => 'عربة التسوق',
       'checkout' => 'الدفع',
+      'cart' => 'Cart',
       'complete_your_purchases' => 'أكمل <span> مشترياتك. </span>',
       'confirmation_note' => 'بتأكيد هذا الشراء ، أوافق على <b> شروط الاستخدام ، وسياسة رد الأموال </b> و <b> سياسة الخصوصية </b>',
       'course_name' => 'اسم الدورة التدريبية',

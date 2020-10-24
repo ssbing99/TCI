@@ -43,7 +43,7 @@
     <div class="banner custom-banner-bg">
         <div class="container">
             <div class="page-heading text-sm-center">
-                @lang('labels.frontend.cart.checkout')
+                @lang('labels.frontend.cart.cart')
             </div>
         </div>
     </div>
