@@ -3,17 +3,17 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
-        <img class="navbar-brand-full" src="{{asset('logos/logo.png')}}"  height="25" alt="Square Logo">
-        <img class="navbar-brand-minimized" src="{{asset('logos/logo.png')}}" height="30" alt="Square Logo">
+        <img class="navbar-brand-full" src="{{asset('storage/logos/'.config('logo_b_image'))}}"  height="25" alt="Square Logo">
+        <img class="navbar-brand-minimized" src=""{{asset('storage/logos/'.config('logo_popup'))}}" height="30" alt="Square Logo">
     </a>
     <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <ul class="nav navbar-nav d-md-down-none">
-        <!--<li class="nav-item px-3">
+        <li class="nav-item px-3">
             <a class="nav-link" href="{{ route('frontend.index') }}"><i class="icon-home"></i></a>
-        </li>-->
+        </li>
 
         <li class="nav-item px-3">
             <a class="nav-link" href="{{ route('admin.dashboard') }}">@lang('navs.frontend.dashboard')</a>
