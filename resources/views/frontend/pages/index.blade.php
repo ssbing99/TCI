@@ -5,7 +5,8 @@
 @section('meta_keywords', ($page->meta_keywords) ? $page->meta_keywords : app_name())
 
 @push('after-styles')
-    <style>
+    @if(config('theme_layout') != 5)
+        <style>
         .content img {
             margin: 10px;
         }
@@ -17,6 +18,20 @@
             margin-bottom: 25px;
         }
     </style>
+    @else
+        <style>
+            .content p {
+                font-family: "Roboto-Regular", Arial;
+                font-size: 16px;
+                text-align: left;
+                color: #666;
+                display: block;
+                line-height: 22px;
+                margin: 15px 0;
+                padding: 0;
+            }
+        </style>
+    @endif
 @endpush
 
 @section('content')
@@ -47,10 +62,26 @@
     <!-- End of breadcrumb section
         ============================================= -->
 
+    @if(config('theme_layout') == 5)
+
+        <section>
+            <div class="container">
+                <div class="row clearfix">
+                    <div class="col-12 col-sm-8 col-md-9 col-lg-9 col-xl-9 content">
+                        {!! $page->content !!}
+                    </div>
+                    @if($page->sidebar == 1 && config('theme_layout') == 5)
+                        @include('frontend.layouts.partials.right-sidebar2')
+                    @endif
+                </div>
+            </div>
+        </section>
+
+    @else
     <section id="about-page" class="about-page-section">
         <div class="container">
             <div class="row">
-                <div class="@if($page->sidebar == 1 && config('theme_layout') != 5) col-md-9 @else col-md-12 @endif ">
+                <div class="@if($page->sidebar == 1) col-md-9 @else col-md-12 @endif ">
                     <div class="about-us-content-item">
                         @if($page->image != "")
                         <div class="about-gallery w-100 text-center">
@@ -76,4 +107,6 @@
             </div>
         </div>
     </section>
+
+    @endif
 @endsection

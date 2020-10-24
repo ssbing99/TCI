@@ -18,7 +18,9 @@ use App\Models\Sponsor;
 use App\Models\System\Session;
 use App\Models\Tag;
 use App\Models\Testimonial;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
 use Newsletter;
 
@@ -237,18 +239,61 @@ class HomeController extends Controller
     {
 
         if (request('type') == 'popular') {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('popular', '=', 1)->orderBy('id', 'desc')->paginate(12);
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('popular', '=', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->orderBy('id', 'desc')->paginate(9);
 
         } else if (request('type') == 'trending') {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('trending', '=', 1)->orderBy('id', 'desc')->paginate(12);
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('trending', '=', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->orderBy('id', 'desc')->paginate(9);
 
         } else if (request('type') == 'featured') {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('featured', '=', 1)->orderBy('id', 'desc')->paginate(12);
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('featured', '=', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->orderBy('id', 'desc')->paginate(12);
 
         } else {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->orderBy('id', 'desc')->paginate(12);
-        }
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
 
+                })
+                ->orderBy('id', 'desc')->paginate(12);
+
+        }
 
         if ($request->category != null) {
             $category = Category::find((int)$request->category);
@@ -256,13 +301,21 @@ class HomeController extends Controller
                 $ids = $category->courses->pluck('id')->toArray();
                 $types = ['popular', 'trending', 'featured'];
                 if ($category) {
-
                     if (in_array(request('type'), $types)) {
                         $type = request('type');
                         $courses = $category->courses()->where(function ($query) use ($request) {
                             $query->where('title', 'LIKE', '%' . $request->q . '%');
                             $query->orWhere('description', 'LIKE', '%' . $request->q . '%');
                         })
+                            ->where(function ($query) use ($request) {
+
+                                $isPast = request('filter') == 'past';
+                                $isUpcoming = request('filter') == 'upcoming';
+                                if($isPast)
+                                    $query->where('start_date', '<', Carbon::today());
+                                if($isUpcoming)
+                                    $query->where('start_date', '>', Carbon::today());
+                            })
                             ->whereIn('id', $ids)
                             ->where('published', '=', 1)
                             ->where($type, '=', 1)
@@ -272,6 +325,16 @@ class HomeController extends Controller
                             ->where(function ($query) use ($request) {
                                 $query->where('title', 'LIKE', '%' . $request->q . '%');
                                 $query->orWhere('description', 'LIKE', '%' . $request->q . '%');
+
+                            })
+                            ->where(function ($query) use ($request) {
+
+                                $isPast = request('filter') == 'past';
+                                $isUpcoming = request('filter') == 'upcoming';
+                                if($isPast)
+                                    $query->where('start_date', '<', Carbon::today());
+                                if($isUpcoming)
+                                    $query->where('start_date', '>', Carbon::today());
                             })
                             ->where('published', '=', 1)
                             ->whereIn('id', $ids)
@@ -279,14 +342,29 @@ class HomeController extends Controller
                     }
 
                 }
+
             }
 
 
         } else {
-            $courses = Course::where('title', 'LIKE', '%' . $request->q . '%')
-                ->orWhere('description', 'LIKE', '%' . $request->q . '%')
+            $courses = Course::withoutGlobalScope('filter')
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->where(function ($query) use ($request) {
+                    $query->where('title', 'LIKE', '%' . $request->q . '%');
+                    $query->orWhere('description', 'LIKE', '%' . $request->q . '%');
+
+                })
                 ->where('published', '=', 1)
                 ->paginate(12);
+
 
         }
 
