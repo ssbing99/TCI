@@ -333,6 +333,7 @@ return array (
     'messages' =>
     array (
       'compose' => 'Compose',
+      'recent' => 'Recent',
       'search_user' => 'Search User',
       'select_recipients' => 'Select Recipients',
       'start_conversation' => 'Start a conversation',

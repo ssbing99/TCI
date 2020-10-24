@@ -29,15 +29,19 @@
             @yield('meta')
             <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
             <link rel="stylesheet" href="{{asset('assets/css/fontawesome-all.css')}}">
+            <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet" type="text/css">
 
             <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-            <link rel="stylesheet"
-                  href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css"/>
+            <!--<link rel="stylesheet"
+                  href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css"/>-->
             <link rel="stylesheet"
                   href="https://cdn.datatables.net/select/1.2.0/css/select.dataTables.min.css"/>
             <link rel="stylesheet"
                   href="//cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css"/>
+
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
             {{--<link rel="stylesheet"--}}
             {{--href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.standalone.min.css"/>--}}
             {{-- See https://laravel.com/docs/5.5/blade#stacks for usage --}}
@@ -49,7 +53,11 @@
 
         <!-- Check if the language is set to RTL, so apply the RTL layouts -->
             <!-- Otherwise apply the normal LTR layouts -->
-            {{ style(mix('css/backend.css')) }}
+            <!--{{ style(mix('css/backend.css')) }}-->
+            <link rel="stylesheet" href="{{asset('css/backend.css')}}">
+            <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+            <link rel="stylesheet" href="{{asset('css/bootstrap-select.css')}}">
+            <link rel="stylesheet" href="{{asset('css/backend-custom.css')}}">
 
 
             @stack('after-styles')
@@ -105,6 +113,7 @@
             var messageNotificationRoute = '{{route('admin.messages.unread')}}'
         </script>
         <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
         <script src="//cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
         <script src="//cdn.datatables.net/buttons/1.2.4/js/buttons.flash.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
@@ -118,6 +127,7 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
+        <script src="{{asset('js/bootstrap-select.min.js')}}"></script>
         <script src="{{asset('js/select2.full.min.js')}}" type="text/javascript"></script>
         <script src="{{asset('js/main.js')}}" type="text/javascript"></script>
         <script>

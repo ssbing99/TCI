@@ -9,7 +9,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ active_class(Active::checkUriPattern('admin/dashboard')) }}"
                    href="{{ route('admin.dashboard') }}">
-                    <i class="nav-icon icon-speedometer"></i> @lang('menus.backend.sidebar.dashboard')
+                    <i class="nav-icon fa fa-tachometer"></i> @lang('menus.backend.sidebar.dashboard')
                 </a>
             </li>
 
@@ -273,7 +273,7 @@
             <li class="nav-item ">
                 <a class="nav-link {{ $request->segment(1) == 'messages' ? 'active' : '' }}"
                    href="{{ route('admin.messages') }}">
-                    <i class="nav-icon icon-envelope-open"></i> <span
+                    <i class="nav-icon fa fa-envelope-open-o"></i> <span
                             class="title">@lang('menus.backend.sidebar.messages.title')</span>
                 </a>
             </li>
@@ -281,7 +281,7 @@
                 <li class="nav-item ">
                     <a class="nav-link {{ $request->segment(1) == 'invoices' ? 'active' : '' }}"
                        href="{{ route('admin.invoices.index') }}">
-                        <i class="nav-icon icon-notebook"></i> <span
+                        <i class="nav-icon fa fa-file-text-o"></i> <span
                                 class="title">@lang('menus.backend.sidebar.invoices.title')</span>
                     </a>
                 </li>
@@ -336,7 +336,7 @@
             <li class="nav-item ">
                 <a class="nav-link {{ $request->segment(1) == 'account' ? 'active' : '' }}"
                    href="{{ route('admin.account') }}">
-                    <i class="nav-icon icon-key"></i>
+                    <i class="nav-icon fa fa-key"></i>
                     <span class="title">@lang('menus.backend.sidebar.account.title')</span>
                 </a>
             </li>

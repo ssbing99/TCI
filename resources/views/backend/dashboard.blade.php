@@ -8,18 +8,18 @@
             top: -10px;
             left: -52px;
             color: #fff;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 700;
             position: absolute;
             padding: 40px 40px 12px;
             -webkit-transform: rotate(-45deg);
             transform: rotate(-45deg);
-            background-color: #ff5a00;
+            background-color: var(--primary);
+            font-family: "Roboto-Medium", Arial;
         }
 
         .progress {
             background-color: #b6b9bb;
-            height: 2em;
             font-weight: bold;
             font-size: 0.8rem;
             text-align: center;
@@ -43,7 +43,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <strong>@lang('strings.backend.dashboard.welcome') {{ $logged_in_user->name }}!</strong>
+                    @lang('strings.backend.dashboard.welcome') {{ $logged_in_user->name }}!
                 </div><!--card-header-->
                 <div class="card-body">
                     <div class="row">
@@ -126,7 +126,7 @@
 
                                                 @if($item->trending == 1)
                                                     <div class="trend-badge-2 text-center text-uppercase">
-                                                        <i class="fas fa-bolt"></i>
+                                                        <i class="fa fa-bolt"></i>
                                                         <span>@lang('labels.backend.dashboard.trending') </span>
                                                     </div>
                                                 @endif
@@ -142,7 +142,7 @@
                                             <div class="best-course-text d-inline-block w-100 p-2">
                                                 <div class="course-title mb20 headline relative-position">
                                                     <h5>
-                                                        <a href="{{ route('courses.show', [$item->slug]) }}">{{$item->title}}</a>
+                                                        <a class="title" href="{{ route('courses.show', [$item->slug]) }}">{{$item->title}}</a>
                                                     </h5>
                                                 </div>
                                                 <div class="course-meta d-inline-block w-100 ">
@@ -156,12 +156,14 @@
                                                             @lang('labels.backend.dashboard.students')
                                             </span>
                                                     </div>
-
-                                                    <div class="progress my-2">
-                                                        <div class="progress-bar"
-                                                             style="width:{{$item->progress() }}%">
-                                                            @lang('labels.backend.dashboard.completed')
-                                                            {{ $item->progress()  }} %
+                                                    <div class="progress my-2 mb-15">
+                                                        <div class="progress-bar {{
+                                                                ($item -> progress() < 50) ? 'bg-danger' :
+                                                                ($item -> progress() < 75 ? 'bg-warning' :
+                                                                ($item -> progress() < 100 ? 'bg-info' :
+                                                                ($item -> progress() == 100 ? 'bg-success' : '')))}}"
+                                                             style="width:{{$item -> progress() }}%">
+                                                            {{ $item -> progress()  }} %
                                                         </div>
                                                     </div>
                                                     @if($item->progress() == 100)
@@ -200,7 +202,7 @@
                                 </div>
                                 @foreach($purchased_bundles as $key=>$bundle)
                                     @php $key++ @endphp
-                                    <div class="col-12"><h5><a
+                                    <div class="col-12"><h5><a class="title"
                                                     href="{{route('bundles.show',['slug'=>$bundle->slug ])}}">
                                                 {{$key.'. '.$bundle->title}}</a></h5>
                                     </div>
@@ -229,7 +231,7 @@
                                                     <div class="best-course-text d-inline-block w-100 p-2">
                                                         <div class="course-title mb20 headline relative-position">
                                                             <h5>
-                                                                <a href="{{ route('courses.show', [$item->slug]) }}">{{$item->title}}</a>
+                                                                <a class="title" href="{{ route('courses.show', [$item->slug]) }}">{{$item->title}}</a>
                                                             </h5>
                                                         </div>
                                                         <div class="course-meta d-inline-block w-100 ">

@@ -18,13 +18,12 @@
 @section('content')
     <div class="card message-box">
         <div class="card-header">
-            <h3 class="page-title mb-0">@lang('labels.backend.messages.title')
+            @lang('labels.backend.messages.title')
 
                 <a href="{{route('admin.messages').'?threads'}}"
                    class="d-lg-none text-decoration-none threads d-md-none float-right">
                     <i class="icon-speech font-weight-bold"></i>
                 </a>
-            </h3>
         </div>
         <div class="card-body">
             <div class="messaging">
@@ -37,15 +36,21 @@
                                     <h5 class="text-white mb-0"><i class="icon-plus"></i>&nbsp;&nbsp; @lang('labels.backend.messages.compose')</h5>
                                 </a>
                             </div>
+                            @else
+                            <div class="recent_heading">
+                                <h4>@lang('labels.backend.messages.recent')</h4>
+                            </div>
                             @endif
-                            <div class="srch_bar @if(!request()->has('thread')) text-left @endif">
+                            <div class="@if(!request()->has('thread')) @endif">
                                 <div class="stylish-input-group">
-                                    <input type="text" class="search-bar" id="myInput" placeholder="@lang('labels.backend.messages.search_user')">
-                                    <span class="input-group-addon">
+                                    <div class="srch_bar">
+                                        <input type="text" class="search-bar" id="myInput" placeholder="@lang('labels.backend.messages.search_user')">
+                                        <span class="input-group-addon">
                                         <button type="button">
                                             <i class="fa fa-search" aria-hidden="true"></i>
                                         </button>
                                     </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -149,17 +154,22 @@
                         <form method="post" action="{{route('admin.messages.send')}}">
                             @csrf
 
-                            <div class="headind_srch bg-dark">
+                            <!--<div class="headind_srch">
                                 <div class="chat_people header row">
                                     <div class="col-12 col-lg-3">
-                                        <p class="font-weight-bold text-white mb-0" style="line-height: 35px">{{trans('labels.backend.messages.select_recipients')}}:</p>
+                                        <p class="font-weight-bold mb-0" style="line-height: 35px">{{trans('labels.backend.messages.select_recipients')}}:</p>
                                     </div>
-                                    <div class="col-lg-9 col-12 text-dark">
-                                        {!! Form::select('recipients[]', $teachers, (request('teacher_id') ? request('teacher_id') : old('recipients')), ['class' => 'form-control select2', 'multiple' => 'multiple']) !!}
-                                    </div>
+
+                                        {!! Form::select('recipients[]', $teachers, (request('teacher_id') ? request('teacher_id') : old('recipients')),
+                                        ['class' => 'selectpicker', 'multiple' => 'multiple', 'data-live-search' => 'true']) !!}
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="mesgs">
+                                <div class="mesgs-heading">
+                                    {{trans('labels.backend.messages.select_recipients')}}:
+                                    {!! Form::select('recipients[]', $teachers, (request('teacher_id') ? request('teacher_id') : old('recipients')),
+                                    ['class' => 'selectpicker', 'multiple' => 'multiple', 'data-live-search' => 'true']) !!}
+                                </div>
                                 <div class="msg_history">
                                     <p class="text-center">{{trans('labels.backend.messages.start_conversation')}}</p>
                                 </div>
