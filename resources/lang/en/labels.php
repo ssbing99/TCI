@@ -1255,6 +1255,7 @@ return array (
       'request_assistance' => 'Request Assistance',
       'cart' => 'Cart',
       'checkout' => 'Checkout',
+      'your_cart' => 'Your Cart',
       'your_shopping_cart' => 'Your Shopping Cart',
       'complete_your_purchases' => 'Complete<span> Your Purchases.</span>',
       'order_item' => 'Order <span>Item.</span>',

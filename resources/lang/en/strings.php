@@ -121,7 +121,7 @@ return array (
       'app_delete' => 'Delete',
       'all' => 'All',
       'trashed' => 'Trashed',
-      'boilerplate_link' => 'JThemes Studio',
+      'boilerplate_link' => 'School of Permaculture',
       'continue' => 'Continue',
       'member_since' => 'Member since',
       'minutes' => ' minutes',

@@ -29,12 +29,21 @@ $(function() {
         if (!$form.data('cc-on-file')) {
             e.preventDefault();
             Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+            var exp_month_year = $('.card-expiry-month-year').val();
+            var exp_month_val = $('.card-expiry-month').val();
+            var exp_year_val = $('.card-expiry-year').val();
+            if (!!exp_month_year) {
+                try {
+                    exp_month_val = exp_month_year.split('/')[0];
+                    exp_year_val = exp_month_year.split('/')[1];
+                } catch (e) {}
+            }
             Stripe.createToken({
                 name: $('.card-name').val(),
                 number: $('.card-number').val(),
                 cvc: $('.card-cvc').val(),
-                exp_month: $('.card-expiry-month').val(),
-                exp_year: $('.card-expiry-year').val()
+                exp_month: exp_month_val,
+                exp_year: exp_year_val
             }, stripeResponseHandler);
         }
     });

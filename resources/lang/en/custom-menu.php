@@ -1,12 +1,11 @@
 <?php return array (
   'nav-menu' => 
   array (
+    'article-videos' => 'Article & Videos',
     'courses-events' => 'Courses & Events',
-    'courses' => 'Courses',
     'forums' => 'Forums',
     'contact' => 'Contact',
     'about-us' => 'About Us',
-    'article-videos' => 'Article & Videos',
-    'bundles' => 'Bundles',
+    'long-term-programs' => 'Long Term Programs',
   ),
 );
