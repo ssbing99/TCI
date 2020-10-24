@@ -1220,6 +1220,7 @@ return array (
       'card_number_placeholder' => 'Entrez votre numéro de carte',
       'cart' => 'Chariot',
       'checkout' => 'Check-out',
+      'cart' => 'Cart',
       'complete_your_purchases' => 'Terminez <span> vos achats. </span>',
       'confirmation_note' => 'En confirmant cet achat, j\'accepte les <b> conditions d\'utilisation, la politique de remboursement </b> et la <b> politique de confidentialité </b>.',
       'course_name' => 'Nom du cours',

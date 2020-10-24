@@ -1219,6 +1219,7 @@ return array (
       'card_number_placeholder' => 'Ingrese su número de tarjeta',
       'cart' => 'Carro',
       'checkout' => 'Revisa',
+      'cart' => 'Cart',
       'complete_your_purchases' => 'Complete <span> Sus compras. </span>',
       'confirmation_note' => 'Al confirmar esta compra, acepto los <b> Términos de uso, la Política de reembolso </b> y la <b> Política de privacidad </b>',
       'course_name' => 'Nombre del curso',
