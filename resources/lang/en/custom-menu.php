@@ -7,5 +7,6 @@
     'contact' => 'Contact',
     'about-us' => 'About Us',
     'long-term-programs' => 'Long Term Programs',
+      'courses' => 'Courses'
   ),
 );
