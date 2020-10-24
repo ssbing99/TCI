@@ -13,6 +13,15 @@
 
     <!-- Start of breadcrumb section
         ============================================= -->
+    @if(config('theme_layout') == 5)
+        <div class="banner custom-banner-bg">
+            <div class="container">
+                <div class="page-heading">
+                    @lang('labels.frontend.cart.your_payment_status')
+                </div>
+            </div>
+        </div>
+    @else
     <section id="breadcrumb" class="breadcrumb-section relative-position backgroud-style">
         <div class="blakish-overlay"></div>
         <div class="container">
@@ -23,6 +32,7 @@
             </div>
         </div>
     </section>
+    @endif
     <!-- End of breadcrumb section
         ============================================= -->
     <section id="checkout" class="checkout-section">
