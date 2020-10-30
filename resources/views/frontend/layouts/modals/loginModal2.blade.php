@@ -147,7 +147,7 @@
 {{--                                            @lang('labels.teacher.teacher_register')--}}
 {{--                                        </a>--}}
 {{--                                    </div>--}}
-                                    <div class="foot"> <label for="tab-1">Already Member?</label> </div>
+                                    <div class="foot"> <label for="tab-1" style="color:inherit;">Already Member?</label> </div>
                                     </form>
                                 </div>
                             </div>

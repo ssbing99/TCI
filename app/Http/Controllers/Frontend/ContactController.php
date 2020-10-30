@@ -41,7 +41,10 @@ class ContactController extends Controller
      */
     public function index()
     {
-        return view($this->path.'.contact');
+
+        $view_path = returnPathByTheme($this->path.'.contact', 5,'-');
+
+        return view($view_path);
     }
 
     /**

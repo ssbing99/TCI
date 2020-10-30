@@ -7,11 +7,11 @@
             </div>
         </div>
         <div class="row clearfix">
-            @if($courses->count() > 0)
-                @foreach($courses as $course)
+            @if($featured_courses->count() > 0)
+                @foreach($featured_courses as $course)
                     <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                         <div class="coursegrid clearfix">
-                            <img src="{{asset('storage/uploads/'.$course->course_image)}}" alt="" />
+                            <img src="@if($course->course_image != "") {{asset('storage/uploads/'.$course->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif"  alt="" />
                             <div class="price">
                                 @if($course->free == 1)
                                     {{trans('labels.backend.courses.fields.free')}}

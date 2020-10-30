@@ -47,7 +47,7 @@
     <div class="sidebar clearfix" style="margin-top: 30px;">
         <div class="sideheading clearfix">@lang('labels.frontend.course.popular_course')</div>
         <div class="coursegrid clearfix">
-            <img src="{{asset('storage/uploads/'.$global_featured_course->course_image)}}" alt="" />
+            <img src="@if($global_featured_course->course_image != "") {{asset('storage/uploads/'.$global_featured_course->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif"  alt="" />
             <div class="price">
                 @if($global_featured_course->free == 1)
                     {{trans('labels.backend.courses.fields.free')}}

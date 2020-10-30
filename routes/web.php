@@ -73,6 +73,17 @@ Route::get('courses/review/{id}/edit', ['uses' => 'CoursesController@editReview'
 Route::post('courses/review/{id}/edit', ['uses' => 'CoursesController@updateReview', 'as' => 'courses.review.update']);
 Route::get('courses/review/{id}/delete', ['uses' => 'CoursesController@deleteReview', 'as' => 'courses.review.delete']);
 
+//============Longterm Program Routes=================//
+Route::get('programs', ['uses' => 'ProgramsController@all', 'as' => 'programs.all']);
+Route::get('programs/{slug}', ['uses' => 'ProgramsController@show', 'as' => 'programs.show']);
+//Route::post('course/payment', ['uses' => 'CoursesController@payment', 'as' => 'courses.payment']);
+Route::post('programs/{course_id}/rating', ['uses' => 'ProgramsController@rating', 'as' => 'programs.rating']);
+Route::get('category/{category}/programs', ['uses' => 'ProgramsController@getByCategory', 'as' => 'programs.category']);
+Route::post('programs/{id}/review', ['uses' => 'ProgramsController@addReview', 'as' => 'programs.review']);
+Route::get('programs/review/{id}/edit', ['uses' => 'ProgramsController@editReview', 'as' => 'programs.review.edit']);
+Route::post('programs/review/{id}/edit', ['uses' => 'ProgramsController@updateReview', 'as' => 'programs.review.update']);
+Route::get('programs/review/{id}/delete', ['uses' => 'ProgramsController@deleteReview', 'as' => 'programs.review.delete']);
+
 
 //============Bundle Routes=================//
 Route::get('bundles', ['uses' => 'BundlesController@all', 'as' => 'bundles.all']);

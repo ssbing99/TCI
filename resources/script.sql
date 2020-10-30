@@ -7,7 +7,7 @@ INSERT INTO `admin_menu_items` (`id`, `label`, `link`, `parent`, `sort`, `class`
 VALUES
 	(1, 'Article & Videos', 'blog', 1, 4, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:59:22'),
 	(2, 'Courses & Events', '', 2, 0, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:58:42'),
-	(4, 'Long Term Programs', 'forums', 4, 1, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:59:22'),
+	(4, 'Long Term Programs', 'programs', 4, 1, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:59:22'),
 	(5, 'Contact', 'contact', 5, 3, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:59:36'),
 	(6, 'About Us', 'about-us', 6, 2, NULL, 1, 0, '2020-08-21 09:04:01', '2020-10-10 08:59:36');
 

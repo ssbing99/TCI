@@ -452,10 +452,38 @@ class HomeController extends Controller
             ->paginate(12);
         $categories = Category::has('blogs')->where('status', '=', 1)->paginate(10);
         $popular_tags = Tag::has('blogs', '>', 4)->get();
+        $category = null;
+        if ($request->category != null) {
 
+            $category = Category::where('slug', '=', str_slug($request->category))->first();
+
+            if($category){
+                $ids = $category->blogs->pluck('id')->toArray();
+                if ($category) {
+
+                    $blogs = $category->blogs()
+                        ->where(function ($query) use ($request) {
+                            $query->where('title', 'LIKE', '%' . $request->q . '%');
+                        })
+                        ->whereIn('id', $ids)
+                        ->paginate(12);
+
+                }
+
+            }
+
+
+        } else {
+            $blogs = Blog::where('title', 'LIKE', '%' . $request->q . '%')
+                ->paginate(12);
+
+        }
 
         $q = $request->q;
-        return view($this->path . '.search-result.blogs', compact('blogs', 'q', 'categories', 'popular_tags'));
+
+        $view_path = returnPathByTheme($this->path.'.search-result.blogs', 5,'');
+
+        return view($view_path, compact('blogs', 'q', 'categories', 'popular_tags','category'));
     }
 }
 

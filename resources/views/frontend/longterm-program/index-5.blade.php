@@ -66,7 +66,7 @@
     <div class="banner custom-banner-bg">
         <div class="container">
             <div class="page-heading">
-                <span>@if(isset($category)) {{$category->name}} @else @lang('labels.frontend.course.courses') @endif </span>
+                <span>@if(isset($category)) {{$category->name}} @else @lang('labels.frontend.program.title') @endif </span>
             </div>
         </div>
     </div>
@@ -89,21 +89,21 @@
                     <div class="page-title clearfix">
                         <div class="row clearfix">
                             <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                <label class="title">@lang('labels.frontend.course.sort_by')
+                                <label class="title">@lang('labels.frontend.program.sort_by')
                                     <select id="sortBy" class="form-control" style="margin-left: 10px;">
-                                        <option value="">@lang('labels.frontend.course.none')</option>
-                                        <option value="popular">@lang('labels.frontend.course.popular')</option>
-                                        <option value="trending">@lang('labels.frontend.course.trending')</option>
-                                        <option value="featured">@lang('labels.frontend.course.featured')</option>
+                                        <option value="">@lang('labels.frontend.program.none')</option>
+                                        <option value="popular">@lang('labels.frontend.program.popular')</option>
+                                        <option value="trending">@lang('labels.frontend.program.trending')</option>
+                                        <option value="featured">@lang('labels.frontend.program.featured')</option>
                                     </select>
                                 </label>
                             </div>
                             <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                <label class="title">@lang('labels.frontend.course.filter_by')
+                                <label class="title">@lang('labels.frontend.program.filter_by')
                                     <select id="filterBy" class="form-control" style="margin-left: 10px;">
-                                        <option value="">@lang('labels.frontend.course.none')</option>
-                                        <option value="past">@lang('labels.frontend.course.past')</option>
-                                        <option value="upcoming">@lang('labels.frontend.course.upcoming')</option>
+                                        <option value="">@lang('labels.frontend.program.none')</option>
+                                        <option value="past">@lang('labels.frontend.program.past')</option>
+                                        <option value="upcoming">@lang('labels.frontend.program.upcoming')</option>
                                     </select>
                                 </label>
                             </div>
@@ -136,7 +136,7 @@
                                                 {{$appCurrency['symbol'].' '.$course->price}}
                                             @endif
                                         </div>
-                                        <h6><a href="{{ route('courses.show', [$course->slug]) }}">{{$course->title}}</a></h6>
+                                        <h6><a href="{{ route('programs.show', [$course->slug]) }}">{{$course->title}}</a></h6>
                                         <p>{{substr($course->description, 0,200).'...'}}</p>
                                         <div class="row clearfix">
                                             <div class="col-8 col-sm-7 col-md-7 col-lg-8 col-xl-8">

@@ -61,12 +61,17 @@ class BlogController extends Controller
 
             $related_news = $blog->category->blogs()->where('id','!=',$blog->id)->take(2)->get();
 
-            return view($this->path.'.blogs.blog-single', compact('blog','previous','next','popular_tags','categories','related_news'));
+            $view_path = returnPathByTheme($this->path.'.blogs.blog-single', 5,'-');
+
+            return view($view_path, compact('blog','previous','next','popular_tags','categories','related_news'));
         }
 
 
         $blogs = Blog::has('category')->OrderBy('created_at','desc')->paginate(6);
-        return view($this->path.'.blogs.index',
+
+        $view_path = returnPathByTheme($this->path.'.blogs.index', 5,'-');
+
+        return view($view_path,
             compact( 'blogs', 'categories', 'popular_tags'));
     }
 

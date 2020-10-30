@@ -1153,6 +1153,22 @@ return array (
       'title' => 'مدونة',
       'write_a_comment' => 'أكتب تعليقا',
     ),
+    'article_video' =>
+    array (
+      'share_this_news' => 'Share this news',
+      'related_news' => '<span>Related</span> News',
+      'post_comments' => 'Post <span>Comments.</span>',
+      'write_a_comment' => 'Write a Comment',
+      'add_comment' => 'Add Comment',
+      'by' => 'By',
+      'title' => 'Article & Videos',
+      'search' => 'Search',
+      'categories' => '<span>Categories.</span>',
+      'popular_tags' => 'Popular <span>Tags.</span>',
+      'featured_course' => 'Featured <span>Course.</span>',
+      'login_to_post_comment' => 'Login to Post a Comment',
+      'no_comments_yet' => 'No comments yet, Be the first to comment.',
+    ),
     'cart' => 
     array (
       'card_number' => 'رقم البطاقة',
@@ -1230,6 +1246,7 @@ return array (
         'name' => 'Nom',
         'email' => 'Email',
         'address' => 'Adresse',
+        'phone' => 'Phone',
     ),
     'course' => 
     array (

@@ -40,6 +40,10 @@ class MenuSeeder extends Seeder
                 'url' => route('blogs.index'),
                 'name' => 'Article & Videos'
             ],
+            [
+                'url' => route('programs.index'),
+                'name' => 'Long Term Programs'
+            ],
         ];
 
         $nav_menu = \Harimayco\Menu\Models\Menus::where('name', '=', 'nav-menu')->first();
