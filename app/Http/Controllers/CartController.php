@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Omnipay\Omnipay;
@@ -69,13 +70,19 @@ class CartController extends Controller
         $total = $courses->sum('price');
         //Apply Tax
         $taxData = $this->applyTax('total');
+        $savedAddress = '';
 
         $view_path = returnPathByTheme($this->path.'.cart.checkout', 5,'-');
         if ($isCheckout) {
+            $userInfo = Auth::user();
+            if ($userInfo->save_address_flag == 'Y') {
+                $savedAddress = $userInfo-> saved_address;
+            }
             $view_path = returnPathByTheme($this->path.'.cart.checkout_confirm', 5,'-');
         }
 
-        return view($view_path, compact('courses', 'bundles', 'total', 'taxData'));
+
+        return view($view_path, compact('courses', 'bundles', 'total', 'taxData'))->with('savedAddress', json_decode($savedAddress, true));
     }
 
     public function addToCart(Request $request)
@@ -193,6 +200,9 @@ class CartController extends Controller
 
     public function stripePayment(Request $request)
     {
+        $saveInfo = $request->input('saveInfo');
+        $addressInfo = $this->constructAddressObj($request);
+        $this->updateUserAddress($addressInfo, $saveInfo != null ? 'Y' : 'N');
         if ($this->checkDuplicate()) {
             return $this->checkDuplicate();
         }
@@ -245,8 +255,29 @@ class CartController extends Controller
         }
     }
 
+    public function constructAddressObj(Request $request) {
+        $firstName = $request->input('firstName');
+        $lastName = $request->input('lastName');
+        $email = $request->input('email');
+        $phone = $request->input('phone');
+        $address = $request->input('address');
+        $address2 = $request->input('address2');
+        $country = $request->input('country');
+        $state = $request->input('state');
+        $zip = $request->input('zip');
+        $info = array(
+            'firstName' => $firstName, 'lastName' => $lastName, 'email' => $email,
+            'phone' => $phone, 'address' => $address, 'address2' => $address2,
+            'country' => $country, 'state' => $state, 'zip' => $zip
+        );
+        return $info;
+    }
+
     public function paypalPayment(Request $request)
     {
+        $saveInfo = $request->input('saveInfo');
+        $addressInfo = $this->constructAddressObj($request);
+        $this->updateUserAddress($addressInfo, $saveInfo != null ? 'Y' : 'N');
         if ($this->checkDuplicate()) {
             return $this->checkDuplicate();
         }
@@ -282,13 +313,18 @@ class CartController extends Controller
 
     public function offlinePayment(Request $request)
     {
+        $saveInfo = $request->input('saveInfo');
+        $addressInfo = $this->constructAddressObj($request);
+        $this->updateUserAddress($addressInfo, $saveInfo != null ? 'Y' : 'N');
         if ($this->checkDuplicate()) {
             return $this->checkDuplicate();
         }
+
         //Making Order
         $order = $this->makeOrder();
         $order->payment_type = 3;
         $order->status = 0;
+        $order->shipping_address = $addressInfo;
         $order->save();
         $content = [];
         $items = [];
@@ -505,11 +541,26 @@ class CartController extends Controller
 
     }
 
+    private function updateUserAddress($address, $savedAddressFlag) {
+        $user = Auth::user();
+        $user->save_address_flag = $savedAddressFlag;
+        $user->saved_address = $address;
+        $user->save();
+    }
+
     private function makeOrder()
     {
         $coupon = Cart::session(auth()->user()->id)->getConditionsByType('coupon')->first();
         if ($coupon != null) {
             $coupon = Coupon::where('code', '=', $coupon->getName())->first();
+        }
+
+        $savedAddress = null;
+        try {
+            $userInfo = Auth::user();
+            $savedAddress = $userInfo->saved_address;
+        }catch (\Exception $e) {
+            \Log::info($e->getMessage());
         }
 
         $order = new Order();
@@ -519,6 +570,7 @@ class CartController extends Controller
         $order->status = 1;
         $order->coupon_id = ($coupon == null) ? 0 : $coupon->id;
         $order->payment_type = 3;
+        $order->shipping_address = $savedAddress;
         $order->save();
         //Getting and Adding items
         foreach (Cart::session(auth()->user()->id)->getContent() as $cartItem) {

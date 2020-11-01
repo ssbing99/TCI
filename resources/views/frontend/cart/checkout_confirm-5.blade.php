@@ -61,70 +61,76 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-8 order-md-1">
-                    <h4 class="mb-3">Billing address</h4>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="firstName">First name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="First Name" value="" required="">
-                            <div class="invalid-feedback"> Valid first name is required. </div>
+                    <form id="address-form">
+                        <h4 class="mb-3">Billing address</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName">First name</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" value="{{ $savedAddress['firstName'] ?? '' }}" required="">
+                                <div class="invalid-feedback"> Valid first name is required. </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName">Last name</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" value="{{ $savedAddress['lastName'] ?? '' }}" required="">
+                                <div class="invalid-feedback"> Valid last name is required. </div>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="lastName">Last name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="Last Name" value="" required="">
-                            <div class="invalid-feedback"> Valid last name is required. </div>
+                        <div class="mb-3">
+                            <label for="email">Email <span class="text-muted">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" value="{{ $savedAddress['email'] ?? '' }}" required="">
+                            <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email">Email <span class="text-muted">*</span></label>
-                        <input type="email" class="form-control" id="email" placeholder="you@example.com">
-                        <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email">Phone <span class="text-muted">*</span></label>
-                        <input type="text" class="form-control" id="phone" placeholder="Phone No.">
-                        <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="address">Address</label>
-                        <input type="text" class="form-control" id="address" placeholder="Address" required="">
-                        <div class="invalid-feedback"> Please enter your shipping address. </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-                        <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5 mb-3">
-                            <label for="country">Country</label>
-                            <select class="custom-select d-block w-100" id="country" required="">
-                                <option value="">Choose...</option>
-                                <option>United States</option>
-                            </select>
-                            <div class="invalid-feedback"> Please select a valid country. </div>
+                        <div class="mb-3">
+                            <label for="email">Phone <span class="text-muted">*</span></label>
+                            <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone No." value="{{ $savedAddress['phone'] ?? '' }}" required="">
+                            <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="state">State</label>
-                            <select class="custom-select d-block w-100" id="state" required="">
-                                <option value="">Choose...</option>
-                                <option>California</option>
-                            </select>
-                            <div class="invalid-feedback"> Please provide a valid state. </div>
+                        <div class="mb-3">
+                            <label for="address">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" placeholder="Address" value="{{ $savedAddress['address'] ?? '' }}" required="">
+                            <div class="invalid-feedback"> Please enter your shipping address. </div>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="zip">Zip</label>
-                            <input type="text" class="form-control" id="zip" placeholder="" required="">
-                            <div class="invalid-feedback"> Zip code required. </div>
+                        <div class="mb-3">
+                            <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+                            <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment or suite" value="{{ $savedAddress['address2'] ?? '' }}">
                         </div>
-                    </div>
-                    <hr class="mb-4">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="same-address">
-                        <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
-                    </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="save-info">
-                        <label class="custom-control-label" for="save-info">Save this information for next time</label>
-                    </div>
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label for="country">Country</label>
+                                {!! Form::select('size', array('' => 'Choose...', 'United States' => 'United States'), $savedAddress['country'] ?? '', array('required' => '', 'class' => 'custom-select d-block w-100', 'name' => 'country', 'id' => 'country')) !!}
+
+                                <!--<select class="custom-select d-block w-100" id="country" name="country" required="">
+                                    <option value="">Choose...</option>
+                                    <option value="US">United States</option>
+                                </select>-->
+                                <div class="invalid-feedback"> Please select a valid country. </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="state">State</label>
+                                {!! Form::select('size', array('' => 'Choose...', 'California' => 'California'), $savedAddress['state'] ?? '', array('required' => '', 'class' => 'custom-select d-block w-100', 'name' => 'state', 'id' => 'state')) !!}
+                                <!--<select class="custom-select d-block w-100" id="state" name="state" required="">
+                                    <option value="">Choose...</option>
+                                    <option>California</option>
+                                </select>-->
+                                <div class="invalid-feedback"> Please provide a valid state. </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="zip">Zip</label>
+                                <input type="text" class="form-control" id="zip" placeholder="" name="zip" required="" value="{{ $savedAddress['zip'] ?? '' }}">
+                                <div class="invalid-feedback"> Zip code required. </div>
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="same-address">
+                            <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="save-info" name="saveInfo" value="true">
+                            <label class="custom-control-label" for="save-info">Save this information for next time</label>
+                        </div>
+                    </form>
+
                     <hr class="mb-4">
 
                     <!--Start of Payment Options-->
@@ -203,12 +209,12 @@
                                 </form>
                             </div>
                             <div id="paypal-detail" style="display: none">
-                                <form method="post" id="payment-form" action="{{route('cart.paypal.payment')}}">
+                                <form method="post" id="payment-form" class="paypal" action="{{route('cart.paypal.payment')}}">
                                     {{ csrf_field() }}
                                     <p> @lang('labels.frontend.cart.pay_securely_paypal')</p>
 
                                     <hr class="mb-4">
-                                    <button type="submit" class="btn btn-primary btn-lg btn-block mb-30">
+                                    <button type="button" onclick="onSubmit(this)" class="btn btn-primary btn-lg btn-block mb-30">
                                         @lang('labels.frontend.cart.pay_now')
                                     </button>
                                 </form>
@@ -286,6 +292,31 @@
 <script type="text/javascript" src="{{asset('js/stripe-form.js')}}"></script>
 @endif
 <script>
+
+    function onSubmit(_this) {
+        var form = $(_this.form);
+        if (document.getElementById('address-form').reportValidity()) {
+            var addressFormInputs = $('#address-form').find(':input');
+            addressFormInputs.each(function(idx, item) {
+                console.log(item);
+                if ($(item).is(':checkbox')) {
+                    if ($(item).is(':checked'))  {
+                        var input = $("<input>")
+                            .attr("type", "hidden")
+                            .attr("name", item.name).val(item.value);
+                        form.append(input);
+                    }
+                } else {
+                    var input = $("<input>")
+                        .attr("type", "hidden")
+                        .attr("name", item.name).val(item.value);
+                    form.append(input);
+                }
+            });
+            form.submit();
+        }
+    }
+
     $(document).ready(function () {
         $(document).on('click', 'input[type="radio"]:checked', function () {
             $('#accordion .check-out-form').addClass('disabled')
@@ -363,7 +394,7 @@
                     $('#offline-detail').show();
                     break;
             }
-        })
+        });
 
     })
 </script>
