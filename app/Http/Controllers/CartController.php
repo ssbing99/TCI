@@ -66,6 +66,7 @@ class CartController extends Controller
         $courses = new Collection(Course::find($course_ids));
         $bundles = Bundle::find($bundle_ids);
         $courses = $bundles->merge($courses);
+        $useSavedAddressFlag = false;
 
         $total = $courses->sum('price');
         //Apply Tax
@@ -75,14 +76,15 @@ class CartController extends Controller
         $view_path = returnPathByTheme($this->path.'.cart.checkout', 5,'-');
         if ($isCheckout) {
             $userInfo = Auth::user();
-            if ($userInfo->save_address_flag == 'Y') {
+            $useSavedAddressFlag = $userInfo->save_address_flag == 'Y';
+            if ($useSavedAddressFlag) {
                 $savedAddress = $userInfo-> saved_address;
             }
             $view_path = returnPathByTheme($this->path.'.cart.checkout_confirm', 5,'-');
         }
 
 
-        return view($view_path, compact('courses', 'bundles', 'total', 'taxData'))->with('savedAddress', json_decode($savedAddress, true));
+        return view($view_path, compact('courses', 'bundles', 'total', 'taxData', 'useSavedAddressFlag'))->with('savedAddress', json_decode($savedAddress, true));
     }
 
     public function addToCart(Request $request)
