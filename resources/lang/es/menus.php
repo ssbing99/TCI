@@ -174,6 +174,10 @@ return array (
       array (
         'title' => 'manojos',
       ),
+      'items' =>
+      array (
+        'title' => 'Store Item',
+      ),
       'reports' => 
       array (
         'sales' => 'Ventas',

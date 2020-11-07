@@ -174,6 +174,10 @@ return array (
       array (
         'title' => 'Liasses',
       ),
+      'items' =>
+      array (
+        'title' => 'Store Item',
+      ),
       'reports' => 
       array (
         'sales' => 'Ventes',

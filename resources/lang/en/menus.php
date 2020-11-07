@@ -146,6 +146,10 @@ return array (
       array (
         'title' => 'Bundles',
       ),
+      'items' =>
+      array (
+        'title' => 'Store Item',
+      ),
       'reports' =>
       array (
         'title' => 'Reports',

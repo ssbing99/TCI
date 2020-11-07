@@ -174,6 +174,10 @@ return array (
       array (
         'title' => 'بال',
       ),
+      'items' =>
+      array (
+        'title' => 'Store Item',
+      ),
       'reports' => 
       array (
         'sales' => 'مبيعات',

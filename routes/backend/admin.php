@@ -240,6 +240,15 @@ Route::post('tests_restore/{id}', ['uses' => 'Admin\TestsController@restore', 'a
 Route::delete('tests_perma_del/{id}', ['uses' => 'Admin\TestsController@perma_del', 'as' => 'tests.perma_del']);
 
 
+//===== Items Routes =====//
+Route::resource('items', 'Admin\ItemsController');
+Route::get('get-items-data', ['uses' => 'Admin\ItemsController@getData', 'as' => 'items.get_data']);
+Route::post('items_mass_destroy', ['uses' => 'Admin\ItemsController@massDestroy', 'as' => 'items.mass_destroy']);
+Route::post('items_restore/{id}', ['uses' => 'Admin\ItemsController@restore', 'as' => 'items.restore']);
+Route::delete('items_perma_del/{id}', ['uses' => 'Admin\ItemsController@perma_del', 'as' => 'items.perma_del']);
+Route::post('items-save-sequence', ['uses' => 'Admin\ItemsController@saveSequence', 'as' => 'items.saveSequence']);
+Route::get('items-publish/{id}', ['uses' => 'Admin\ItemsController@publish', 'as' => 'items.publish']);
+
 //===== Media Routes =====//
 Route::post('media/remove', ['uses' => 'Admin\MediaController@destroy', 'as' => 'media.destroy']);
 
