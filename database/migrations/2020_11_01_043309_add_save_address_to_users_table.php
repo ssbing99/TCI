@@ -15,7 +15,7 @@ class AddSaveAddressToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('save_address_flag')->after('timezone')->nullable()->default('N');
-            $table->string('saved_address')->after('save_address_flag')->nullable();
+            $table->text('saved_address')->after('save_address_flag')->nullable();
         });
     }
 
