@@ -2098,7 +2098,7 @@ class ApiController extends Controller
                     return ['status' => 'failure', 'message' => 'Total Mismatch', 'result' => $data];
                 }
             }
-            return ['status' => 'failure', 'message' => 'Add Items to Cart before applying coupon'];
+            return ['status' => 'failure', 'message' => 'Add Item to Cart before applying coupon'];
         }
         return ['status' => 'failure', 'message' => 'Please input valid coupon'];
     }
@@ -2195,7 +2195,7 @@ class ApiController extends Controller
                 return ['status' => 'failure', 'message' => 'Total Mismatch', 'result' => $data];
             }
         }
-        return ['status' => 'failure', 'message' => 'Add Items to Cart before applying coupon'];
+        return ['status' => 'failure', 'message' => 'Add Item to Cart before applying coupon'];
     }
 
     public function removeCoupon(Request $request)

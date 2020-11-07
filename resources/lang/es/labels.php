@@ -250,6 +250,42 @@ return array (
       'title' => 'Los cursos',
       'view' => 'Ver cursos',
     ),
+    'items' =>
+    array (
+      'title' => 'Store Items',
+      'fields' =>
+      array (
+        'published' => 'Published',
+        'unpublished' => 'Not Published',
+        'featured' => 'Featured',
+        'free' => 'Free',
+        'trending' => 'Trending',
+        'popular' => 'Popular',
+        'category' => 'Category',
+        'title' => 'Title',
+        'slug' => 'Slug',
+        'description' => 'Description',
+        'price' => 'Price',
+        'discount' => 'Discount',
+        'discount_type' => 'Discount Type',
+        'stock_count' => 'Stock Count',
+        'item_image' => 'Item Image',
+        'start_date' => 'Start Date',
+        'duration' => 'Duration',
+        'meta_title' => 'Meta Title',
+        'meta_description' => 'Meta Description',
+        'meta_keywords' => 'Meta Keywords',
+        'sidebar' => 'Add Sidebar',
+        'status' => 'Status',
+      ),
+      'add_categories' => 'Add Categories',
+      'slug_placeholder' => 'Input slug or it will be generated automatically',
+      'select_category' => 'Select Category',
+      'create' => 'Create Item',
+      'edit' => 'Edit Item',
+      'view' => 'View Item',
+      'category' => 'Category',
+    ),
     'pages' => 
     array (
       'fields' => 
