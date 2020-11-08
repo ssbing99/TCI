@@ -63,8 +63,9 @@
                             {!! session('danger')  !!}
                         </div>
                     @endif
-                        @if(count($courses) > 0)
-                            @foreach($courses as $course)
+                        @if(count($courses) > 0 || count($storeItems) > 0)
+                            @if (count($courses) > 0)
+                                @foreach($courses as $course)
 
                                 <div class="cartbox clearfix">
                                     <div class="cartbtn clearfix"><a href="{{route('cart.remove',['course'=>$course])}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></div>
@@ -77,24 +78,24 @@
                                             <ul class="cartdetails clearfix">
                                                 <li>@lang('labels.frontend.course.teacher')
                                                     @foreach($course->teachers as $key=>$teacher)
-                                                        @php $key++ @endphp
+                                                    @php $key++ @endphp
                                                     <span>{{$teacher->full_name}}</span>
-                                                        @if($key < count($course->teachers )) <br/> @endif
+                                                    @if($key < count($course->teachers )) <br/> @endif
                                                     @endforeach
                                                 </li>
                                                 <li>@lang('labels.frontend.course.ratings')<span>
-                                                        <div class="stars">
-                                                            @for($i=1; $i<=(int)$course->rating; $i++)
-                                                                <i class="fa fa-star"></i>
-                                                            @endfor
-                                                        </div></span></li>
+                                                                    <div class="stars">
+                                                                        @for($i=1; $i<=(int)$course->rating; $i++)
+                                                                            <i class="fa fa-star"></i>
+                                                                        @endfor
+                                                                    </div></span></li>
                                                 <li>@lang('labels.frontend.course.category')<span>{{$course->category->name}}</span></li>
                                             </ul>
                                             <div class="cart-price clearfix">
                                                 @if($course->free == 1)
-                                                    <span>{{trans('labels.backend.bundles.fields.free')}}</span>
+                                                <span>{{trans('labels.backend.bundles.fields.free')}}</span>
                                                 @else
-                                                    <span> {{$appCurrency['symbol'].' '.$course->price}}</span>
+                                                <span> {{$appCurrency['symbol'].' '.$course->price}}</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -102,24 +103,24 @@
                                             <div class="cartblock clearfix">
                                                 <div class="cart-qty clearfix">Quantity</div>
                                                 <div class="input-group mtb-10">1
-{{--                                                    <span class="input-group-btn">--}}
-{{--                                                          <button type="button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">--}}
-{{--                                                              <span class="fa fa-minus"></span>--}}
-{{--                                                          </button>--}}
-{{--                                                      </span>--}}
-{{--                                                    <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">--}}
-{{--                                                    <span class="input-group-btn">--}}
-{{--                                                      <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">--}}
-{{--                                                          <span class="fa fa-plus"></span>--}}
-{{--                                                      </button>--}}
-{{--                                                  </span>--}}
+                                                    {{--                                                    <span class="input-group-btn">--}}
+            {{--                                                          <button type="button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">--}}
+            {{--                                                              <span class="fa fa-minus"></span>--}}
+            {{--                                                          </button>--}}
+            {{--                                                      </span>--}}
+                                                    {{--                                                    <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">--}}
+                                                    {{--                                                    <span class="input-group-btn">--}}
+            {{--                                                      <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">--}}
+            {{--                                                          <span class="fa fa-plus"></span>--}}
+            {{--                                                      </button>--}}
+            {{--                                                  </span>--}}
                                                 </div>
                                                 <div class="cart-qty clearfix">Total Price</div>
                                                 <div class="cart-price clearfix">
                                                     @if($course->free == 1)
-                                                        {{trans('labels.backend.bundles.fields.free')}}
+                                                    {{trans('labels.backend.bundles.fields.free')}}
                                                     @else
-                                                        {{$appCurrency['symbol'].' '.$course->price}}
+                                                    {{$appCurrency['symbol'].' '.$course->price}}
                                                     @endif
                                                 </div>
                                             </div>
@@ -127,7 +128,39 @@
                                     </div>
                                 </div>
 
-                            @endforeach
+                                @endforeach
+                            @endif
+                            @if (count($storeItems) > 0)
+                                @foreach($storeItems as $item)
+                                <div class="cartbox clearfix">
+                                    <div class="cartbtn clearfix"><a href="{{route('cart.remove',['storeItem'=>$item])}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></div>
+                                    <div class="row clearfix">
+                                        <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                            <img src="{{asset('storage/uploads/'.$item->item_image)}}" alt="" class="img-full" />
+                                        </div>
+                                        <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7">
+                                            <div class="cart-title clearfix">{{$item->title}}</div>
+                                            <div class="cart-price clearfix">
+                                                <span> {{$appCurrency['symbol'].' '.$item->price}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                            <div class="cartblock clearfix">
+                                                <div class="cart-qty clearfix">Quantity</div>
+                                                <div class="cart-qty clearfix">Total Price</div>
+                                                <div class="cart-price clearfix">
+                                                    @if($item->free == 1)
+                                                    {{trans('labels.backend.bundles.fields.free')}}
+                                                    @else
+                                                    {{$appCurrency['symbol'].' '.$item->price}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            @endif
                         @else
                             <h6>@lang('labels.frontend.cart.empty_cart')</h6>
                         @endif
@@ -135,7 +168,7 @@
                 <!-- Cart side bar-->
                 <!-- ============================ -->
 
-                @if(count($courses) > 0)
+                @if(count($courses) > 0 || count($storeItems) > 0)
                     <div class="purchase-list col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                         @include('frontend.cart.partials.order-stats-5')
                     </div>

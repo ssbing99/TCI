@@ -17,33 +17,40 @@ class MenuSeeder extends Seeder
                 'name' => 'Courses & Events'
             ],
             [
-                'url' => route('courses.all'),
-                'name' => 'Courses',
+                'url' => route('programs.all'),
+                'name' => 'Long Term Programs'
             ],
-//            [
-//                'url' => route('bundles.all'),
-//                'name' => 'Bundles'
-//            ],
-            [
-                'url' => asset('forums'),
-                'name' => 'Forums'
-            ],
-            [
-                'url' => asset('contact'),
-                'name' => 'Contact'
-            ],
+
             [
                 'url' => asset('about-us'),
                 'name' => 'About Us'
             ],
             [
+                'url' => route('store.all'),
+                'name' => 'Store'
+            ],
+            [
+                'url' => asset('contact'),
+                'name' => 'Contact',
+                'hideInHeader' => 'Y'
+            ],
+            /*[
+                'url' => route('courses.all'),
+                'name' => 'Courses',
+            ],*/
+//            [
+//                'url' => route('bundles.all'),
+//                'name' => 'Bundles'
+//            ],
+            /*[
+                'url' => asset('forums'),
+                'name' => 'Forums'
+            ],*/
+            [
                 'url' => route('blogs.index'),
                 'name' => 'Article & Videos'
             ],
-            [
-                'url' => route('programs.index'),
-                'name' => 'Long Term Programs'
-            ],
+
         ];
 
         $nav_menu = \Harimayco\Menu\Models\Menus::where('name', '=', 'nav-menu')->first();
@@ -65,6 +72,7 @@ class MenuSeeder extends Seeder
                 $menuItem->sort = $key;
                 $menuItem->menu = $nav_menu->id;
                 $menuItem->depth = 0;
+                $menuItem->hide_in_header = isset($item['hideInHeader']) ? $item['hideInHeader'] : null;
                 $menuItem->save();
                 $menuItem->parent = $menuItem->id;
                 $menuItem->save();

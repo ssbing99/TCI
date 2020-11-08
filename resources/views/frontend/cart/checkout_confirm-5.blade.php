@@ -135,7 +135,7 @@
 
                     <!--Start of Payment Options-->
                     <h4 class="mb-3">@lang('labels.frontend.cart.order_payment')</h4>
-                    @if(count($courses) > 0)
+                    @if(count($courses) > 0 || count($storeItems) > 0)
                         @if((config('services.stripe.active') == 0) && (config('paypal.active') == 0) && (config('payment_offline_active') == 0))
                             <div class="order-payment">
                                 <div class="section-title-2 headline text-left">
@@ -242,10 +242,10 @@
                 <div class="col-md-4 order-md-2 mb-4">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted">@lang('labels.frontend.cart.your_cart')</span>
-                    <span class="badge badge-theme badge-pill">{{ count($courses) }}</span>
+                    <span class="badge badge-theme badge-pill">{{ count($courses) + count($storeItems) }}</span>
                 </h4>
                 <ul class="list-group mb-3 sticky-top">
-                    @if(count($courses) > 0)
+                    @if(count($courses) > 0 || count($storeItems) > 0)
                         @foreach($courses as $course)
                         <li class="list-group-item d-flex justify-content-between lh-condensed">
                             <div>
@@ -257,6 +257,14 @@
                             @else
                                 <span class="text-muted"> {{$appCurrency['symbol'].''.$course->price}}</span>
                             @endif
+                        </li>
+                        @endforeach
+                        @foreach($storeItems as $item)
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0">{{$item->title}}</h6>
+                            </div>
+                            <span class="text-muted"> {{$appCurrency['symbol'].''.$item->price}}</span>
                         </li>
                         @endforeach
 

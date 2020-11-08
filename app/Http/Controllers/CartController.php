@@ -9,6 +9,7 @@ use App\Models\Auth\User;
 use App\Models\Bundle;
 use App\Models\Coupon;
 use App\Models\Course;
+use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Tax;
@@ -26,6 +27,7 @@ class CartController extends Controller
 
     private $path;
     private $currency;
+    private $storeItemPrefix = 'SI_';
 
     public function __construct()
     {
@@ -50,6 +52,7 @@ class CartController extends Controller
         $ids = Cart::session(auth()->user()->id)->getContent()->keys();
         $course_ids = [];
         $bundle_ids = [];
+        $storeItem_ids = [];
         $isCheckout = false;
 
         if ($request->has('$isCheckout')) {
@@ -59,16 +62,20 @@ class CartController extends Controller
         foreach (Cart::session(auth()->user()->id)->getContent() as $item) {
             if ($item->attributes->type == 'bundle') {
                 $bundle_ids[] = $item->id;
+            } else if ($item->attributes->type == 'store') {
+                $storeItem_ids[] = $this->getActualItemId($item->id, $item->attributes->type);
             } else {
                 $course_ids[] = $item->id;
             }
         }
         $courses = new Collection(Course::find($course_ids));
         $bundles = Bundle::find($bundle_ids);
+        $storeItems = Item::find($storeItem_ids);
         $courses = $bundles->merge($courses);
+        $consolidateItems = $courses->merge($storeItems);
         $useSavedAddressFlag = false;
 
-        $total = $courses->sum('price');
+        $total = $consolidateItems->sum('price');
         //Apply Tax
         $taxData = $this->applyTax('total');
         $savedAddress = '';
@@ -83,8 +90,7 @@ class CartController extends Controller
             $view_path = returnPathByTheme($this->path.'.cart.checkout_confirm', 5,'-');
         }
 
-
-        return view($view_path, compact('courses', 'bundles', 'total', 'taxData', 'useSavedAddressFlag'))->with('savedAddress', json_decode($savedAddress, true));
+        return view($view_path, compact('courses', 'bundles', 'storeItems', 'total', 'taxData', 'useSavedAddressFlag'))->with('savedAddress', json_decode($savedAddress, true));
     }
 
     public function addToCart(Request $request)
@@ -101,12 +107,15 @@ class CartController extends Controller
             $product = Bundle::findOrFail($request->get('bundle_id'));
             $teachers = $product->user->name;
             $type = 'bundle';
+        } else if ($request->has('storeItem_id')) {
+            $product = Item::findOrFail($request->get('storeItem_id'));
+            $type = 'store';
         }
 
         $cart_items = Cart::session(auth()->user()->id)->getContent()->keys()->toArray();
-        if (!in_array($product->id, $cart_items)) {
+        if (!in_array($this->getShoppingCartItemId($product->id, $type), $cart_items)) {
             Cart::session(auth()->user()->id)
-                ->add($product->id, $product->title, $product->price, 1,
+                ->add($this->getShoppingCartItemId($product->id, $type), $product->title, $product->price, 1,
                     [
                         'user_id' => auth()->user()->id,
                         'description' => $product->description,
@@ -116,9 +125,28 @@ class CartController extends Controller
                     ]);
         }
 
-
         Session::flash('success', trans('labels.frontend.cart.product_added'));
         return back();
+    }
+
+    private function getShoppingCartItemId($itemId, $type) {
+        if ($type == 'store') {
+            return $this->storeItemPrefix.$itemId;
+        } else {
+            return $itemId;
+        }
+    }
+
+    private function getActualItemId($itemId, $type) {
+        if ($type == 'store') {
+            $prefix = $this->storeItemPrefix;
+            if (substr($itemId, 0, strlen($prefix)) == $prefix) { // remove prefix
+                return substr($itemId, strlen($prefix));
+            }
+            return $itemId;
+        } else {
+            return $itemId;
+        }
     }
 
     public function checkout(Request $request)
@@ -196,7 +224,13 @@ class CartController extends Controller
             Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
             Cart::session(auth()->user()->id)->clear();
         }
-        Cart::session(auth()->user()->id)->remove($request->course);
+        if ($request->has('course')) {
+            Cart::session(auth()->user()->id)->remove($request->course);
+        }
+        if ($request->has('storeItem')) {
+            $id = $this->getShoppingCartItemId($request->course, 'store');
+            Cart::session(auth()->user()->id)->remove($id);
+        }
         return redirect(route('cart.index'));
     }
 
@@ -369,13 +403,15 @@ class CartController extends Controller
             $order->save();
             (new EarningHelper)->insert($order);
             foreach ($order->items as $orderItem) {
-                //Bundle Entries
-                if ($orderItem->item_type == Bundle::class) {
-                    foreach ($orderItem->item->courses as $course) {
-                        $course->students()->attach($order->user_id);
+                if ($orderItem->item_type != Item::class) {
+                    //Bundle Entries
+                    if ($orderItem->item_type == Bundle::class) {
+                        foreach ($orderItem->item->courses as $course) {
+                            $course->students()->attach($order->user_id);
+                        }
                     }
+                    $orderItem->item->students()->attach($order->user_id);
                 }
-                $orderItem->item->students()->attach($order->user_id);
             }
 
             //Generating Invoice
@@ -578,14 +614,25 @@ class CartController extends Controller
         foreach (Cart::session(auth()->user()->id)->getContent() as $cartItem) {
             if ($cartItem->attributes->type == 'bundle') {
                 $type = Bundle::class;
+            } else if ($cartItem->attributes->type == 'store') {
+                $type = Item::class;
             } else {
                 $type = Course::class;
             }
-            $order->items()->create([
-                'item_id' => $cartItem->id,
-                'item_type' => $type,
-                'price' => $cartItem->price
-            ]);
+            if ($type == Item::class) {
+                $order->items()->create([
+                    'item_id' =>$this->getActualItemId($cartItem->id, 'store'),
+                    'item_type' => $type,
+                    'price' => $cartItem->price
+                ]);
+            } else {
+                $order->items()->create([
+                    'item_id' => $cartItem->id,
+                    'item_type' => $type,
+                    'price' => $cartItem->price
+                ]);
+            }
+
         }
 //        Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
         return $order;

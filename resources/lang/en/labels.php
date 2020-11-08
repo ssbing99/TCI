@@ -1729,6 +1729,10 @@ return array (
       'usage' => 'Usage',
       'per_user' => 'Per User',
     ),
+  'store' =>
+      array(
+          'store' => 'Store'
+      )
   ),
   'lang' =>
   array (

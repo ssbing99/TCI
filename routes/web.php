@@ -84,6 +84,8 @@ Route::get('programs/review/{id}/edit', ['uses' => 'ProgramsController@editRevie
 Route::post('programs/review/{id}/edit', ['uses' => 'ProgramsController@updateReview', 'as' => 'programs.review.update']);
 Route::get('programs/review/{id}/delete', ['uses' => 'ProgramsController@deleteReview', 'as' => 'programs.review.delete']);
 
+//============Store Routes=================//
+Route::get('store', ['uses' => 'StoreController@all', 'as' => 'store.all']);
 
 //============Bundle Routes=================//
 Route::get('bundles', ['uses' => 'BundlesController@all', 'as' => 'bundles.all']);

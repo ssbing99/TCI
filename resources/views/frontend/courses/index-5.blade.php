@@ -81,10 +81,10 @@
             <div class="row clearfix">
                 <div class="col-12 col-sm-8 col-md-9 col-lg-9 col-xl-9">
                     @if(session()->has('success'))
-                        <div class="alert alert-dismissable alert-success fade show">
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            {{session('success')}}
-                        </div>
+                    <div class="alert alert-dismissable alert-success fade show">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        {{session('success')}}
+                    </div>
                     @endif
                     <div class="page-title clearfix">
                         <div class="row clearfix">
