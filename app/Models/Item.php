@@ -29,7 +29,9 @@ class Item extends Model
 
     protected $fillable = ['title', 'slug', 'description', 'price', 'discount', 'discount_type', 'item_image', 'stock_count', 'published', 'meta_title', 'meta_description', 'meta_keywords'];
 
-    protected $appends = ['image', 'quantity'];
+    protected $appends = ['image'];
+
+    protected $quantity;
 
     protected static function boot()
     {
@@ -71,15 +73,17 @@ class Item extends Model
 
     public function getQuantityAttribute()
     {
-        if (($this->attributes['quantity'] == null)) {
+
+        if (($this->quantity == null)) {
             return 1;
         }
-        return $this->attributes['quantity'];
+        return $this->quantity;
+
     }
 
     public function setQuantityAttribute($input)
     {
-        $this->attributes['quantity'] = $input ? $input : 1;
+        $this->quantity = $input ? $input : 1;
     }
 
     /**
