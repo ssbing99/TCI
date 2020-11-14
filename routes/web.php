@@ -86,6 +86,14 @@ Route::get('programs/review/{id}/delete', ['uses' => 'ProgramsController@deleteR
 
 //============Store Routes=================//
 Route::get('store', ['uses' => 'StoreController@all', 'as' => 'store.all']);
+Route::get('store/{slug}', ['uses' => 'StoreController@show', 'as' => 'store.show']);
+//Route::post('course/payment', ['uses' => 'CoursesController@payment', 'as' => 'store.payment']);
+//Route::post('store/{course_id}/rating', ['uses' => 'StoreController@rating', 'as' => 'store.rating']);
+//Route::get('category/{category}/courses', ['uses' => 'StoreController@getByCategory', 'as' => 'store.category']);
+//Route::post('store/{id}/review', ['uses' => 'StoreController@addReview', 'as' => 'store.review']);
+//Route::get('store/review/{id}/edit', ['uses' => 'StoreController@editReview', 'as' => 'store.review.edit']);
+//Route::post('store/review/{id}/edit', ['uses' => 'StoreController@updateReview', 'as' => 'store.review.update']);
+//Route::get('store/review/{id}/delete', ['uses' => 'StoreController@deleteReview', 'as' => 'store.review.delete']);
 
 //============Bundle Routes=================//
 Route::get('bundles', ['uses' => 'BundlesController@all', 'as' => 'bundles.all']);

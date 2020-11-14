@@ -130,7 +130,7 @@
 
                                 @endforeach
                             @endif
-                            @if (count($storeItems) > 0)
+                            @if (isset($storeItems) && count($storeItems) > 0)
                                 @foreach($storeItems as $item)
                                 <div class="cartbox clearfix">
                                     <div class="cartbtn clearfix"><a href="{{route('cart.remove',['storeItem'=>$item])}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></div>
@@ -147,6 +147,7 @@
                                         <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                             <div class="cartblock clearfix">
                                                 <div class="cart-qty clearfix">Quantity</div>
+                                                <div class="input-group mtb-10">{{$item->quantity}}</div>
                                                 <div class="cart-qty clearfix">Total Price</div>
                                                 <div class="cart-price clearfix">
                                                     @if($item->free == 1)

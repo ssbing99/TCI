@@ -44,4 +44,17 @@ class StoreController extends Controller
 
         return view( $view_path, compact('storeItems'));
     }
+
+    public function show($storeItems_slug)
+    {
+        $continue_course=NULL;
+        $item = Item::withoutGlobalScope('filter')->where('slug', $storeItems_slug)->firstOrFail();
+        if(($item->published == 0)){
+            abort(404);
+        }
+
+        $view_path = returnPathByTheme($this->path.'.store.details', 5,'-');
+
+        return view( $view_path, compact('item'));
+    }
 }
