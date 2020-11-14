@@ -143,14 +143,17 @@ class CartController extends Controller
         $cart_items = Cart::session(auth()->user()->id)->getContent()->keys()->toArray();
 
         if(isset($request->quantity) && in_array($this->getShoppingCartItemId($product->id, $type), $cart_items)){
+            $exist = Cart::session(auth()->user()->id)->get($this->getShoppingCartItemId($product->id, $type));
+
+            $newPrice = $exist->price + $price;
 
             Cart::session(auth()->user()->id)
                 ->update($this->getShoppingCartItemId($product->id, $type),[
                     'quantity' => [
                         'value'=>$quantity,
-                        'relative' => false
+                        'relative' => true
                     ],
-                    'price' => $price
+                    'price' => $newPrice
                 ]);
 
         }
