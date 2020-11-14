@@ -312,6 +312,7 @@ if (!function_exists('generateInvoice')) {
         $invoice->addTotal($total);
         $user = \App\Models\Auth\User::find($order->user_id);
 
+        ini_set('memory_limit', '-1'); // to prevent insufficient memory allocation
         $invoice->customer([
                 'name' => $user->full_name,
                 'id' => $user->id,
