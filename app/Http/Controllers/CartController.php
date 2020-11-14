@@ -53,6 +53,7 @@ class CartController extends Controller
         $course_ids = [];
         $bundle_ids = [];
         $storeItem_ids = [];
+        $storeItem_extra = [];
         $isCheckout = false;
 
         if ($request->has('$isCheckout')) {
@@ -63,7 +64,14 @@ class CartController extends Controller
             if ($item->attributes->type == 'bundle') {
                 $bundle_ids[] = $item->id;
             } else if ($item->attributes->type == 'store') {
-                $storeItem_ids[] = $this->getActualItemId($item->id, $item->attributes->type);
+                $id = $this->getActualItemId($item->id, $item->attributes->type);
+                $storeItem_ids[] = $id;
+                $storeItem_extra[] = [
+                    $id => [
+                        'price' => $item->price,
+                        'quantity' => $item->quantity,
+                    ],
+                ];
             } else {
                 $course_ids[] = $item->id;
             }
@@ -71,6 +79,21 @@ class CartController extends Controller
         $courses = new Collection(Course::find($course_ids));
         $bundles = Bundle::find($bundle_ids);
         $storeItems = Item::find($storeItem_ids);
+
+        if(isset($storeItems)){
+            foreach($storeItems as $item){
+                if(isset($storeItem_extra)){
+                    foreach ($storeItem_extra as $extra){
+                        if(isset($extra[$item->id])) {
+                            $item->setPriceAttribute($extra[$item->id]['price']);
+                            $item->setQuantityAttribute($extra[$item->id]['quantity']);
+                        }
+                    }
+                }
+            }
+        }
+
+
         $courses = $bundles->merge($courses);
         $consolidateItems = $courses->merge($storeItems);
         $useSavedAddressFlag = false;
@@ -98,24 +121,44 @@ class CartController extends Controller
         $product = "";
         $teachers = "";
         $type = "";
+        $quantity = 1;
+        $price = 0;
         if ($request->has('course_id')) {
             $product = Course::findOrFail($request->get('course_id'));
             $teachers = $product->teachers->pluck('id', 'name');
             $type = 'course';
+            $price = $product->price;
 
         } elseif ($request->has('bundle_id')) {
             $product = Bundle::findOrFail($request->get('bundle_id'));
             $teachers = $product->user->name;
             $type = 'bundle';
+            $price = $product->price;
         } else if ($request->has('storeItem_id')) {
             $product = Item::findOrFail($request->get('storeItem_id'));
             $type = 'store';
+            $quantity = isset($request->quantity) ? $request->quantity : 1;
+            $price = $quantity * $product->price;
         }
 
         $cart_items = Cart::session(auth()->user()->id)->getContent()->keys()->toArray();
+
+        if(isset($request->quantity) && in_array($this->getShoppingCartItemId($product->id, $type), $cart_items)){
+
+            Cart::session(auth()->user()->id)
+                ->update($this->getShoppingCartItemId($product->id, $type),[
+                    'quantity' => [
+                        'value'=>$quantity,
+                        'relative' => false
+                    ],
+                    'price' => $price
+                ]);
+
+        }
+
         if (!in_array($this->getShoppingCartItemId($product->id, $type), $cart_items)) {
             Cart::session(auth()->user()->id)
-                ->add($this->getShoppingCartItemId($product->id, $type), $product->title, $product->price, 1,
+                ->add($this->getShoppingCartItemId($product->id, $type), $product->title, $price, $quantity,
                     [
                         'user_id' => auth()->user()->id,
                         'description' => $product->description,

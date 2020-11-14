@@ -245,6 +245,7 @@ return array (
         'meta_keywords' => 'Meta Keywords',
         'sidebar' => 'Add Sidebar',
         'status' => 'Status',
+        'quantity' => 'Quantity',
       ),
       'add_categories' => 'Add Categories',
       'slug_placeholder' => 'Input slug or it will be generated automatically',

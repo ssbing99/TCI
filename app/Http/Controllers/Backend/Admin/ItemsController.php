@@ -201,7 +201,7 @@ class ItemsController extends Controller
         }
         $item = Item::findOrFail($id);
 
-        return view('backend.items.show', compact('item'));
+        return view('backend.items.items-show', compact('item'));
     }
 
     /**

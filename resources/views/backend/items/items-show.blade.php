@@ -59,7 +59,7 @@
                             <td>
                                 @if($item->published == 1)
                                     <a target="_blank"
-                                       href="{{ route('items.show', [$item->slug]) }}">{{ $item->title }}</a>
+                                       href="{{ route('store.show', [$item->slug]) }}">{{ $item->title }}</a>
                                 @else
                                     {{ $item->title }}
                                 @endif
