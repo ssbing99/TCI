@@ -102,7 +102,9 @@ class LessonsController extends Controller
             ->pluck('model_id')
             ->toArray();
 
-        return view($this->path . '.courses.lesson', compact('lesson', 'previous_lesson', 'next_lesson', 'test_result',
+        $view_path = returnPathByTheme($this->path.'.courses.lesson', 5,'-');
+
+        return view($view_path, compact('lesson', 'previous_lesson', 'next_lesson', 'test_result',
             'purchased_course', 'test_exists', 'lessons', 'completed_lessons'));
     }
 
