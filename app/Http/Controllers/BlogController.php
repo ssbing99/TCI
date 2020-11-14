@@ -37,7 +37,8 @@ class BlogController extends Controller
         $categories = Category::has('blogs')->where('status', '=', 1)->paginate(10);
         if ($category != "") {
             $blogs = $category->blogs()->paginate(6);
-            return view($this->path.'.blogs.index', compact('category', 'blogs', 'popular_tags', 'categories'));
+            $view_path = returnPathByTheme($this->path.'.blogs.index', 5,'-');
+            return view($view_path, compact('category', 'blogs', 'popular_tags', 'categories'));
         }
         return abort(404);
     }
