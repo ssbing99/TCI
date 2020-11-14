@@ -93,7 +93,6 @@ class CartController extends Controller
             }
         }
 
-
         $courses = $bundles->merge($courses);
         $consolidateItems = $courses->merge($storeItems);
         $useSavedAddressFlag = false;
