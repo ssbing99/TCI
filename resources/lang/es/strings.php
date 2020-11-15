@@ -19,6 +19,7 @@ return array (
       'title' => 'Tablero',
       'welcome' => 'Bienvenido',
       'my_courses' => 'Mis cursos',
+      'my_items' => 'My Items',
     ),
     'general' => 
     array (

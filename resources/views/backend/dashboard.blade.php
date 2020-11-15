@@ -276,6 +276,37 @@
                                         @endforeach
                                     @endif
                                 @endforeach
+
+                                    <div class="col-12">
+                                        <h4>@lang('labels.backend.dashboard.my_items')</h4>
+                                    </div>
+                                    @if(count($purchased_items) > 0)
+                                        @foreach($purchased_items as $item)
+
+                                            <div class="col-md-3">
+                                                <div class="best-course-pic-text position-relative border">
+                                                    <div class="best-course-pic position-relative overflow-hidden"
+                                                         @if($item->item_image != "") style="background-image: url({{asset('storage/uploads/'.$item->item_image)}})" @endif>
+
+                                                    </div>
+                                                    <div class="best-course-text d-inline-block w-100 p-2">
+                                                        <div class="course-title mb20 headline relative-position">
+                                                            <h5>
+                                                                <a class="title" href="{{ route('store.show', [$item->slug]) }}">{{$item->title}}</a>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="col-12 text-center">
+                                            <h4 class="text-center">@lang('labels.backend.dashboard.no_data')</h4>
+                                            <a class="btn btn-primary"
+                                               href="{{route('store.all')}}">@lang('labels.backend.dashboard.buy_item_now')
+                                                <i class="fa fa-arrow-right"></i></a>
+                                        </div>
+                                    @endif
                     </div>
                     @endif
                     @elseif(auth()->user()->hasRole('teacher'))

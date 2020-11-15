@@ -23,6 +23,7 @@ class DashboardController extends Controller
     public function index()
     {
         $purchased_courses = NULL;
+        $purchased_items = NULL;
         $students_count = NULL;
         $recent_reviews = NULL;
         $threads = NULL;
@@ -36,6 +37,7 @@ class DashboardController extends Controller
 
             $purchased_courses = auth()->user()->purchasedCourses();
             $purchased_bundles = auth()->user()->purchasedBundles();
+            $purchased_items = auth()->user()->purchasedItems();
             $pending_orders = auth()->user()->pendingOrders();
 
             if(auth()->user()->hasRole('teacher')){
@@ -80,6 +82,6 @@ class DashboardController extends Controller
             }
         }
 
-        return view('backend.dashboard',compact('purchased_courses','students_count','recent_reviews','threads','purchased_bundles','teachers_count','courses_count','recent_orders','recent_contacts','pending_orders'));
+        return view('backend.dashboard',compact('purchased_courses','students_count','recent_reviews','threads','purchased_bundles','teachers_count','courses_count','recent_orders','recent_contacts','pending_orders','purchased_items'));
     }
 }

@@ -17,6 +17,7 @@ return array (
     'dashboard' => 
     array (
       'my_courses' => 'دوراتي',
+      'my_items' => 'My Items',
       'title' => 'لوحة القيادة',
       'welcome' => 'أهلا بك',
     ),
