@@ -367,6 +367,7 @@ return array (
     array (
       'amount' => 'Montant',
       'buy_course_now' => 'Acheter le cours maintenant',
+      'buy_item_now' => 'Buy item now',
       'completed' => 'Terminé',
       'course' => 'Cours',
       'courses' => 'Cours',
@@ -393,6 +394,7 @@ return array (
       'your_courses' => 'Vos cours',
       'my_course_bundles' => 'Mes cours',
       'my_courses' => 'Mes cours',
+      'my_items' => 'My Items',
       'course_and_bundles' => 'Cours et forfaits',
       'your_courses_and_bundles' => 'Vos cours et forfaits',
       'pending' => 'en attendant',

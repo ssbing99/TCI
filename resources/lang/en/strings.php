@@ -161,6 +161,7 @@ return array (
       'title' => 'Dashboard',
       'welcome' => 'Welcome',
       'my_courses' => 'My Courses',
+      'my_items' => 'My Items',
     ),
     'search' => 
     array (

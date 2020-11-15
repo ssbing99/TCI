@@ -19,6 +19,7 @@ return array (
       'title' => 'Tableau de bord',
       'welcome' => 'Bienvenue',
       'my_courses' => 'Mes cours',
+      'my_items' => 'My Items',
     ),
     'general' => 
     array (

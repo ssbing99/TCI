@@ -7,6 +7,7 @@ use App\Models\Certificate;
 use App\Models\ChapterStudent;
 use App\Models\Course;
 use App\Models\Invoice;
+use App\Models\Item;
 use App\Models\Lesson;
 use App\Models\LessonSlotBooking;
 use App\Models\Media;
@@ -207,6 +208,19 @@ class User extends Authenticatable
             ->get();
 
         return $bundles;
+    }
+
+    public function purchasedItems()
+    {
+        $orders = Order::where('status', '=', 1)
+            ->where('user_id', '=', $this->id)
+            ->pluck('id');
+        $items_id = OrderItem::whereIn('order_id', $orders)
+            ->where('item_type', '=', "App\Models\Item")
+            ->pluck('item_id');
+        $items = Item::whereIn('id', $items_id)
+            ->get();
+        return $items;
     }
 
 

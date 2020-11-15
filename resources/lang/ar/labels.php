@@ -453,6 +453,7 @@ return array (
     array (
       'amount' => 'كمية',
       'buy_course_now' => 'شراء بالطبع الآن',
+      'buy_item_now' => 'Buy item now',
       'completed' => 'منجز',
       'course' => 'دورة',
       'courses' => 'الدورات',
@@ -479,6 +480,7 @@ return array (
       'your_courses' => 'الدورات الخاصة بك',
       'my_course_bundles' => 'حزم دورة بلدي',
       'my_courses' => 'دوراتي',
+      'my_items' => 'My Items',
       'course_and_bundles' => 'بالطبع وحزم',
       'your_courses_and_bundles' => 'الدورات الخاصة بك والحزم',
       'pending' => 'قيد الانتظار',
