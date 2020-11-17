@@ -367,6 +367,7 @@ return array (
     array (
       'amount' => 'Cantidad',
       'buy_course_now' => 'Comprar curso ahora',
+      'buy_item_now' => 'Buy item now',
       'completed' => 'Terminado',
       'course' => 'Curso',
       'courses' => 'Los cursos',
@@ -393,6 +394,7 @@ return array (
       'your_courses' => 'Tus cursos',
       'my_course_bundles' => 'Mis paquetes de curso',
       'my_courses' => 'Mis cursos',
+      'my_items' => 'My Items',
       'course_and_bundles' => 'Curso y Paquetes',
       'your_courses_and_bundles' => 'Tus cursos y paquetes',
       'pending' => 'Pendiente',
