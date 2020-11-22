@@ -29,6 +29,7 @@ class UpdateProfileRequest extends FormRequest
      */
     public function rules()
     {
+        ini_set('memory_limit', '-1'); // to prevent insufficient memory allocation
         if(Auth::user()->hasRole('teacher')){
             return [
                 'first_name'  => ['required', 'max:191'],
