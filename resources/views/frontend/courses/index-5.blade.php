@@ -79,7 +79,7 @@
     <section>
         <div class="container">
             <div class="row clearfix">
-                <div class="col-12 col-sm-8 col-md-9 col-lg-9 col-xl-9">
+                <div class="col-12">
                     @if(session()->has('success'))
                     <div class="alert alert-dismissable alert-success fade show">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -172,7 +172,7 @@
                 <!-- Start of sidebar section
                     ============================================= -->
 
-                @include('frontend.layouts.partials.browse-course-sidebar')
+                <!--@include('frontend.layouts.partials.browse-course-sidebar')-->
 
                 <!-- End of sidebar section
                     ============================================= -->

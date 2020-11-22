@@ -166,7 +166,7 @@
                 <!-- Start of sidebar section
                     ============================================= -->
 
-            @include('frontend.layouts.partials.browse-course-sidebar')
+            <!--@include('frontend.layouts.partials.browse-course-sidebar')-->
 
             <!-- End of sidebar section
                     ============================================= -->
