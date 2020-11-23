@@ -47,7 +47,7 @@
     <div class="sidebar clearfix" style="margin-top: 30px;">
         <div class="sideheading clearfix">@lang('labels.frontend.course.popular_course')</div>
         <div class="coursegrid clearfix">
-            <img src="@if($global_featured_course->course_image != "") {{asset('storage/uploads/'.$global_featured_course->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif"  alt="" />
+            <a href="{{ route('courses.show', [$global_featured_course->slug]) }}"><img src="@if($global_featured_course->course_image != "") {{asset('storage/uploads/'.$global_featured_course->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif"  alt="" /></a>
             <div class="price">
                 @if($global_featured_course->free == 1)
                     {{trans('labels.backend.courses.fields.free')}}
@@ -62,7 +62,7 @@
                     @foreach($global_featured_course->teachers as $teacher)
                         <div class="user-img">
                             <img src="{{$teacher->picture}}" alt="Image goes here" />
-                            <p class="username">By <span><a href="#">{{$teacher->first_name}}</a></span></p>
+                            <p class="username">By&nbsp;<span><a href="#">{{$teacher->first_name}}</a></span></p>
                         </div>
                     @endforeach
                 </div>

@@ -68,7 +68,7 @@
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                     <div class="blog clearfix">
                                         <div class="blog-img clearfix">
-                                            <a href="#"><img src="@if($item->image != "") {{asset('storage/uploads/'.$item->image)}} @else {{asset('assets_new/images/blog-img-1.jpg')}} @endif"  alt="" /></a>
+                                            <a href="{{route('blogs.index',['slug'=> $item->slug.'-'.$item->id])}}"><img src="@if($item->image != "") {{asset('storage/uploads/'.$item->image)}} @else {{asset('assets_new/images/blog-img-1.jpg')}} @endif"  alt="" /></a>
                                             <div class="blogdate">{{$item->created_at->format('d M Y')}}</div>
                                         </div>
                                         <div class="blogcontent clearfix">

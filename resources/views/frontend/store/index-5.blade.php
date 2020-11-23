@@ -52,8 +52,10 @@
                             </div>-->
 
                             <div class="storegrid clearfix">
+                                <a href="{{ route('store.show', [$item->slug]) }}" >
                                 <img src="@if($item->item_image != "") {{asset('storage/uploads/'.$item->item_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif" alt="" />
                                 <div class="overlay"></div>
+                                </a>
                                 @if($item->discount > 0)
                                 <div class="tag">Discount</div>
                                 @endif

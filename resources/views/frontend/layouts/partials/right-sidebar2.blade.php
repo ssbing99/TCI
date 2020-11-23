@@ -41,7 +41,7 @@
                         @foreach($global_featured_course->teachers as $teacher)
                             <div class="user-img">
                                 <img src="{{$teacher->picture}}" alt="Image goes here" />
-                                <p class="username">By <span><a href="#">{{$teacher->first_name}}</a></span></p>
+                                <p class="username">By&nbsp;<span><a href="#">{{$teacher->first_name}}</a></span></p>
                             </div>
                         @endforeach
                     </div>
