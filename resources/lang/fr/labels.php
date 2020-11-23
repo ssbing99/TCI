@@ -1503,7 +1503,7 @@ return array (
         'login_with' => 'Connecte-toi With',
         'signup_with' => 'Inscrire With',
         'signup' => 'Inscrire',
-        'keep_signin' => 'Kepp me Signed in',
+        'keep_signin' => 'Keep me Signed in',
         'enter_y_username' => 'Enter your username',
         'enter_y_password' => 'Enter your password',
     ),

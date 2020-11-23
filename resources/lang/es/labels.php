@@ -1502,7 +1502,7 @@ return array (
         'login_with' => 'Inicia sesión With',
         'signup_with' => 'Regístrate With',
         'signup' => 'Regístrate',
-        'keep_signin' => 'Kepp me Signed in',
+        'keep_signin' => 'Keep me Signed in',
         'enter_y_username' => 'Enter your username',
         'enter_y_password' => 'Enter your password',
     ),

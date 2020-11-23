@@ -270,7 +270,11 @@
                             console.log(jqXHR)
                             if (response.message) {
                                 // $('#login').find('span.error-response').html(response.message)
-                                $('.error-response').empty().html(response.message);
+                                var displayErrMsg = response.message;
+                                if (displayErrMsg === 'CSRF token mismatch.') {
+                                    displayErrMsg = 'Something went wrong. Please try again later.';
+                                }
+                                $('.error-response').empty().html(displayErrMsg);
                             }
                         }
                     });

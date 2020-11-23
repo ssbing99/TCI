@@ -1460,7 +1460,7 @@ return array (
         'login_with' => 'Login With',
         'signup_with' => 'Sign Up With',
         'signup' => 'Sign Up',
-        'keep_signin' => 'Kepp me Signed in',
+        'keep_signin' => 'Keep me Signed in',
         'enter_y_username' => 'Enter your username',
         'enter_y_password' => 'Enter your password',
     ),
