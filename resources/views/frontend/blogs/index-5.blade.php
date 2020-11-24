@@ -60,7 +60,7 @@
     <section>
         <div class="container">
             <div class="row clearfix">
-                <div class="col-12 col-sm-8 col-md-9 col-lg-9 col-xl-9">
+                <div class="col-12">
                     <div class="row clearfix">
                         <!-- row -->
                         @if(count($blogs) > 0)
@@ -93,7 +93,7 @@
                 <!-- Start of sidebar section
                     ============================================= -->
 
-            @include('frontend.blogs.partials.sidebar-5')
+{{--            @include('frontend.blogs.partials.sidebar-5')--}}
 
             <!-- End of sidebar section
                     ============================================= -->

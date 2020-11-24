@@ -1229,6 +1229,7 @@ return array (
     'trash' => 'Trash',
     'delete' => 'Delete',
     'no_data_available' => 'No data available',
+    'no_search_results' => 'No search results.',
     'edit' => 'Edit',
     'copyright' => 'Copyright',
     'delete_selected' => 'Delete Selected',

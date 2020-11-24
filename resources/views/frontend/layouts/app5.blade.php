@@ -154,7 +154,7 @@
                     <div id="search">
                         <button type="button" class="close">×</button>
                         <form action="{{route('search')}}" method="get">
-                            <input type="search" value="" placeholder="type keyword(s) here" />
+                            <input type="search" name="q" value="" placeholder="type keyword(s) here" />
                             <button type="submit" class="btn btn-primary">@lang('labels.frontend.home.search')</button>
                         </form>
                     </div>
