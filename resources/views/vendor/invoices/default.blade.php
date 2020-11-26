@@ -40,7 +40,7 @@
                     <h4 style="font-weight: bold;">{{env('APP_NAME')}}</h4>
 
                     @if($contact_data["primary_address"]["status"] == 1)
-                        <span>Address: {{$contact_data["primary_address"]["value"]}} </span><br>
+                        <span>Address: {!! nl2br(e($contact_data["primary_address"]["value"])) !!} </span><br>
                     @endif
 
                     @if($contact_data["primary_phone"]["status"] == 1)

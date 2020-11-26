@@ -16,7 +16,7 @@
                                     <li>
                                         <div class="contactitem clearfix">
                                             <div class="icon"><i class="fa fa-map-marker"></i></div>
-                                            <div class="txtright"><span>@lang('labels.frontend.contact.address')</span><br />{{$contact_data["primary_address"]["value"]}}</div>
+                                            <div class="txtright"><span>@lang('labels.frontend.contact.address')</span><br />{!! nl2br(e($contact_data["primary_address"]["value"])) !!}</div>
                                         </div>
                                     </li>
                                 @endif
