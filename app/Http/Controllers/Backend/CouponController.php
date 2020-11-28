@@ -45,6 +45,7 @@ class CouponController extends Controller
             'type' => 'required',
             'amount' => 'required',
             'per_user_limit' => 'required',
+            'min_price' => 'required'
         ]);
 
         $coupon = Coupon::where('name','=',$request->name)->first();
@@ -103,6 +104,7 @@ class CouponController extends Controller
             'type' => 'required',
             'amount' => 'required',
             'per_user_limit' => 'required',
+            'min_price' => 'required'
 
         ]);
 
