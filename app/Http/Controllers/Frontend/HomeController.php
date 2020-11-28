@@ -214,7 +214,10 @@ class HomeController extends Controller
         if (count($teacher->courses) > 0) {
             $courses = $teacher->courses()->paginate(12);
         }
-        return view($this->path . '.teachers.show', compact('teacher', 'recent_news', 'courses'));
+
+        $view_path = returnPathByTheme($this->path . '.teachers.show', 5,'-');
+
+        return view($view_path, compact('teacher', 'recent_news', 'courses'));
     }
 
     public function getDownload(Request $request)
