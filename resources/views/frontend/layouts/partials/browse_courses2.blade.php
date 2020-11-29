@@ -11,7 +11,7 @@
                 @foreach($featured_courses as $course)
                     <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                         <div class="coursegrid clearfix">
-                            <img src="@if($course->course_image != "") {{asset('storage/uploads/'.$course->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif"  alt="" />
+                            <a href="{{ route('courses.show', [$course->slug]) }}"><img src="@if($course->course_image != "") {{asset('storage/uploads/'.$course->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif"  alt="" /></a>
                             <div class="price">
                                 @if($course->free == 1)
                                     {{trans('labels.backend.courses.fields.free')}}
@@ -26,7 +26,7 @@
                                     @foreach($course->teachers as $teacher)
                                         <div class="user-img">
                                             <img src="{{$teacher->picture}}" alt="Image goes here" />
-                                            <p class="username">By <span><a href="#">{{$teacher->first_name}}</a></span></p>
+                                            <p class="username">By&nbsp;<span><a href="#">{{$teacher->first_name}}</a></span></p>
                                         </div>
                                     @endforeach
                                 </div>

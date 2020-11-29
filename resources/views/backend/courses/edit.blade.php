@@ -87,6 +87,17 @@
                     @endif
                 </div>
             </div>
+                <div class="row">
+                    <div class="col-12 col-lg-4 form-group">
+                        {!! Form::label('duration',  trans('labels.backend.courses.fields.duration').' ('.trans('labels.frontend.layouts.partials.hours').')', ['class' => 'control-label']) !!}
+                        {!! Form::number('duration', old('duration'), ['class' => 'form-control', 'placeholder' => trans('labels.frontend.layouts.partials.hours'),'step' => 'any', 'pattern' => "[0-9]"]) !!}
+                    </div>
+                    <div class="col-12 col-lg-4  form-group">
+                        {!! Form::label('skill_level', trans('labels.backend.courses.fields.skill_level'), ['class' => 'control-label']) !!}
+                        {!! Form::text('skill_level', old('skill_level'), ['class' => 'form-control date', 'placeholder' => trans('labels.backend.courses.fields.skill_level'), 'autocomplete' => 'off']) !!}
+
+                    </div>
+                </div>
             <div class="row">
                 <div class="col-md-12 form-group">
                     {!! Form::label('add_video', trans('labels.backend.lessons.fields.add_video'), ['class' => 'control-label']) !!}

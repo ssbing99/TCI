@@ -11,6 +11,7 @@ use App\Models\Config;
 use App\Models\Course;
 use App\Models\CourseTimeline;
 use App\Models\Faq;
+use App\Models\Item;
 use App\Models\Lesson;
 use App\Models\Page;
 use App\Models\Reason;
@@ -213,7 +214,10 @@ class HomeController extends Controller
         if (count($teacher->courses) > 0) {
             $courses = $teacher->courses()->paginate(12);
         }
-        return view($this->path . '.teachers.show', compact('teacher', 'recent_news', 'courses'));
+
+        $view_path = returnPathByTheme($this->path . '.teachers.show', 5,'-');
+
+        return view($view_path, compact('teacher', 'recent_news', 'courses'));
     }
 
     public function getDownload(Request $request)
@@ -232,6 +236,33 @@ class HomeController extends Controller
 
         }
         return abort(404);
+
+    }
+
+    public function searchAll(Request $request)
+    {
+
+        $courses = $this->searchCourses($request);
+
+        $storeItems = $this->searchItems($request);
+
+        $blogs = $this->searchBlogs($request);
+
+
+//        $consolidateItems = new Collection();
+//        $consolidateItems = $consolidateItems->concat($courses);
+//        $consolidateItems = $consolidateItems->concat($storeItems);
+//        $consolidateItems = $consolidateItems->concat($blogs);
+//
+//        $consolidate = $consolidateItems->paginate(12);
+
+        $q = $request->q;
+        $recent_news = Blog::orderBy('created_at', 'desc')->take(2)->get();
+        $categories = Category::where('status', '=', 1)->get();
+
+        $view_path = returnPathByTheme($this->path.'.search-result.search-all', 5,'-');
+
+        return view($view_path, compact('courses', 'storeItems', 'blogs', 'q', 'recent_news','categories'));
 
     }
 
@@ -484,6 +515,188 @@ class HomeController extends Controller
         $view_path = returnPathByTheme($this->path.'.search-result.blogs', 5,'');
 
         return view($view_path, compact('blogs', 'q', 'categories', 'popular_tags','category'));
+    }
+
+    public function searchCourses(Request $request){
+        if (request('type') == 'popular') {
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('popular', '=', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->orderBy('id', 'desc')->get();
+//            ->paginate(9);
+
+        } else if (request('type') == 'trending') {
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('trending', '=', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->orderBy('id', 'desc')->get();
+//            ->paginate(9);
+
+        } else if (request('type') == 'featured') {
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('featured', '=', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->orderBy('id', 'desc')->get();
+//            ->paginate(12);
+
+        } else {
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->orderBy('id', 'desc')->get();
+//            ->paginate(12);
+
+        }
+
+        if ($request->category != null) {
+            $category = Category::find((int)$request->category);
+            if($category){
+                $ids = $category->courses->pluck('id')->toArray();
+                $types = ['popular', 'trending', 'featured'];
+                if ($category) {
+                    if (in_array(request('type'), $types)) {
+                        $type = request('type');
+                        $courses = $category->courses()->where(function ($query) use ($request) {
+                            $query->where('title', 'LIKE', '%' . $request->q . '%');
+                            $query->orWhere('description', 'LIKE', '%' . $request->q . '%');
+                        })
+                            ->where(function ($query) use ($request) {
+
+                                $isPast = request('filter') == 'past';
+                                $isUpcoming = request('filter') == 'upcoming';
+                                if($isPast)
+                                    $query->where('start_date', '<', Carbon::today());
+                                if($isUpcoming)
+                                    $query->where('start_date', '>', Carbon::today());
+                            })
+                            ->whereIn('id', $ids)
+                            ->where('published', '=', 1)
+                            ->where($type, '=', 1)->get();
+//                            ->paginate(12);
+                    } else {
+                        $courses = $category->courses()
+                            ->where(function ($query) use ($request) {
+                                $query->where('title', 'LIKE', '%' . $request->q . '%');
+                                $query->orWhere('description', 'LIKE', '%' . $request->q . '%');
+
+                            })
+                            ->where(function ($query) use ($request) {
+
+                                $isPast = request('filter') == 'past';
+                                $isUpcoming = request('filter') == 'upcoming';
+                                if($isPast)
+                                    $query->where('start_date', '<', Carbon::today());
+                                if($isUpcoming)
+                                    $query->where('start_date', '>', Carbon::today());
+                            })
+                            ->where('published', '=', 1)
+                            ->whereIn('id', $ids)->get();
+//                            ->paginate(12);
+                    }
+
+                }
+
+            }
+
+
+        } else {
+            $courses = Course::withoutGlobalScope('filter')
+                ->where(function ($query) use ($request) {
+                    $isPast = request('filter') == 'past';
+                    $isUpcoming = request('filter') == 'upcoming';
+                    if($isPast)
+                        $query->where('start_date', '<', Carbon::today());
+                    if($isUpcoming)
+                        $query->where('start_date', '>', Carbon::today());
+
+                })
+                ->where(function ($query) use ($request) {
+                    $query->where('title', 'LIKE', '%' . $request->q . '%');
+                    $query->orWhere('description', 'LIKE', '%' . $request->q . '%');
+
+                })
+                ->where('published', '=', 1)->get();
+//                ->paginate(12);
+
+
+        }
+
+        return $courses;
+    }
+
+    public function searchItems(Request $request){
+
+        $items = Item::where('title', 'LIKE', '%' . $request->q . '%')
+            ->orWhere('description', 'LIKE', '%' . $request->q . '%')
+            ->where('published', '=', 1)->get();
+//            ->paginate(12);
+
+        return $items;
+    }
+
+    public function searchBlogs(Request $request){
+
+        $blogs = Blog::where('title', 'LIKE', '%' . $request->q . '%')->get();
+//            ->paginate(12);
+        $category = null;
+        if ($request->category != null) {
+
+            $category = Category::where('slug', '=', str_slug($request->category))->first();
+
+            if($category){
+                $ids = $category->blogs->pluck('id')->toArray();
+                if ($category) {
+
+                    $blogs = $category->blogs()
+                        ->where(function ($query) use ($request) {
+                            $query->where('title', 'LIKE', '%' . $request->q . '%');
+                        })
+                        ->whereIn('id', $ids)->get();
+//                        ->paginate(12);
+
+                }
+
+            }
+
+
+        } else {
+            $blogs = Blog::where('title', 'LIKE', '%' . $request->q . '%')->get();
+//                ->paginate(12);
+
+        }
+
+        return $blogs;
     }
 }
 

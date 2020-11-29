@@ -7,5 +7,6 @@
     'store' => 'Store',
     'contact' => 'Contact',
     'article-videos' => 'Article & Videos',
+    'course' => 'Course',
   ),
 );

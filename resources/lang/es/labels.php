@@ -26,6 +26,7 @@ return array (
     'sr_no' => 'No Señor.',
     'read_more' => 'Lee mas',
     'no_data_available' => 'Datos no disponibles',
+    'no_search_results' => 'No search results.',
     'more' => 'Más',
     'edit' => 'Editar',
     'delete_selected' => 'Eliminar seleccionado',

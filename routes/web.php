@@ -116,7 +116,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('lesson/book-slot','LessonsController@bookSlot')->name('lessons.course.book-slot');
 });
 
-Route::get('/search', [HomeController::class, 'searchCourse'])->name('search');
+Route::get('/search', [HomeController::class, 'searchAll'])->name('search');
 Route::get('/search-course', [HomeController::class, 'searchCourse'])->name('search-course');
 Route::get('/search-bundle', [HomeController::class, 'searchBundle'])->name('search-bundle');
 Route::get('/search-blog', [HomeController::class, 'searchBlog'])->name('blogs.search');

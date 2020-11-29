@@ -17,7 +17,7 @@
 
                             <div class="item">
                                 <div class="coursegrid clearfix">
-                                    <img src="{{asset('storage/uploads/'.$item->course_image)}}" alt="" />
+                                    <a href="{{ route('courses.show', [$item->slug]) }}"><img src="{{asset('storage/uploads/'.$item->course_image)}}" alt="" /></a>
                                     <div class="price">
                                         @if($item->free == 1)
                                             {{trans('labels.backend.courses.fields.free')}}
@@ -32,7 +32,7 @@
                                             @foreach($item->teachers as $teacher)
                                             <div class="user-img">
                                                 <img src="{{$teacher->picture}}" alt="Image goes here" />
-                                                <p class="username">By <span><a href="#">{{$teacher->first_name}}</a></span></p>
+                                                <p class="username">By&nbsp;<span><a href="#">{{$teacher->first_name}}</a></span></p>
                                             </div>
                                             @endforeach
                                         </div>

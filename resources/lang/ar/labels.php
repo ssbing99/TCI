@@ -1140,6 +1140,7 @@ return array (
     'read_more' => 'قراءة المزيد',
     'none' => 'لا شيء',
     'no_data_available' => 'لا تتوافر بيانات',
+    'no_search_results' => 'No search results.',
     'no' => 'لا',
     'more' => 'أكثر من',
     'actions' => 'أفعال',
