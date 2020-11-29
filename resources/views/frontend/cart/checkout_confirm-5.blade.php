@@ -82,7 +82,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="email">Phone <span class="text-muted">*</span></label>
-                            <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone No." value="{{ $savedAddress['phone'] ?? '' }}" required="">
+                            <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone No." value="{{ $savedAddress['phone'] ?? '' }}">
                             <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
                         </div>
                         <div class="mb-3">
