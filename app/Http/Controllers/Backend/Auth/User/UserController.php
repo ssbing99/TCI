@@ -66,7 +66,7 @@ class UserController extends Controller
                 ->orderBy('users.created_at', 'desc');
         }
 
-        return \DataTables::of($users)
+        return \DataTables::of($users->get())
             ->addIndexColumn()
             ->addColumn('confirmed_label', function ($q)  {
                 return $q->confirmed_label;

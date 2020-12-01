@@ -88,7 +88,7 @@
                             return '<input type="checkbox" class="single" name="id[]" value="' + data.id + '" />';
                         }, "orderable": false, "searchable": false, "name": "id"
                     },
-                    {data: "DT_RowIndex", name: 'DT_RowIndex', searchable: false},
+                    {data: "DT_RowIndex", name: 'DT_RowIndex', searchable: false, orderable: false},
                     {data: "id", name: 'id'},
                     {data: "reference_no", name: 'reference_no'},
                     {data: "items", name: 'items'},

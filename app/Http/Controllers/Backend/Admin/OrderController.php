@@ -41,7 +41,7 @@ class OrderController extends Controller
             $orders = Order::query()->orderBy('updated_at', 'desc');
         }
 
-        return DataTables::of($orders)
+        return DataTables::of($orders->get())
             ->addIndexColumn()
             ->addColumn('actions', function ($q) use ($request) {
                 $view = "";

@@ -64,7 +64,7 @@ class BlogController extends Controller
             $has_delete = true;
         }
 
-        return DataTables::of($blogs)
+        return DataTables::of($blogs->get())
             ->addIndexColumn()
             ->addColumn('actions', function ($q) use ($has_view, $has_edit, $has_delete, $request) {
                 $view = "";
