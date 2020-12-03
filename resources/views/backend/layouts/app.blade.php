@@ -57,6 +57,9 @@
             <link rel="stylesheet" href="{{asset('css/backend.css')}}">
             <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
             <link rel="stylesheet" href="{{asset('css/bootstrap-select.css')}}">
+            @if(auth()->check() && (auth()->user()->hasRole('student')))
+            <link rel="stylesheet" href="{{asset('css/backend2.css')}}">
+            @endif
             <link rel="stylesheet" href="{{asset('css/backend-custom.css')}}">
 
 
@@ -76,30 +79,53 @@
 
         </head>
 
-        <body class="{{ config('backend.body_classes') }}">
-        @include('backend.includes.header')
+        @if(auth()->check() && !(auth()->user()->hasRole('student')))
+            <body class="{{ config('backend.body_classes') }}">
+            @include('backend.includes.header')
+        @else
+            <body class="app header-fixed sidebar-fixed">
+        @endif
 
-        <div class="app-body">
-            @include('backend.includes.sidebar')
+        @if(auth()->check() && (auth()->user()->hasRole('student')))
+            @include('backend.includes.header-5')
 
-            <main class="main">
-                @include('includes.partials.logged-in-as')
-                {{--{!! Breadcrumbs::render() !!}--}}
-
-                <div class="container-fluid" style="padding-top: 30px">
-                    <div class="animated fadeIn">
-                        <div class="content-header">
-                            @yield('page-header')
-                        </div><!--content-header-->
-
+            <div class="container-fluid" style="padding-top: 30px;">
+                <div class="row row-offcanvas row-offcanvas-left">
+                    @include('backend.includes.sidebar-5')
+                    <div class="col main pt-5 mt-3">
                         @include('includes.partials.messages')
                         @yield('content')
                     </div><!--animated-->
-                </div><!--container-fluid-->
-            </main><!--main-->
+                </div>
+            </div>
+            </div><!--container-fluid-->
+        @else
 
-            {{--@include('backend.includes.aside')--}}
-        </div><!--app-body-->
+
+            <div class="app-body">
+                @include('backend.includes.sidebar')
+
+                <main class="main">
+                    @include('includes.partials.logged-in-as')
+                    {{--{!! Breadcrumbs::render() !!}--}}
+
+                    <div class="container-fluid" style="padding-top: 30px">
+                        <div class="animated fadeIn">
+                            <div class="content-header">
+                                @yield('page-header')
+                            </div><!--content-header-->
+
+                            @include('includes.partials.messages')
+                            @yield('content')
+                        </div><!--animated-->
+                    </div><!--container-fluid-->
+
+                </main><!--main-->
+
+                {{--@include('backend.includes.aside')--}}
+            </div><!--app-body-->
+
+        @endif
 
         @include('backend.includes.footer')
 
@@ -132,6 +158,28 @@
         <script src="{{asset('js/main.js')}}" type="text/javascript"></script>
         <script>
             window._token = '{{ csrf_token() }}';
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('[data-toggle=offcanvas]').click(function() {
+                    $('.row-offcanvas').toggleClass('active');
+                });
+            });
+            //Searchbar js Starts
+            $(function () {
+                $('a[href="#search"]').on('click', function(event) {
+                    event.preventDefault();
+                    $('#search').addClass('open');
+                    $('#search > form > input[type="search"]').focus();
+                });
+
+                $('#search, #search button.close').on('click keyup', function(event) {
+                    if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
+                        $(this).removeClass('open');
+                    }
+                });
+            });
         </script>
 
         @stack('after-scripts')
