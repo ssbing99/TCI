@@ -32,7 +32,7 @@
                                             @foreach($item->teachers as $teacher)
                                             <div class="user-img">
                                                 <img src="{{$teacher->picture}}" alt="Image goes here" />
-                                                <p class="username">By&nbsp;<span><a href="#">{{$teacher->first_name}}</a></span></p>
+                                                <p class="username">By&nbsp;<span><a href="{{route('teachers.show',['id'=>$teacher->id])}}" target="_blank">{{$teacher->first_name}}</a></span></p>
                                             </div>
                                             @endforeach
                                         </div>
