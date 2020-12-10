@@ -21,13 +21,13 @@ class ConfigUpdateSeeder extends Seeder
             1 =>
                 array(
                     'name' => 'primary_address',
-                    'value' => 'Surburban Site - 3928 Dickens Dr. Plano, TX 75023 \nFarm Site - Ben Franklin, TX',
+                    'value' => 'Surburban Site - 3928 Dickens Dr. Plano, TX 75023 Farm Site - Ben Franklin, TX',
                     'status' => 1,
                 ),
             2 =>
                 array(
                     'name' => 'secondary_address',
-                    'value' => 'Surburban Site - 3928 Dickens Dr. Plano, TX 75023 \nFarm Site - Ben Franklin, TX',
+                    'value' => 'Surburban Site - 3928 Dickens Dr. Plano, TX 75023 Farm Site - Ben Franklin, TX',
                     'status' => 1,
                 ),
             3 =>
