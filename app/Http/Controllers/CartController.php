@@ -323,6 +323,7 @@ class CartController extends Controller
             generateInvoice($order);
             $this->adminOrderMail($order);
 
+            $this->populatePaymentDisplayInfo();
             Cart::session(auth()->user()->id)->clear();
             Session::flash('success', trans('labels.frontend.cart.payment_done'));
             return redirect()->route('status');
@@ -462,11 +463,13 @@ class CartController extends Controller
             //Generating Invoice
             generateInvoice($order);
             $this->adminOrderMail($order);
+            $this->populatePaymentDisplayInfo();
             Cart::session(auth()->user()->id)->clear();
             return Redirect::route('status');
         }
         else {
             \Session::flash('failure', trans('labels.frontend.cart.payment_failed'));
+            $this->populatePaymentDisplayInfo();
             return Redirect::route('status');
         }
 
@@ -759,5 +762,54 @@ class CartController extends Controller
                 \Mail::to($admin->email)->send(new AdminOrederMail($content, $admin));
             }
         }
+    }
+
+    private function populatePaymentDisplayInfo() {
+        $course_ids = [];
+        $bundle_ids = [];
+        $storeItem_ids = [];
+        $storeItem_extra = [];
+        foreach (Cart::session(auth()->user()->id)->getContent() as $item) {
+            if ($item->attributes->type == 'bundle') {
+                $bundle_ids[] = $item->id;
+            } else if ($item->attributes->type == 'store') {
+                $id = $this->getActualItemId($item->id, $item->attributes->type);
+                $storeItem_ids[] = $id;
+                $storeItem_extra[] = [
+                    $id => [
+                        'price' => $item->price,
+                        'quantity' => $item->quantity,
+                    ],
+                ];
+            } else {
+                $course_ids[] = $item->id;
+            }
+        }
+        $courses = new Collection(Course::find($course_ids));
+        $bundles = Bundle::find($bundle_ids);
+        $storeItems = Item::find($storeItem_ids);
+
+        if(isset($storeItems)){
+            foreach($storeItems as $item){
+                if(isset($storeItem_extra)){
+                    foreach ($storeItem_extra as $extra){
+                        if(isset($extra[$item->id])) {
+                            $item->setPriceAttribute($extra[$item->id]['price']);
+                            $item->setQuantityAttribute($extra[$item->id]['quantity']);
+                        }
+                    }
+                }
+            }
+        }
+
+        $courses = $bundles->merge($courses);
+        $consolidateItems = $courses->merge($storeItems);
+        $total = $consolidateItems->sum('price');
+        $savedAddress = Auth::user() -> saved_address;
+
+        \Session::flash('courses', $courses);
+        \Session::flash('saved_address', $savedAddress);
+        \Session::flash('storeItems', $storeItems);
+        \Session::flash('total', $total);
     }
 }
