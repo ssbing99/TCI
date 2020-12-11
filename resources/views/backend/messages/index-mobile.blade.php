@@ -16,17 +16,17 @@
     </style>
 @endpush
 @section('content')
-    <div class="card message-box">
+    <div class="card message-box message-box-mobile">
         <div class="card-header">
             <h3 class="page-title mb-0">@lang('labels.backend.messages.title')
                 <div class="float-right">
-                    <a class="text-decoration-none mr-2 refresh" href="#">
+                    <a class="text-decoration-none mr-2 refresh" href="#" style="color: #007bff;">
                         <i class="icon-refresh font-weight-bold"></i>
                     </a>
-                    <a class="text-decoration-none compose mr-2" href="#">
+                    <a class="text-decoration-none compose mr-2" href="#" style="color: #007bff;">
                         <i class="icon-plus font-weight-bold"></i>
                     </a>
-                    <a href="{{route('admin.messages')}}" class="d-lg-none text-decoration-none threads d-md-none">
+                    <a href="{{route('admin.messages')}}" class="d-lg-none text-decoration-none threads d-md-none" style="color: #007bff;">
                         <i class="icon-speech font-weight-bold"></i>
                     </a>
                 </div>
@@ -63,6 +63,8 @@
                                             <div data-thread="{{$item->id}}"
                                                  class="chat_list @if(($thread != "") && ($thread->id == $item->id))  active_chat @endif ">
                                                 <div class="chat_people">
+
+                                                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt=""> </div>
 
                                                     <div class="chat_ib">
                                                         <h5>

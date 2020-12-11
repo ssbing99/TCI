@@ -53,7 +53,7 @@ class TeachersController extends Controller
         }
 
 
-        return DataTables::of($teachers)
+        return DataTables::of($teachers->get())
             ->addIndexColumn()
             ->addColumn('actions', function ($q) use ($has_view, $has_edit, $has_delete, $request) {
                 $view = "";

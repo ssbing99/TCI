@@ -62,7 +62,7 @@ class CategoriesController extends Controller
             $has_delete = true;
         }
 
-        return DataTables::of($categories)
+        return DataTables::of($categories->get())
             ->addIndexColumn()
             ->addColumn('actions', function ($q) use ($has_view, $has_edit, $has_delete, $request) {
                 $view = "";

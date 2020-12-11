@@ -16,12 +16,12 @@
     </style>
 @endpush
 @section('content')
-    <div class="card message-box">
+    <div class="card">
         <div class="card-header">
             @lang('labels.backend.messages.title')
 
                 <a href="{{route('admin.messages').'?threads'}}"
-                   class="d-lg-none text-decoration-none threads d-md-none float-right">
+                   class="d-lg-none text-decoration-none threads d-md-none float-right" style="color: #007bff;">
                     <i class="icon-speech font-weight-bold"></i>
                 </a>
         </div>
@@ -32,7 +32,7 @@
                         <div class="headind_srch">
                             @if(request()->has('thread'))
                             <div class="recent_heading btn-sm btn btn-dark">
-                                <a class="text-decoration-none" href="{{route('admin.messages')}}">
+                                <a class="text-decoration-none" href="{{route('admin.messages')}}" style="color: #007bff;">
                                     <h5 class="text-white mb-0"><i class="icon-plus"></i>&nbsp;&nbsp; @lang('labels.backend.messages.compose')</h5>
                                 </a>
                             </div>
@@ -63,7 +63,7 @@
                                             <div data-thread="{{$item->id}}"
                                                  class="chat_list @if(($thread != "") && ($thread->id == $item->id))  active_chat @endif" >
                                                 <div class="chat_people">
-
+                                                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt=""> </div>
                                                     <div class="chat_ib">
                                                         <h5>{{ $item->participants()->with('user')->where('user_id','<>', auth()->user()->id)->first()->user->name }}
                                                             @if($item->participants()->count() > 2)
@@ -105,7 +105,7 @@
                                             @endif
                                         </h5>
                                         <p class="float-right d-inline mb-0">
-                                            <a class="" href="{{route('admin.messages',['thread'=>$thread->id])}}">
+                                            <a class="" href="{{route('admin.messages',['thread'=>$thread->id])}}" style="color: #007bff;">
                                                 <i class="icon-refresh font-weight-bold"></i>
                                             </a>
                                         </p>

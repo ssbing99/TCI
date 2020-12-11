@@ -176,7 +176,8 @@
 
                 columnDefs: [
                     {"width": "5%", "targets": 0},
-                    {"className": "text-center", "targets": [0]}
+                    {"className": "text-center", "targets": [0]},
+                    {targets: [0], orderable: false}
                 ],
                 language:{
                     url : "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/{{$locale_full_name}}.json",

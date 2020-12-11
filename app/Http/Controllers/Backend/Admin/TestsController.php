@@ -65,7 +65,7 @@ class TestsController extends Controller
             $has_delete = true;
         }
 
-        return DataTables::of($tests)
+        return DataTables::of($tests->get())
             ->addIndexColumn()
             ->addColumn('actions', function ($q) use ($has_view, $has_edit, $has_delete, $request) {
                 $view = "";

@@ -115,7 +115,8 @@
                 {
                     data: "DT_RowIndex",
                     name: 'DT_RowIndex',
-                    width: '8%'
+                    width: '8%',
+                    orderable: false
                 },
                 {
                     data: "id",

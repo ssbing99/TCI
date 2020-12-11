@@ -83,7 +83,7 @@ class CoursesController extends Controller
             $has_delete = true;
         }
 
-        return DataTables::of($courses)
+        return DataTables::of($courses->get())
             ->addIndexColumn()
             ->addColumn('actions', function ($q) use ($has_view, $has_edit, $has_delete, $request) {
                 $view = "";
