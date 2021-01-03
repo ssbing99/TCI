@@ -55,6 +55,7 @@
                         <th>@lang('labels.backend.courses.fields.title')</th>
                         <th>@lang('labels.backend.courses.fields.category')</th>
                         <th>@lang('labels.backend.courses.fields.price') <br><small>(in {{$appCurrency['symbol']}})</small></th>
+                        <th>@lang('labels.backend.courses.fields.price') with Skype<br><small>(in {{$appCurrency['symbol']}})</small></th>
                             <th>@lang('labels.backend.courses.fields.status')</th>
                             <th>@lang('labels.backend.lessons.title')</th>
                         @if( request('show_deleted') == 1 )
@@ -101,13 +102,13 @@
                     {
                         extend: 'csv',
                         exportOptions: {
-                            columns: [ 1, 2, 3, 4,5,6 ]
+                            columns: [ 1, 2, 3, 4,5,6, 7 ]
                         }
                     },
                     {
                         extend: 'pdf',
                         exportOptions: {
-                            columns: [ 1, 2, 3, 4,5,6 ]
+                            columns: [ 1, 2, 3, 4,5,6, 7 ]
                         }
                     },
                     'colvis'
@@ -132,6 +133,7 @@
                     {data: "title", name: 'title'},
                     {data: "category", name: 'category'},
                     {data: "price", name: "price"},
+                    {data: "price_skype", name: "price_skype"},
                     {data: "status", name: "status"},
                     {data: "lessons", name: "lessons"},
                     {data: "actions", name: "actions"}

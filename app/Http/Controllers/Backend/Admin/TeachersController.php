@@ -119,8 +119,9 @@ class TeachersController extends Controller
         $teacher = User::create($request->all());
         $teacher->confirmed = 1;
         if ($request->image) {
+            $file = $request->file('image');
             $teacher->avatar_type = 'storage';
-            $teacher->avatar_location = $request->image->store('/avatars', 'public');
+            $teacher->avatar_location = $file->store('/avatars', 'public');
         }
         $teacher->active = isset($request->active)?1:0;
         $teacher->save();
@@ -136,11 +137,13 @@ class TeachersController extends Controller
         $data = [
             'user_id'           => $teacher->id,
             'facebook_link'     => request()->facebook_link,
+            'insta_link'     => request()->insta_link,
             'twitter_link'      => request()->twitter_link,
             'linkedin_link'     => request()->linkedin_link,
             'payment_method'    => request()->payment_method,
             'payment_details'   => json_encode($payment_details),
             'description'       => request()->description,
+            'title'       => request()->title,
         ];
         TeacherProfile::create($data);
 
@@ -191,11 +194,13 @@ class TeachersController extends Controller
         $data = [
             // 'user_id'           => $user->id,
             'facebook_link'     => request()->facebook_link,
+            'insta_link'     => request()->insta_link,
             'twitter_link'      => request()->twitter_link,
             'linkedin_link'     => request()->linkedin_link,
             'payment_method'    => request()->payment_method,
             'payment_details'   => json_encode($payment_details),
             'description'       => request()->description,
+            'title'       => request()->title,
         ];
         $teacher->teacherProfile->update($data);
 

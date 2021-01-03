@@ -63,13 +63,15 @@
 
     <!-- Start of breadcrumb section
         ============================================= -->
-    <div class="banner custom-banner-bg">
+    <header>
         <div class="container">
-            <div class="page-heading">
-                <span>@if(isset($category)) {{$category->name}} @else @lang('labels.frontend.course.courses') @endif </span>
+            <div class="row clearfix">
+                <div class="col-12">
+                    <h1>@if(isset($category)) {{$category->name}} @else @lang('labels.frontend.course.courses') @endif</h1>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
     <!-- End of breadcrumb section
         ============================================= -->
 
@@ -79,103 +81,211 @@
     <section>
         <div class="container">
             <div class="row clearfix">
-                <div class="col-12">
-                    @if(session()->has('success'))
-                    <div class="alert alert-dismissable alert-success fade show">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        {{session('success')}}
-                    </div>
-                    @endif
-                    <div class="page-title clearfix">
-                        <div class="row clearfix">
-                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                <label class="title">@lang('labels.frontend.course.sort_by')
-                                    <select id="sortBy" class="form-control" style="margin-left: 10px;">
-                                        <option value="">@lang('labels.frontend.course.none')</option>
-                                        <option value="popular">@lang('labels.frontend.course.popular')</option>
-                                        <option value="trending">@lang('labels.frontend.course.trending')</option>
-                                        <option value="featured">@lang('labels.frontend.course.featured')</option>
-                                    </select>
-                                </label>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">
+                    <div class="bg-f7f7f7 clearfix">
+                        <form method="post" action="" role="form">
+                            <div class="form-group">
+                                <input type="text" name="courseSearch" id="courseSearch" class="form-control" placeholder="Search" />
                             </div>
-                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                <label class="title">@lang('labels.frontend.course.filter_by')
-                                    <select id="filterBy" class="form-control" style="margin-left: 10px;">
-                                        <option value="">@lang('labels.frontend.course.none')</option>
-                                        <option value="past">@lang('labels.frontend.course.past')</option>
-                                        <option value="upcoming">@lang('labels.frontend.course.upcoming')</option>
-                                    </select>
-                                </label>
+                            <div class="form-group">
+                                <input type="text" name="filterSkill" id="filterSkill" class="form-control" placeholder="Filter by Skill Level" />
                             </div>
-                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                <div class="float-right">
-                                    <div class="btn-group">
-                                        <button class="btn btn-outline-secondary" id="list">
-                                            <i class="fa fa-list"></i>
-                                        </button>
-                                        <button class="btn btn-outline-secondary" id="grid">
-                                            <i class="fa fa-th-large"></i>
-                                        </button>
-                                    </div>
+                            <div class="form-group">
+                                <input type="text" name="filterDuration" id="filterDuration" class="form-control" placeholder="Filter by Duration" />
+                            </div>
+                            <div class="form-group">
+                                <label class="label">Course Price</label>
+                                <div class="demo__body">
+                                    <input id="demo_0" type="text" name="" value="" />
                                 </div>
                             </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-8 col-md-8 col-lg-9 col-xl-9">
+                    <div class="bg-f7f7f7 clearfix">
+                        <div class="filter-text clearfix">
+                            @if($courses->count() > 0)
+                                Showing all {{$courses->count()}} Results
+                            @else
+                                @lang('labels.general.no_data_available')
+                            @endif
+                                @if($courses->count() > 0)
+                                    <span class="float-right">
+
+                                    <select class="form-control" id="sortBy">
+                                    <option value="">-Sort by-</option>
+                                    <option value="popularity">Popularity</option>
+                                    <option value="price">Price</option>
+                                    <option value="duration">Duration</option>
+                                  </select>
+
+                            </span>
+                                @endif
                         </div>
                     </div>
-                    <div id="products" class="row view-group">
+                    <div class="row clearfix">
 
                         @if($courses->count() > 0)
 
                             @foreach($courses as $course)
-                                <div class="item col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                    <div class="coursegrid clearfix">
-                                        <a href="{{ route('courses.show', [$course->slug]) }}"><img src="@if($course->course_image != "") {{asset('storage/uploads/'.$course->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif"  alt="" /></a>
-                                        <div class="price">
-                                            @if($course->free == 1)
-                                                {{trans('labels.backend.courses.fields.free')}}
-                                            @else
-                                                {{$appCurrency['symbol'].' '.$course->price}}
-                                            @endif
-                                        </div>
-                                        <h6><a href="{{ route('courses.show', [$course->slug]) }}">{{$course->title}}</a></h6>
-                                        <p>{{substr($course->description, 0,200).'...'}}</p>
-                                        <div class="row clearfix">
-                                            <div class="col-8 col-sm-7 col-md-7 col-lg-8 col-xl-8">
-                                                @foreach($course->teachers as $teacher)
-                                                <div class="user-img">
-                                                    <img src="{{$teacher->picture}}" alt="Image goes here" />
-                                                    <p class="username">By&nbsp;<span><a href="{{route('teachers.show',['id'=>$teacher->id])}}" target="_blank">{{$teacher->first_name}}</a></span></p>
+                                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="course clearfix">
+                                        <div class="course-img clearfix">
+                                            <a href="{{ route('courses.show', [$course->slug]) }}"><img src="@if($course->course_image != "") {{asset('storage/uploads/'.$course->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif" alt="" /></a>
+                                            <div class="over">
+                                                <div class="price">
+                                                    @if($course->free == 1)
+                                                        {{trans('labels.backend.courses.fields.free')}}
+                                                    @else
+                                                        <span>{{$appCurrency['symbol']}}</span> {{$course->price}}
+                                                        <div class="float-right">
+                                                            <i class="fa fa-skype"></i>
+                                                            <span>{{$appCurrency['symbol']}}</span> {{$course->price_skype}}
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                                @endforeach
                                             </div>
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <ul class="subicons" style="float: left;">
-                                                    <li><i class="fa fa-users"></i> {{ $course->students()->count() }}</li>
-                                                    <li><i class="fa fa-commenting-o"></i> {{count($course->reviews) }}</li>
-                                                </ul>
-                                            </div>
+                                        </div>
+                                        <div class="course-content clearfix">
+                                            <p class="title clearfix"><a href="{{ route('courses.show', [$course->slug]) }}">{{$course->title}}</a></p>
+                                            <div class="desc clearfix">By :
+                                                @foreach($course->teachers as $teacher){{$teacher->first_name}}&nbsp;@endforeach<span class="duration">{{$course->duration}} Days</span></div>
                                         </div>
                                     </div>
                                 </div>
 
                             @endforeach
-                        @else
-                            <h3>@lang('labels.general.no_data_available')</h3>
                         @endif
 
-
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="course clearfix">
+                                <div class="course-img clearfix">
+                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-1.jpg")}}" alt="Images goes here" /></a>
+                                    <div class="over">
+                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
+                                    </div>
+                                </div>
+                                <div class="course-content clearfix">
+                                    <p class="title clearfix"><a href="course-details.html">Photography Portfolio Review with David Bathgate</a></p>
+                                    <div class="desc clearfix">By : David Bathgate<span class="duration">60 Days</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="course clearfix">
+                                <div class="course-img clearfix">
+                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-2.jpg")}}" alt="Images goes here" /></a>
+                                    <div class="over">
+                                        <div class="price"><span>$</span> 159 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 179</div></div>
+                                    </div>
+                                </div>
+                                <div class="course-content clearfix">
+                                    <p class="title clearfix"><a href="course-details.html">Art of Culinary Photography</a></p>
+                                    <div class="desc clearfix">By : Meeta Khurana<span class="duration">90 Days</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="course clearfix">
+                                <div class="course-img clearfix">
+                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-3.jpg")}}" alt="Images goes here" /></a>
+                                    <div class="over">
+                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
+                                    </div>
+                                </div>
+                                <div class="course-content clearfix">
+                                    <p class="title clearfix"><a href="course-details.html">Capturing Breathtaking Landscapes</a></p>
+                                    <div class="desc clearfix">By : Gina Genis<span class="duration">30 Days</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="course clearfix">
+                                <div class="course-img clearfix">
+                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-1.jpg")}}" alt="Images goes here" /></a>
+                                    <div class="over">
+                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
+                                    </div>
+                                </div>
+                                <div class="course-content clearfix">
+                                    <p class="title clearfix"><a href="course-details.html">Photography Portfolio Review with David Bathgate</a></p>
+                                    <div class="desc clearfix">By : David Bathgate<span class="duration">60 Days</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="course clearfix">
+                                <div class="course-img clearfix">
+                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-2.jpg")}}" alt="Images goes here" /></a>
+                                    <div class="over">
+                                        <div class="price"><span>$</span> 159 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 179</div></div>
+                                    </div>
+                                </div>
+                                <div class="course-content clearfix">
+                                    <p class="title clearfix"><a href="course-details.html">Art of Culinary Photography</a></p>
+                                    <div class="desc clearfix">By : Meeta Khurana<span class="duration">90 Days</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="course clearfix">
+                                <div class="course-img clearfix">
+                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-3.jpg")}}" alt="Images goes here" /></a>
+                                    <div class="over">
+                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
+                                    </div>
+                                </div>
+                                <div class="course-content clearfix">
+                                    <p class="title clearfix"><a href="course-details.html">Capturing Breathtaking Landscapes</a></p>
+                                    <div class="desc clearfix">By : Gina Genis<span class="duration">30 Days</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="course clearfix">
+                                <div class="course-img clearfix">
+                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-1.jpg")}}" alt="Images goes here" /></a>
+                                    <div class="over">
+                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
+                                    </div>
+                                </div>
+                                <div class="course-content clearfix">
+                                    <p class="title clearfix"><a href="course-details.html">Photography Portfolio Review with David Bathgate</a></p>
+                                    <div class="desc clearfix">By : David Bathgate<span class="duration">60 Days</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="course clearfix">
+                                <div class="course-img clearfix">
+                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-2.jpg")}}" alt="Images goes here" /></a>
+                                    <div class="over">
+                                        <div class="price"><span>$</span> 159 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 179</div></div>
+                                    </div>
+                                </div>
+                                <div class="course-content clearfix">
+                                    <p class="title clearfix"><a href="course-details.html">Art of Culinary Photography</a></p>
+                                    <div class="desc clearfix">By : Meeta Khurana<span class="duration">90 Days</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="course clearfix">
+                                <div class="course-img clearfix">
+                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-3.jpg")}}" alt="Images goes here" /></a>
+                                    <div class="over">
+                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
+                                    </div>
+                                </div>
+                                <div class="course-content clearfix">
+                                    <p class="title clearfix"><a href="course-details.html">Capturing Breathtaking Landscapes</a></p>
+                                    <div class="desc clearfix">By : Gina Genis<span class="duration">30 Days</span></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                        <nav aria-label="Page navigation example">
-                            {{ $courses->links() }}
-                        </nav>
                 </div>
-
-                <!-- Start of sidebar section
-                    ============================================= -->
-
-                <!--@include('frontend.layouts.partials.browse-course-sidebar')-->
-
-                <!-- End of sidebar section
-                    ============================================= -->
             </div>
         </div>
     </section>
@@ -185,7 +295,7 @@
 
     <!-- Start of best course
    =============================================  -->
-    @include('frontend.layouts.partials.browse_courses2')
+{{--    @include('frontend.layouts.partials.browse_courses2')--}}
     <!-- End of best course
             ============================================= -->
 
@@ -195,18 +305,18 @@
 @push('after-scripts')
     <script>
         $(document).ready(function () {
+            var cjson = {!! $courses_json !!};
+            console.log(cjson);
 
             $('#list').click(function(event){event.preventDefault();$('#products .item').addClass('list-group-item');});
             $('#grid').click(function(event){event.preventDefault();$('#products .item').removeClass('list-group-item');$('#products .item').addClass('grid-group-item');});
 
             $(document).on('change', '#sortBy', function () {
 
-                var filterBy = $('#filterBy').val() != '' ? 'filter=' + $('#filterBy').val() : '';
+                // var filterBy = $('#filterBy').val() != '' ? 'filter=' + $('#filterBy').val() : '';
 
                 if ($(this).val() != "") {
-                    location.href = '{{url()->current()}}?type=' + $(this).val() + (filterBy!=""?'&'+filterBy:'');
-                } else {
-                    location.href = '{{url()->current()}}'+(filterBy!=""?'?'+filterBy:'');
+                    location.href = '{{url()->current()}}?type=' + $(this).val();
                 }
             });
 

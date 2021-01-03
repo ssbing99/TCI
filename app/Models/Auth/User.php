@@ -64,6 +64,7 @@ class User extends Authenticatable
         'gender',
         'address',
         'city',
+        'postal',
         'pincode',
         'state',
         'country',

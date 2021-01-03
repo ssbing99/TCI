@@ -142,6 +142,10 @@ return array (
       array (
         'title' => 'Backup',
       ),
+      'workshops' =>
+      array (
+        'title' => 'Workshops',
+      ),
       'bundles' =>
       array (
         'title' => 'Bundles',

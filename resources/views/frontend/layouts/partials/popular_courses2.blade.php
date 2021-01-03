@@ -2,55 +2,126 @@
 <!-- Start popular course
        ============================================= -->
 @if(count($popular_courses) > 0)
-    <section>
+    <section class="bg-f0f1f5 clearfix">
         <div class="container">
             <div class="row clearfix">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <h3>@lang('labels.frontend.layouts.partials.popular_courses')</h3>
+                <div class="col-12">
+                    <h3>@lang('labels.frontend.layouts.partials.popular_courses')
+                        <div class="float-right">
+                            <button class="btn btn-primary filter-button" data-filter="all">All</button>
+                            <button class="btn btn-outline-secondary filter-button" data-filter="beginner">Beginner</button>
+                            <button class="btn btn-outline-secondary filter-button" data-filter="intermediate">Intermediate</button>
+                            <button class="btn btn-outline-secondary filter-button" data-filter="advanced">Advanced</button>
+                            <a class="btn btn-trans float-right" href="{{route('courses.all')}}">View All <i class="fa fa-long-arrow-right"></i></a>
+                        </div>
+                    </h3>
                 </div>
             </div>
-            <div class="row mtb-30 clearfix">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="owl-carousel owl-theme">
-
-                        @foreach($popular_courses as $item)
-
-                            <div class="item">
-                                <div class="coursegrid clearfix">
-                                    <a href="{{ route('courses.show', [$item->slug]) }}"><img src="{{asset('storage/uploads/'.$item->course_image)}}" alt="" /></a>
-                                    <div class="price">
+            <div class="row clearfix">
+                @foreach($popular_courses as $item)
+                <div class="gallery_product col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3 filter @if($item->beginner == 1) beginner @elseif($item->intermediate == 1) intermediate @elseif($item->advance == 1) advanced @endif">
+                    <figure>
+                        <a href="{{ route('courses.show', [$item->slug]) }}"><img src="{{asset('storage/uploads/'.$item->course_image)}}" alt="Images goes here" /></a>
+                        <figcaption>
+                            <a href="{{ route('courses.show', [$item->slug]) }}"><h4>{{$item->title}}</h4></a>
+                            <ul class="clearfix">
+                                <li>
+                                    <div class="title">Instructor</div>
+                                    <div class="text">
+                                        <?php $key=0; ?>
+                                        @foreach($item->teachers as $teacher)
+                                            {{$teacher->first_name}}
+                                            @if($key > 0) {{','}} @endif
+                                            <?php $key++ ?>
+                                        @endforeach
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="title">Duration</div>
+                                    <div class="text">{{$item->duration}} Days</div>
+                                </li>
+                                <li>
+                                    <div class="title">Course Price</div>
+                                    <div class="text">
                                         @if($item->free == 1)
                                             {{trans('labels.backend.courses.fields.free')}}
                                         @else
                                             {{$appCurrency['symbol'].' '.$item->price}}
                                         @endif
                                     </div>
-                                    <h6><a href="{{ route('courses.show', [$item->slug]) }}">{{$item->title}}</a></h6>
-                                    <p>{{substr($item->description, 0,200).'...'}}</p>
-                                    <div class="row clearfix">
-                                        <div class="col-8 col-sm-7 col-md-7 col-lg-8 col-xl-8">
-                                            @foreach($item->teachers as $teacher)
-                                            <div class="user-img">
-                                                <img src="{{$teacher->picture}}" alt="Image goes here" />
-                                                <p class="username">By&nbsp;<span><a href="{{route('teachers.show',['id'=>$teacher->id])}}" target="_blank">{{$teacher->first_name}}</a></span></p>
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                        <div class="col-4 col-sm-5 col-md-5 col-lg-4 col-xl-4">
-                                            <ul class="subicons">
-                                                <li><i class="fa fa-users"></i> {{ $item->students()->count() }}</li>
-                                                <li><i class="fa fa-commenting-o"></i> {{count($item->reviews) }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- /item -->
-                        @endforeach
-
-                    </div>
+                                </li>
+                            </ul>
+                        </figcaption>
+                    </figure>
                 </div>
+                    <!-- /item -->
+                @endforeach
+{{--                <div class="gallery_product col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3 filter intermediate">--}}
+{{--                    <figure>--}}
+{{--                        <img src="{{asset("assets_new/images/course-img-2.jpg")}}" alt="Images goes here" />--}}
+{{--                        <figcaption>--}}
+{{--                            <h4>Capturing Breathetaking Landscape</h4>--}}
+{{--                            <ul class="clearfix">--}}
+{{--                                <li>--}}
+{{--                                    <div class="title">Instructor</div>--}}
+{{--                                    <div class="text">Gina Genis</div>--}}
+{{--                                </li>--}}
+{{--                                <li>--}}
+{{--                                    <div class="title">Duration</div>--}}
+{{--                                    <div class="text">3 Months</div>--}}
+{{--                                </li>--}}
+{{--                                <li>--}}
+{{--                                    <div class="title">Course Price</div>--}}
+{{--                                    <div class="text">$149</div>--}}
+{{--                                </li>--}}
+{{--                            </ul>--}}
+{{--                        </figcaption>--}}
+{{--                    </figure>--}}
+{{--                </div>--}}
+{{--                <div class="gallery_product col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3 filter advanced">--}}
+{{--                    <figure>--}}
+{{--                        <img src="{{asset("assets_new/images/course-img-3.jpg")}}" alt="Images goes here" />--}}
+{{--                        <figcaption>--}}
+{{--                            <h4>Capturing Breathetaking Landscape</h4>--}}
+{{--                            <ul class="clearfix">--}}
+{{--                                <li>--}}
+{{--                                    <div class="title">Instructor</div>--}}
+{{--                                    <div class="text">Gina Genis</div>--}}
+{{--                                </li>--}}
+{{--                                <li>--}}
+{{--                                    <div class="title">Duration</div>--}}
+{{--                                    <div class="text">3 Months</div>--}}
+{{--                                </li>--}}
+{{--                                <li>--}}
+{{--                                    <div class="title">Course Price</div>--}}
+{{--                                    <div class="text">$149</div>--}}
+{{--                                </li>--}}
+{{--                            </ul>--}}
+{{--                        </figcaption>--}}
+{{--                    </figure>--}}
+{{--                </div>--}}
+{{--                <div class="gallery_product col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3 filter beginner">--}}
+{{--                    <figure>--}}
+{{--                        <img src="{{asset("assets_new/images/course-img-1.jpg")}}" alt="Images goes here" />--}}
+{{--                        <figcaption>--}}
+{{--                            <h4>Capturing Breathetaking Landscape</h4>--}}
+{{--                            <ul class="clearfix">--}}
+{{--                                <li>--}}
+{{--                                    <div class="title">Instructor</div>--}}
+{{--                                    <div class="text">Gina Genis</div>--}}
+{{--                                </li>--}}
+{{--                                <li>--}}
+{{--                                    <div class="title">Duration</div>--}}
+{{--                                    <div class="text">3 Months</div>--}}
+{{--                                </li>--}}
+{{--                                <li>--}}
+{{--                                    <div class="title">Course Price</div>--}}
+{{--                                    <div class="text">$149</div>--}}
+{{--                                </li>--}}
+{{--                            </ul>--}}
+{{--                        </figcaption>--}}
+{{--                    </figure>--}}
+{{--                </div>--}}
             </div>
         </div>
     </section>

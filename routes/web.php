@@ -65,6 +65,7 @@ Route::post('newsletter/subscribe', 'Frontend\HomeController@subscribe')->name('
 //============Course Routes=================//
 Route::get('courses', ['uses' => 'CoursesController@all', 'as' => 'courses.all']);
 Route::get('course/{slug}', ['uses' => 'CoursesController@show', 'as' => 'courses.show']);
+Route::get('course/{slug}/addreview', ['uses' => 'CoursesController@reviewShow', 'as' => 'courses.review.show']);
 //Route::post('course/payment', ['uses' => 'CoursesController@payment', 'as' => 'courses.payment']);
 Route::post('course/{course_id}/rating', ['uses' => 'CoursesController@rating', 'as' => 'courses.rating']);
 Route::get('category/{category}/courses', ['uses' => 'CoursesController@getByCategory', 'as' => 'courses.category']);
@@ -95,6 +96,18 @@ Route::get('store/{slug}', ['uses' => 'StoreController@show', 'as' => 'store.sho
 //Route::post('store/review/{id}/edit', ['uses' => 'StoreController@updateReview', 'as' => 'store.review.update']);
 //Route::get('store/review/{id}/delete', ['uses' => 'StoreController@deleteReview', 'as' => 'store.review.delete']);
 
+//============Workshop Routes=================//
+Route::get('workshops', ['uses' => 'WorkshopsController@all', 'as' => 'workshops.all']);
+Route::get('workshop/{slug}', ['uses' => 'WorkshopsController@show', 'as' => 'workshops.show']);
+//Route::post('workshop/payment', ['uses' => 'WorkshopsController@payment', 'as' => 'workshops.payment']);
+Route::post('workshop/{workshop_id}/rating', ['uses' => 'WorkshopsController@rating', 'as' => 'workshops.rating']);
+//Route::get('category/{category}/workshops', ['uses' => 'WorkshopsController@getByCategory', 'as' => 'workshops.category']);
+Route::post('workshops/{id}/review', ['uses' => 'WorkshopsController@addReview', 'as' => 'workshops.review']);
+Route::get('workshops/review/{id}/edit', ['uses' => 'WorkshopsController@editReview', 'as' => 'workshops.review.edit']);
+Route::post('workshops/review/{id}/edit', ['uses' => 'WorkshopsController@updateReview', 'as' => 'workshops.review.update']);
+Route::get('workshops/review/{id}/delete', ['uses' => 'WorkshopsController@deleteReview', 'as' => 'workshops.review.delete']);
+
+
 //============Bundle Routes=================//
 Route::get('bundles', ['uses' => 'BundlesController@all', 'as' => 'bundles.all']);
 Route::get('bundle/{slug}', ['uses' => 'BundlesController@show', 'as' => 'bundles.show']);
@@ -111,6 +124,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('lesson/{course_id}/{slug}/', ['uses' => 'LessonsController@show', 'as' => 'lessons.show']);
     Route::post('lesson/{slug}/test', ['uses' => 'LessonsController@test', 'as' => 'lessons.test']);
     Route::post('lesson/{slug}/retest', ['uses' => 'LessonsController@retest', 'as' => 'lessons.retest']);
+    Route::post('lesson/{id}/comment', ['uses' => 'LessonsController@addComment', 'as' => 'lessons.comment']);
     Route::post('video/progress', 'LessonsController@videoProgress')->name('update.videos.progress');
     Route::post('lesson/progress', 'LessonsController@courseProgress')->name('update.course.progress');
     Route::post('lesson/book-slot','LessonsController@bookSlot')->name('lessons.course.book-slot');
@@ -124,6 +138,7 @@ Route::get('/search-blog', [HomeController::class, 'searchBlog'])->name('blogs.s
 
 Route::get('/faqs', 'Frontend\HomeController@getFaqs')->name('faqs');
 
+Route::get('/how-it-works', [HomeController::class, 'howItWork'])->name('howitwork');
 
 /*=============== Theme blades routes ends ===================*/
 

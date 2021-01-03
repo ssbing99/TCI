@@ -62,26 +62,80 @@ class Socialite
         $socialite_links = '';
 
         if (config('services.facebook.active')) {
-            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'facebook')."' ><img src='".asset("assets_new/images/fb-icon.jpg")."' alt='image' /></a>";
+            $socialite_enable[] = "<li><a href='".route('frontend.auth.social.login', 'facebook')."' class=\"icoFacebook\"  ><i class=\"fa fa-facebook-f\"></i></a></li>";
+        }
+
+        $socialite_enable[] = "<li><a href='#' class=\"icoInstagram\"  ><i class=\"fa fa-instagram\"></i></a></li>";
+
+//
+//        if (config('services.google.active')) {
+//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'google')."' ><img src='".asset("assets_new/images/google-icon.jpg")."' alt='image' /></a>";
+//        }
+//
+//        if (config('services.twitter.active')) {
+//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'twitter')."' ><img src='".asset("assets_new/images/twitter-icon.jpg")."' alt='image' /></a>";
+//        }
+//
+//        if (config('services.linkedin.active')) {
+//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'linkedin')."' ><img src='".asset("assets_new/images/linkedin-icon.jpg")."' alt='image' /></a>";
+//        }
+//
+//
+//        if (config('services.bitbucket.active')) {
+//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'bitbucket')."' ><img src='".asset("assets_new/images/bitbucket-icon.jpg")."' alt='image' /></a>";
+//        }
+//
+//
+//        if (config('services.github.active')) {
+//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'github')."' ><img src='".asset("assets_new/images/github-icon.jpg")."' alt='image' /></a>";
+//        }
+
+
+        if ($count = count($socialite_enable)) {
+            $socialite_links .= '<ul class="social-network social-circle">';
+        }
+
+        for ($i = 0; $i < $count; $i++) {
+            $socialite_links .= ($socialite_links != '' ? ' ' : '').$socialite_enable[$i];
+        }
+
+        if ($count > 0) {
+            $socialite_links .= '</ul>';
+        }
+
+        return $socialite_links;
+    }
+
+    public function getSocialLinksForSignup()
+    {
+        $socialite_enable = [];
+        $socialite_links = '';
+
+        if (config('services.facebook.active')) {
+            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'facebook')."' ><img src='".asset("assets_new/images/facebook.jpg")."' alt='image' /></a>";
         }
 
 
-        if (config('services.google.active')) {
-            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'google')."' ><img src='".asset("assets_new/images/google-icon.jpg")."' alt='image' /></a>";
-        }
+//        if (config('services.google.active')) {
+//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'google')."' ><img src='".asset("assets_new/images/google-icon.jpg")."' alt='image' /></a>";
+//        }
+//
+//        if (config('services.twitter.active')) {
+//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'twitter')."' ><img src='".asset("assets_new/images/twitter-icon.jpg")."' alt='image' /></a>";
+//        }
 
-        if (config('services.twitter.active')) {
-            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'twitter')."' ><img src='".asset("assets_new/images/twitter-icon.jpg")."' alt='image' /></a>";
-        }
+//        if (config('services.linkedin.active')) {
+//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'linkedin')."' ><img src='".asset("assets_new/images/linkedin-icon.jpg")."' alt='image' /></a>";
+//        }
+//
+//
+//        if (config('services.bitbucket.active')) {
+//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'bitbucket')."' ><img src='".asset("assets_new/images/bitbucket-icon.jpg")."' alt='image' /></a>";
+//        }
 
-        if (config('services.linkedin.active')) {
-            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'linkedin')."' ><img src='".asset("assets_new/images/linkedin-icon.jpg")."' alt='image' /></a>";
-        }
-
-
-        if (config('services.bitbucket.active')) {
-            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'bitbucket')."' ><img src='".asset("assets_new/images/bitbucket-icon.jpg")."' alt='image' /></a>";
-        }
+//        if (config('services.bitbucket.active')) {
+            $socialite_enable[] = "<a href='#' ><img src='".asset("assets_new/images/instagram.jpg")."' alt='image' /></a>";
+//        }
 
 
         if (config('services.github.active')) {
@@ -97,9 +151,9 @@ class Socialite
             $socialite_links .= ($socialite_links != '' ? ' ' : '').$socialite_enable[$i];
         }
 
-        if ($count > 0) {
-            $socialite_links .= '</div>';
-        }
+//        if ($count > 0) {
+//            $socialite_links .= '</div>';
+//        }
 
         return $socialite_links;
     }

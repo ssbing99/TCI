@@ -8,5 +8,8 @@
     'contact' => 'Contact',
     'article-videos' => 'Article & Videos',
     'course' => 'Course',
+    'courses' => 'Courses',
+    'instructors' => 'Instructors',
+    'workshops' => 'Workshops',
   ),
 );

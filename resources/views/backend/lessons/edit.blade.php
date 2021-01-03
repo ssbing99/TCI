@@ -90,97 +90,97 @@
 
             </div>
 
-            <div class="row">
-                <div class="col-12 form-group">
-                    {!! Form::label('short_text', trans('labels.backend.lessons.fields.short_text'), ['class' => 'control-label']) !!}
-                    {!! Form::textarea('short_text', old('short_text'), ['class' => 'form-control ', 'placeholder' => trans('labels.backend.lessons.short_description_placeholder')]) !!}
-                </div>
-            </div>
+{{--            <div class="row">--}}
+{{--                <div class="col-12 form-group">--}}
+{{--                    {!! Form::label('short_text', trans('labels.backend.lessons.fields.short_text'), ['class' => 'control-label']) !!}--}}
+{{--                    {!! Form::textarea('short_text', old('short_text'), ['class' => 'form-control ', 'placeholder' => trans('labels.backend.lessons.short_description_placeholder')]) !!}--}}
+{{--                </div>--}}
+{{--            </div>--}}
             <div class="row">
                 <div class="col-12 form-group">
                     {!! Form::label('full_text', trans('labels.backend.lessons.fields.full_text'), ['class' => 'control-label']) !!}
                     {!! Form::textarea('full_text', old('full_text'), ['class' => 'form-control editor', 'placeholder' => '','id' => 'editor']) !!}
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12 form-group">
-                    {!! Form::label('downloadable_files', trans('labels.backend.lessons.fields.downloadable_files').' '.trans('labels.backend.lessons.max_file_size'), ['class' => 'control-label']) !!}
-                    {!! Form::file('downloadable_files[]', [
-                        'multiple',
-                        'class' => 'form-control file-upload',
-                         'id' => 'downloadable_files',
-                        'accept' => "image/jpeg,image/gif,image/png,application/msword,audio/mpeg,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint,application/pdf,video/mp4"
+{{--            <div class="row">--}}
+{{--                <div class="col-12 form-group">--}}
+{{--                    {!! Form::label('downloadable_files', trans('labels.backend.lessons.fields.downloadable_files').' '.trans('labels.backend.lessons.max_file_size'), ['class' => 'control-label']) !!}--}}
+{{--                    {!! Form::file('downloadable_files[]', [--}}
+{{--                        'multiple',--}}
+{{--                        'class' => 'form-control file-upload',--}}
+{{--                         'id' => 'downloadable_files',--}}
+{{--                        'accept' => "image/jpeg,image/gif,image/png,application/msword,audio/mpeg,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint,application/pdf,video/mp4"--}}
 
-                        ]) !!}
-                    <div class="photo-block mt-3">
-                        <div class="files-list">
-                            @if(count($lesson->downloadableMedia) > 0)
-                                @foreach($lesson->downloadableMedia as $media)
-                                    <p class="form-group">
-                                        <a href="{{ asset('storage/uploads/'.$media->name) }}"
-                                           target="_blank">{{ $media->name }}
-                                            ({{ $media->size }} KB)</a>
-                                        <a href="#" data-media-id="{{$media->id}}"
-                                           class="btn btn-xs btn-danger delete remove-file">@lang('labels.backend.lessons.remove')</a>
-                                    </p>
-                                @endforeach
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 form-group">
-                    {!! Form::label('pdf_files', trans('labels.backend.lessons.fields.add_pdf'), ['class' => 'control-label']) !!}
-                    {!! Form::file('add_pdf', [
-                        'class' => 'form-control file-upload',
-                         'id' => 'add_pdf',
-                        'accept' => "application/pdf"
-                        ]) !!}
-                    <div class="photo-block mt-3">
-                        <div class="files-list">
-                            @if($lesson->mediaPDF)
-                                <p class="form-group">
-                                    <a href="{{ asset('storage/uploads/'.$lesson->mediaPDF->name) }}"
-                                       target="_blank">{{ $lesson->mediaPDF->name }}
-                                        ({{ $lesson->mediaPDF->size }} KB)</a>
-                                    <a href="#" data-media-id="{{$lesson->mediaPDF->id}}"
-                                       class="btn btn-xs btn-danger delete remove-file">@lang('labels.backend.lessons.remove')</a>
-                                    <iframe src="{{asset('storage/uploads/'.$lesson->mediaPDF->name)}}" width="100%" height="500px">
-                                    </iframe>
-                                </p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
+{{--                        ]) !!}--}}
+{{--                    <div class="photo-block mt-3">--}}
+{{--                        <div class="files-list">--}}
+{{--                            @if(count($lesson->downloadableMedia) > 0)--}}
+{{--                                @foreach($lesson->downloadableMedia as $media)--}}
+{{--                                    <p class="form-group">--}}
+{{--                                        <a href="{{ asset('storage/uploads/'.$media->name) }}"--}}
+{{--                                           target="_blank">{{ $media->name }}--}}
+{{--                                            ({{ $media->size }} KB)</a>--}}
+{{--                                        <a href="#" data-media-id="{{$media->id}}"--}}
+{{--                                           class="btn btn-xs btn-danger delete remove-file">@lang('labels.backend.lessons.remove')</a>--}}
+{{--                                    </p>--}}
+{{--                                @endforeach--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--            <div class="row">--}}
+{{--                <div class="col-12 form-group">--}}
+{{--                    {!! Form::label('pdf_files', trans('labels.backend.lessons.fields.add_pdf'), ['class' => 'control-label']) !!}--}}
+{{--                    {!! Form::file('add_pdf', [--}}
+{{--                        'class' => 'form-control file-upload',--}}
+{{--                         'id' => 'add_pdf',--}}
+{{--                        'accept' => "application/pdf"--}}
+{{--                        ]) !!}--}}
+{{--                    <div class="photo-block mt-3">--}}
+{{--                        <div class="files-list">--}}
+{{--                            @if($lesson->mediaPDF)--}}
+{{--                                <p class="form-group">--}}
+{{--                                    <a href="{{ asset('storage/uploads/'.$lesson->mediaPDF->name) }}"--}}
+{{--                                       target="_blank">{{ $lesson->mediaPDF->name }}--}}
+{{--                                        ({{ $lesson->mediaPDF->size }} KB)</a>--}}
+{{--                                    <a href="#" data-media-id="{{$lesson->mediaPDF->id}}"--}}
+{{--                                       class="btn btn-xs btn-danger delete remove-file">@lang('labels.backend.lessons.remove')</a>--}}
+{{--                                    <iframe src="{{asset('storage/uploads/'.$lesson->mediaPDF->name)}}" width="100%" height="500px">--}}
+{{--                                    </iframe>--}}
+{{--                                </p>--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
-            <div class="row">
-                <div class="col-12 form-group">
-                    {!! Form::label('pdf_files', trans('labels.backend.lessons.fields.add_audio'), ['class' => 'control-label']) !!}
-                    {!! Form::file('add_audio', [
-                        'class' => 'form-control file-upload',
-                         'id' => 'add_audio',
-                        'accept' => "audio/mpeg3"
-                        ]) !!}
-                    <div class="photo-block mt-3">
-                        <div class="files-list">
-                            @if($lesson->mediaAudio)
-                                <p class="form-group">
-                                    <a href="{{ asset('storage/uploads/'.$lesson->mediaAudio->name) }}"
-                                       target="_blank">{{ $lesson->mediaAudio->name }}
-                                        ({{ $lesson->mediaAudio->size }} KB)</a>
-                                    <a href="#" data-media-id="{{$lesson->mediaAudio->id}}"
-                                       class="btn btn-xs btn-danger delete remove-file">@lang('labels.backend.lessons.remove')</a>
-                                    <audio id="player" controls>
-                                        <source src="{{ $lesson->mediaAudio->url }}" type="audio/mp3" />
-                                    </audio>
-                                </p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
+{{--            <div class="row">--}}
+{{--                <div class="col-12 form-group">--}}
+{{--                    {!! Form::label('pdf_files', trans('labels.backend.lessons.fields.add_audio'), ['class' => 'control-label']) !!}--}}
+{{--                    {!! Form::file('add_audio', [--}}
+{{--                        'class' => 'form-control file-upload',--}}
+{{--                         'id' => 'add_audio',--}}
+{{--                        'accept' => "audio/mpeg3"--}}
+{{--                        ]) !!}--}}
+{{--                    <div class="photo-block mt-3">--}}
+{{--                        <div class="files-list">--}}
+{{--                            @if($lesson->mediaAudio)--}}
+{{--                                <p class="form-group">--}}
+{{--                                    <a href="{{ asset('storage/uploads/'.$lesson->mediaAudio->name) }}"--}}
+{{--                                       target="_blank">{{ $lesson->mediaAudio->name }}--}}
+{{--                                        ({{ $lesson->mediaAudio->size }} KB)</a>--}}
+{{--                                    <a href="#" data-media-id="{{$lesson->mediaAudio->id}}"--}}
+{{--                                       class="btn btn-xs btn-danger delete remove-file">@lang('labels.backend.lessons.remove')</a>--}}
+{{--                                    <audio id="player" controls>--}}
+{{--                                        <source src="{{ $lesson->mediaAudio->url }}" type="audio/mp3" />--}}
+{{--                                    </audio>--}}
+{{--                                </p>--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
             <div class="row">
                 <div class="col-md-12 form-group">
                     {!! Form::label('add_video', trans('labels.backend.lessons.fields.add_video'), ['class' => 'control-label']) !!}

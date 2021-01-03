@@ -53,6 +53,7 @@
                                 <th>@lang('labels.general.id')</th>
                             <th>@lang('labels.backend.lessons.fields.title')</th>
                             <th>@lang('labels.backend.lessons.fields.published')</th>
+                            <th>Assignment</th>
                             @if( request('show_deleted') == 1 )
                                 <th>@lang('strings.backend.general.actions') &nbsp;</th>
                             @else
@@ -125,6 +126,7 @@
 
                     {data: "title", name: 'title'},
                     {data: "published", name: "published"},
+                    {data: "assignments", name: "assignments"},
                     {data: "actions", name: "actions"}
                 ],
                 @if(request('show_deleted') != 1)

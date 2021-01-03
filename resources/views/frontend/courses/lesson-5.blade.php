@@ -124,14 +124,15 @@
 @section('content')
     <!-- Start of breadcrumb section
             ============================================= -->
-    <div class="banner custom-banner-bg">
+    <header>
         <div class="container">
-            <div class="lesson-heading text-sm-center">
-                <span>{{$lesson->course->title}}</span><br>
-                <p class="lesson-sub-heading">{{$lesson->title}}</p>
+            <div class="row clearfix">
+                <div class="col-12">
+                    <h1>{{$lesson->course->title}}</h1>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
     <!-- End of breadcrumb section
         ============================================= -->
 
@@ -141,278 +142,163 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                    @if(session()->has('success'))
-                    <div class="alert alert-dismissable alert-success fade show">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        {{session('success')}}
-                    </div>
-                    @endif
-                    @include('includes.partials.messages')
-
-
-                    @if($lesson->lesson_image != "")
-                    <div class="course-single-pic mb30">
-                        <img class="content-img" src="{{asset('storage/uploads/'.$lesson->lesson_image)}}"
-                             alt="">
-                    </div>
-                    @endif
-
-                    @if ($test_exists)
-                        <div class="course-single-text">
-                            <div class="course-title mt10 headline relative-position">
-                                <h4>
-                                    <b>@lang('labels.frontend.course.test')
-                                        : {{$lesson->title}}</b>
-                                </h4>
-                            </div>
-                            <div class="course-details-content">
-                                <p> {!! $lesson->full_text !!} </p>
-                            </div>
-                        </div>
-                        <hr/>
-                        @if (!is_null($test_result))
-                        <div class="alert alert-info">@lang('labels.frontend.course.your_test_score')
-                            : {{ $test_result->test_result }}</div>
-                        @if(config('retest'))
-                        <form action="{{route('lessons.retest',[$test_result->test->slug])}}" method="post">
-                            @csrf
-                            <input type="hidden" name="result_id" value="{{$test_result->id}}">
-                            <button type="submit" class="btn gradient-bg font-weight-bold text-white"
-                                    href="">
-                                @lang('labels.frontend.course.give_test_again')
-                            </button>
-                        </form>
-                        @endif
-                        @if(count($lesson->questions) > 0  )
-                        <hr>
-
-                        @foreach ($lesson->questions as $question)
-
-                        <h4 class="mb-0">{{ $loop->iteration }}
-                            . {!! $question->question !!}   @if(!$question->isAttempted($test_result->id))
-                            <small class="badge badge-danger"> @lang('labels.frontend.course.not_attempted')</small> @endif
-                        </h4>
-                        <br/>
-                        <ul class="options-list pl-4">
-                            @foreach ($question->options as $option)
-
-                            <li class="@if(($option->answered($test_result->id) != null && $option->answered($test_result->id) == 1) || ($option->correct == true)) correct @elseif($option->answered($test_result->id) != null && $option->answered($test_result->id) == 2) incorrect  @endif"> {{ $option->option_text }}
-
-                                @if($option->correct == 1 && $option->explanation != null)
-                                <p class="text-dark">
-                                    <b>@lang('labels.frontend.course.explanation')</b><br>
-                                    {{$option->explanation}}
-                                </p>
-                                @endif
-                            </li>
-
-                            @endforeach
-                        </ul>
-                        <br/>
-                        @endforeach
-
-                        @else
-                        <h3>@lang('labels.general.no_data_available')</h3>
-
-                        @endif
-                        @else
-                        <div class="test-form">
-                            @if(count($lesson->questions) > 0  )
-                            <form action="{{ route('lessons.test', [$lesson->slug]) }}" method="post">
-                                {{ csrf_field() }}
-                                @foreach ($lesson->questions as $question)
-                                <h4 class="mb-0">{{ $loop->iteration }}. {!! $question->question !!}  </h4>
-                                <br/>
-                                @foreach ($question->options as $option)
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="questions[{{ $question->id }}]"
-                                               value="{{ $option->id }}"/>
-                                        <!--<span class="cr"><i class="cr-icon fa fa-circle"></i></span>-->
-                                        {{ $option->option_text }}<br/>
-                                    </label>
-                                </div>
-                                @endforeach
-                                <br/>
-                                @endforeach
-                                <input class="btn gradient-bg text-white font-weight-bold" type="submit"
-                                       value=" @lang('labels.frontend.course.submit_results') "/>
-                            </form>
-                            @else
-                            <h3>@lang('labels.general.no_data_available')</h3>
-
-                            @endif
-                        </div>
-                        @endif
-                        <hr/>
-                    @else
-                        <p class="content clearfix">
-                            <span>{{$lesson->title}}</span>
-                            @if($lesson->live_lesson)
-                            <p>{{ $lesson->short_text }}</p>
-                            @else
-                            <p>{!! $lesson->full_text !!}</p>
-                            @endif
-                        </p>
-
-                        @if($lesson->live_lesson)
-                        <!--TODO migrate live lesson-->
-                        @endif
-                    @endif
-
-                    @if($lesson->mediaPDF)
-                    <div id="myPDF"></div>
-                    @endif
-
-                    @if($lesson->mediaVideo && $lesson->mediavideo->count() > 0)
-                    <div class="course-single-text">
-                        @if($lesson->mediavideo != "")
-                        <div class="course-details-content mt-3">
-                            <div class="video-container mb-5" data-id="{{$lesson->mediavideo->id}}">
-                                @if($lesson->mediavideo->type == 'youtube')
-
-
-                                <div id="player" class="js-player" data-plyr-provider="youtube"
-                                     data-plyr-embed-id="{{$lesson->mediavideo->file_name}}"></div>
-                                @elseif($lesson->mediavideo->type == 'vimeo')
-                                <div id="player" class="js-player" data-plyr-provider="vimeo"
-                                     data-plyr-embed-id="{{$lesson->mediavideo->file_name}}"></div>
-                                @elseif($lesson->mediavideo->type == 'upload')
-
-
-                                <video poster="" id="player" class="js-player" playsinline controls>
-                                    <source src="{{$lesson->mediavideo->url}}" type="video/mp4"/>
-                                </video>
-                                @elseif($lesson->mediavideo->type == 'embed')
-                                {!! $lesson->mediavideo->url !!}
-                                @endif
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-                    @endif
-
-                    @if($lesson->mediaAudio)
-                    <div class="course-single-text mb-5">
-                        <audio id="audioPlayer" controls>
-                            <source src="{{$lesson->mediaAudio->url}}" type="audio/mp3"/>
-                        </audio>
-                    </div>
-                    @endif
-
-                    @if(($lesson->downloadableMedia != "") && ($lesson->downloadableMedia->count() > 0))
-                    <div class="course-single-text mt-4 px-3 py-1 gradient-bg text-white">
-                        <div class="course-title mt10 headline relative-position">
-                            <h4 class="text-white">
-                                @lang('labels.frontend.course.download_files')
-                            </h4>
-                        </div>
-
-                        @foreach($lesson->downloadableMedia as $media)
-                        <div class="course-details-content text-white">
-                            <p class="form-group">
-                                <a href="{{ route('download',['filename'=>$media->name,'lesson'=>$lesson->id]) }}"
-                                   class="text-white font-weight-bold"><i
-                                            class="fa fa-download"></i> {{ $media->name }}
-                                    ({{ number_format((float)$media->size / 1024 , 2, '.', '')}} @lang('labels.frontend.course.mb')
-                                    )</a>
-                            </p>
-                        </div>
-                        @endforeach
-                    </div>
-                    @endif
-
-                </div>
-                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                    @if ($previous_lesson)
-                    <p><a class="btn btn-block gradient-bg font-weight-bold text-white"
-                          href="{{ route('lessons.show', [$previous_lesson->course_id, $previous_lesson->model->slug]) }}"><i
-                                    class="fa fa-angle-double-left"></i>
-                            @lang('labels.frontend.course.prev')</a></p>
-                    @endif
-
-                    <p id="nextButton">
-                        @if($next_lesson)
-                        @if((int)config('lesson_timer') == 1 && $lesson->isCompleted() )
-                        <a class="btn btn-block gradient-bg font-weight-bold text-white"
-                           href="{{ route('lessons.show', [$next_lesson->course_id, $next_lesson->model->slug]) }}">@lang('labels.frontend.course.next')
-                            <i class='fa fa-angle-double-right'></i> </a>
-                        @else
-                        <a class="btn btn-block gradient-bg font-weight-bold text-white"
-                           href="{{ route('lessons.show', [$next_lesson->course_id, $next_lesson->model->slug]) }}">@lang('labels.frontend.course.next')
-                            <i class='fa fa-angle-double-right'></i> </a>
-                        @endif
-                        @endif
+                    <p class="assign-content clearfix">
+                        <span class="bold">{{$lesson->course->title}}</span>
+                        <p> {!! $lesson->full_text !!} </p>
                     </p>
+{{--                    <div class="row clearfix">--}}
+{{--                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">--}}
+{{--                            <img src="images/pic-full-1.jpg" class="img-full mb-15" alt="Images goes here" />--}}
+{{--                        </div>--}}
+{{--                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">--}}
+{{--                            <img src="images/pic-full-2.jpg" class="img-full mb-15" alt="Images goes here" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
-                    <!--<a href="#" class="btn btn-primary btn-lg btn-block">NEXT <i class="fa fa-angle-double-right"></i></a>-->
-                    @if($lesson->course->progress() == 100)
-                        @if(!$lesson->course->isUserCertified())
-                            <form method="post" action="{{route('admin.certificates.generate')}}">
-                                @csrf
-                                <input type="hidden" value="{{$lesson->course->id}}" name="course_id">
-                                <button class="btn btn-success btn-block text-white mb-3 text-uppercase font-weight-bold"
-                                        id="finish">@lang('labels.frontend.course.finish_course')</button>
-                            </form>
-                        @else
-                            <div class="alert alert-success">
-                                @lang('labels.frontend.course.certified')
+                    <!-- COMMENTS -->
+                    @if(count($lesson->comments) > 0)
+
+                        @foreach($lesson->comments as $item)
+                            <div class="discuss clearfix">
+                                <div class="discuss-head clearfix">
+                                    <img src="{{$item->user->picture}}" alt="" />
+                                    <p>{{$item->user->full_name}}<span>{{$item->created_at->diffforhumans()}}</span></p>
+                                </div>
+                                <div class="discuss-box clearfix">
+                                    <p class="discuss-txt clearfix">
+                                    {!! nl2br($item->content) !!}
+
+{{--                                        Hi David,<br /><br />--}}
+{{--                                        MY name is Thomas Mangione and i have enrolled in your storytelling course. I tried uploadind the 10 images with my write-up but I am not sure it went through. The directions say create a title and then upload my images. It will only let me upload 1 image at a time? Everytime i upload a image i press preview and it says waiting for compelling image and then it lets me upload another image, Is that the way it is supposed to work? There is no save button. Attached is a screen shot of what I am experiencing.<br /><br />--}}
+{{--                                        Thomas Mangione--}}
+                                    </p>
+                                </div>
                             </div>
-                        @endif
+                        @endforeach
+                    @else
+                        <h6> No Comments Yet.</h6>
                     @endif
+{{--                    <div class="discuss clearfix">--}}
+{{--                        <div class="discuss-head clearfix">--}}
+{{--                            <img src="{{asset('assets_new/images/user.jpg')}}" alt="Images goes here" />--}}
+{{--                            <p>Thomas Mangione<span>2 Months ago</span></p>--}}
+{{--                        </div>--}}
+{{--                        <div class="discuss-box clearfix">--}}
+{{--                            <p class="discuss-txt clearfix">--}}
+{{--                                Hi David,<br /><br />--}}
+{{--                                MY name is Thomas Mangione and i have enrolled in your storytelling course. I tried uploadind the 10 images with my write-up but I am not sure it went through. The directions say create a title and then upload my images. It will only let me upload 1 image at a time? Everytime i upload a image i press preview and it says waiting for compelling image and then it lets me upload another image, Is that the way it is supposed to work? There is no save button. Attached is a screen shot of what I am experiencing.<br /><br />--}}
+{{--                                Thomas Mangione--}}
+{{--                            </p>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="discuss clearfix">--}}
+{{--                        <div class="discuss-head clearfix">--}}
+{{--                            <img src="{{asset('assets_new/images/david-bathgate.jpg')}}" alt="Images goes here" />--}}
+{{--                            <p>David Bathgate<span>2 Months ago</span></p>--}}
+{{--                        </div>--}}
+{{--                        <div class="discuss-box clearfix">--}}
+{{--                            <p class="discuss-txt clearfix">--}}
+{{--                                Hi Thomas Mangione,<br /><br />--}}
+{{--                                First of all - thanks for enrolling on the course. Good to have you aboard. In answer to your question - yes, upload one image at a time (640 px. on the long side at 72 dpi). All this said, I am currently in Austria and do not always have an internet connection. Therefore, please go ahead and upload your work and I will get to it on the Sunday the 13th. My apologies for the delay. And I will have TCI grant you an additional week's tuition for this  inconvenience. Looking forward to working with you.<br /><br />--}}
+{{--                                Best David--}}
+{{--                            </p>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
 
-                    <div class="sidebar clearfix" style="margin-top: 30px;">
-                        <div class="sideheading clearfix"><span>Course</span> Timeline</div>
-                        <ul class="course-timeline-list">
-                            @foreach($lesson->course->courseTimeline()->orderBy('sequence')->get() as $key=>$item)
-                                @if($item->model && $item->model->published == 1)
-                                    {{--@php $key++; @endphp--}}
-                                    <li class="@if($lesson->id == $item->model->id) active @endif ">
-                                        <a @if(in_array($item->model->id,$completed_lessons))href="{{route('lessons.show',['course_id' => $lesson->course->id,'slug'=>$item->model->slug])}}"@endif>
-                                            {{$item->model->title}}
-                                            @if($item->model_type == 'App\Models\Test')
-                                                - @lang('labels.frontend.course.test')
-                                            @endif
-                                            @if(in_array($item->model->id,$completed_lessons)) <i
-                                                    class="fa text-success float-right fa-check-square"></i> @endif
-                                        </a>
-                                    </li>
+                            <form class="mtb-30" action="{{route('lessons.comment',['id'=> $lesson->id])}}" method="POST" data-lead="Residential">
+                                @csrf
+                                <input type="hidden" name="rating" id="rating">
+
+                                <textarea class="form-control custom-input mb-15  @if($errors->has('review')) border-bottom border-danger @endif" name="comment" id="textarea" rows="3" placeholder="Enter Text"></textarea>
+                                @if($errors->has('comment'))
+                                    <span class="help-block text-danger">{{ $errors->first('review', ':message') }}</span>
+                                @endif
+
+                                <button type="submit" name="submit" id="submit" class="btn btn-primary br-24 btn-padding btn-lg" value="Submit">CREATE</button>
+                            </form>
+                </div>
+
+                <!-- SIDE -->
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="side-bg clearfix">
+                        <div class="side-title clearfix">Course Instructor</div>
+                        @foreach($lesson->course->teachers as $key=>$teacher)
+                            @php $key++ @endphp
+                            <div class="side-pic clearfix">
+                                <img src="{{$teacher->picture}}" alt="" />
+                                <p>{{$teacher->full_name}}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                    @if($lesson->course->students->count() > 0)
+                    <div class="side-bg clearfix">
+                        <div class="side-title clearfix">Other Students from this Course</div>
+                        <ul class="sidelinks clearfix">
+                            @foreach($lesson->course->students as $key=>$student)
+                                @if(Auth::user()->id != $student->id)
+                                <li><a href="#">{{$student->full_name}}</a></li>
                                 @endif
                             @endforeach
                         </ul>
                     </div>
-                    <div class="sidebar clearfix">
-                        <ul class="course-feature clearfix">
-                            <li>@lang('labels.frontend.course.chapters')
-                                <span> {{$lesson->course->chapterCount()}} </span>
-                            </li>
-                            <li>@lang('labels.frontend.course.category')
-                                <span>
-                                <a href="{{route('courses.category',['category'=>$lesson->course->category->slug])}}" target="_blank">{{$lesson->course->category->name}}</a>
-                                </span>
-                            </li>
-                            <li>@lang('labels.frontend.course.author')
-                                <span>
-                                    @foreach($lesson->course->teachers as $key=>$teacher)
-                                        @php $key++ @endphp
-                                            <a href="{{route('teachers.show',['id'=>$teacher->id])}}" target="_blank">
-                                                {{$teacher->full_name}}@if($key < count($lesson->course->teachers )), @endif
-                                            </a>
-                                    @endforeach
-                                </span>
-                            </li>
-                            <li>@lang('labels.frontend.course.progress')
-                                <span> <b> {{ $lesson->course->progress()  }}
-                                            % @lang('labels.frontend.course.completed')</b>
-                                </span>
-                            </li>
-                        </ul>
+                    @endif
+
+                <!-- Photo -->
+
+                    <div class="side-bg clearfix">
+                        <div class="side-title clearfix">Photo's</div>
+                        <div class="photos clearfix">
+                            @if(count($photos) > 0)
+                                @foreach($photos as $photo)
+                            <a href="#" data-toggle="modal" data-target="#gridPhotos"><img src="{{$photo}}" alt="" /></a>
+                                @endforeach
+                            @endif
+                        </div>
+{{--                        <a href="#" class="btn btn-primary br-24 btn-padding">VIEW MORE</a>--}}
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Modal -->
+    <div class="modal fade" id="gridPhotos" tabindex="-1" role="dialog" aria-labelledby="photos" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+                </div>
+                <div class="modal-body">
+                    <div class="photos clearfix">
+                        @if(count($photos) > 0)
+                            @foreach($photos as $photo)
+                                <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img src="{{$photo}}" alt="" /></a>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="Photos" tabindex="-1" role="dialog" aria-labelledby="photos" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+                </div>
+                <div class="modal-body">
+                    <img id="big-photo" src="images/pic-full-1.jpg" class="img-full" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- End of course details section
         ============================================= -->
 @endsection
@@ -428,6 +314,19 @@
     <script src="{{asset('plugins/touchpdf-master/jquery.mousewheel.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
+
+        $(document).ready(function () {
+            $(document).on('click', '#gridPhotoImg', function () {
+                var imgSrc = $(this).children('img')[0].src;
+
+                if(imgSrc){
+                    $('#big-photo').attr('src',imgSrc);
+                    $('Photos').modal('show');
+                }
+            });
+        });
+
+
         @if($lesson->mediaPDF)
             $(function () {
                 $("#myPDF").pdf({

@@ -25,7 +25,7 @@ class UpdateBundlesRequest extends FormRequest
         return [
             'courses' => 'required',
             'title' => 'required',
-            'start_date' => 'required|date_format:'.config('app.date_format'),
+//            'start_date' => 'required|date_format:'.config('app.date_format'),
         ];
     }
 }

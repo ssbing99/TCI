@@ -216,6 +216,14 @@ Route::post('lessons_restore/{id}', ['uses' => 'Admin\LessonsController@restore'
 Route::delete('lessons_perma_del/{id}', ['uses' => 'Admin\LessonsController@perma_del', 'as' => 'lessons.perma_del']);
 
 
+//===== Assignments Routes =====//
+Route::resource('assignments', 'Admin\AssignmentsController');
+Route::get('get-assignment-data', ['uses' => 'Admin\AssignmentsController@getData', 'as' => 'assignments.get_data']);
+Route::post('assignment_mass_destroy', ['uses' => 'Admin\AssignmentsController@massDestroy', 'as' => 'assignments.mass_destroy']);
+Route::post('assignment_restore/{id}', ['uses' => 'Admin\AssignmentsController@restore', 'as' => 'assignments.restore']);
+Route::delete('assignment_perma_del/{id}', ['uses' => 'Admin\AssignmentsController@perma_del', 'as' => 'assignments.perma_del']);
+
+
 //===== Questions Routes =====//
 Route::resource('questions', 'Admin\QuestionsController');
 Route::get('get-questions-data', ['uses' => 'Admin\QuestionsController@getData', 'as' => 'questions.get_data']);
@@ -248,6 +256,15 @@ Route::post('items_restore/{id}', ['uses' => 'Admin\ItemsController@restore', 'a
 Route::delete('items_perma_del/{id}', ['uses' => 'Admin\ItemsController@perma_del', 'as' => 'items.perma_del']);
 Route::post('items-save-sequence', ['uses' => 'Admin\ItemsController@saveSequence', 'as' => 'items.saveSequence']);
 Route::get('items-publish/{id}', ['uses' => 'Admin\ItemsController@publish', 'as' => 'items.publish']);
+
+//===== Workshops Routes =====//
+Route::resource('workshops', 'Admin\WorkshopsController');
+Route::get('get-workshops-data', ['uses' => 'Admin\WorkshopsController@getData', 'as' => 'workshops.get_data']);
+Route::post('workshops_mass_destroy', ['uses' => 'Admin\WorkshopsController@massDestroy', 'as' => 'workshops.mass_destroy']);
+Route::post('workshops_restore/{id}', ['uses' => 'Admin\WorkshopsController@restore', 'as' => 'workshops.restore']);
+Route::delete('workshops_perma_del/{id}', ['uses' => 'Admin\WorkshopsController@perma_del', 'as' => 'workshops.perma_del']);
+Route::post('workshop-save-sequence', ['uses' => 'Admin\WorkshopsController@saveSequence', 'as' => 'workshops.saveSequence']);
+Route::get('workshop-publish/{id}', ['uses' => 'Admin\WorkshopsController@publish', 'as' => 'workshops.publish']);
 
 //===== Media Routes =====//
 Route::post('media/remove', ['uses' => 'Admin\MediaController@destroy', 'as' => 'media.destroy']);

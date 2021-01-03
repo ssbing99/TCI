@@ -55,13 +55,17 @@
             <div class="row">
                 <div class="col-12 form-group">
                     {!! Form::label('description',trans('labels.backend.courses.fields.description'), ['class' => 'control-label']) !!}
-                    {!! Form::textarea('description', old('description'), ['class' => 'form-control ', 'placeholder' => trans('labels.backend.courses.fields.description')]) !!}
+                    {!! Form::textarea('description', old('description'), ['class' => 'form-control editor', 'placeholder' => trans('labels.backend.courses.fields.description'), 'id' => 'editor']) !!}
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 col-lg-4 form-group">
                     {!! Form::label('price', trans('labels.backend.courses.fields.price').' (in '.$appCurrency["symbol"].')', ['class' => 'control-label']) !!}
                     {!! Form::number('price', old('price'), ['class' => 'form-control', 'placeholder' => trans('labels.backend.courses.fields.price') ,'step' => 'any', 'pattern' => "[0-9]"]) !!}
+                </div>
+                <div class="col-12 col-lg-4 form-group">
+                    {!! Form::label('price_skype',  trans('labels.backend.courses.fields.price').' with Skype call'.' (in '.$appCurrency["symbol"].')', ['class' => 'control-label']) !!}
+                    {!! Form::number('price_skype', old('price_skype'), ['class' => 'form-control', 'placeholder' => trans('labels.backend.courses.fields.price').' with Skype call','step' => 'any', 'pattern' => "[0-9]"]) !!}
                 </div>
                 <div class="col-12 col-lg-4 form-group">
 
@@ -76,20 +80,20 @@
                                     class="mt-1"></a>
                     @endif
                 </div>
-                <div class="col-12 col-lg-4 form-group">
-                    {!! Form::label('start_date', trans('labels.backend.courses.fields.start_date').' (yyyy-mm-dd)', ['class' => 'control-label']) !!}
-                    {!! Form::text('start_date', old('start_date'), ['class' => 'form-control date', 'required' => true, 'pattern' => '(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))', 'placeholder' => trans('labels.backend.courses.fields.start_date').' (Ex . 2019-01-01)']) !!}
-                    <p class="help-block"></p>
-                    @if($errors->has('start_date'))
-                        <p class="help-block">
-                            {{ $errors->first('start_date') }}
-                        </p>
-                    @endif
-                </div>
+{{--                <div class="col-12 col-lg-4 form-group">--}}
+{{--                    {!! Form::label('start_date', trans('labels.backend.courses.fields.start_date').' (yyyy-mm-dd)', ['class' => 'control-label']) !!}--}}
+{{--                    {!! Form::text('start_date', old('start_date'), ['class' => 'form-control date', 'required' => true, 'pattern' => '(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))', 'placeholder' => trans('labels.backend.courses.fields.start_date').' (Ex . 2019-01-01)']) !!}--}}
+{{--                    <p class="help-block"></p>--}}
+{{--                    @if($errors->has('start_date'))--}}
+{{--                        <p class="help-block">--}}
+{{--                            {{ $errors->first('start_date') }}--}}
+{{--                        </p>--}}
+{{--                    @endif--}}
+{{--                </div>--}}
             </div>
                 <div class="row">
                     <div class="col-12 col-lg-4 form-group">
-                        {!! Form::label('duration',  trans('labels.backend.courses.fields.duration').' ('.trans('labels.frontend.layouts.partials.hours').')', ['class' => 'control-label']) !!}
+                        {!! Form::label('duration',  trans('labels.backend.courses.fields.duration').' ('.'Days'.')', ['class' => 'control-label']) !!}
                         {!! Form::number('duration', old('duration'), ['class' => 'form-control', 'placeholder' => trans('labels.frontend.layouts.partials.hours'),'step' => 'any', 'pattern' => "[0-9]"]) !!}
                     </div>
                     <div class="col-12 col-lg-4  form-group">
@@ -142,21 +146,21 @@
                     @if (Auth::user()->isAdmin())
 
                     <div class="checkbox d-inline mr-4">
-                        {!! Form::hidden('featured', 0) !!}
-                        {!! Form::checkbox('featured', 1, old('featured'), []) !!}
-                        {!! Form::label('featured',  trans('labels.backend.courses.fields.featured'), ['class' => 'checkbox control-label font-weight-bold']) !!}
+                        {!! Form::hidden('beginner', 0) !!}
+                        {!! Form::checkbox('beginner', 1, old('beginner'), []) !!}
+                        {!! Form::label('beginner',  'Beginner', ['class' => 'checkbox control-label font-weight-bold']) !!}
                     </div>
 
                     <div class="checkbox d-inline mr-4">
-                        {!! Form::hidden('trending', 0) !!}
-                        {!! Form::checkbox('trending', 1, old('trending'), []) !!}
-                        {!! Form::label('trending',  trans('labels.backend.courses.fields.trending'), ['class' => 'checkbox control-label font-weight-bold']) !!}
+                        {!! Form::hidden('intermediate', 0) !!}
+                        {!! Form::checkbox('intermediate', 1, old('intermediate'), []) !!}
+                        {!! Form::label('intermediate',  'Intermediate', ['class' => 'checkbox control-label font-weight-bold']) !!}
                     </div>
 
                     <div class="checkbox d-inline mr-4">
-                        {!! Form::hidden('popular', 0) !!}
-                        {!! Form::checkbox('popular', 1, old('popular'), []) !!}
-                        {!! Form::label('popular',  trans('labels.backend.courses.fields.popular'), ['class' => 'checkbox control-label font-weight-bold']) !!}
+                        {!! Form::hidden('advance', 0) !!}
+                        {!! Form::checkbox('advance', 1, old('advance'), []) !!}
+                        {!! Form::label('advance',  'Advance', ['class' => 'checkbox control-label font-weight-bold']) !!}
                     </div>
                     @endif
                     <div class="checkbox d-inline mr-4">
@@ -197,6 +201,36 @@
 @stop
 
 @push('after-scripts')
+    <script src="{{asset('plugins/bootstrap-tagsinput/bootstrap-tagsinput.js')}}"></script>
+    <script type="text/javascript" src="{{asset('/vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script>
+    <script type="text/javascript" src="{{asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js')}}"></script>
+    <script src="{{asset('/vendor/laravel-filemanager/js/lfm.js')}}"></script>
+    <script>
+        $('.editor').each(function () {
+
+            CKEDITOR.replace($(this).attr('id'), {
+                filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+                filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token={{csrf_token()}}',
+                filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+                filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token={{csrf_token()}}',
+
+                extraPlugins: 'smiley,lineutils,widget,codesnippet,prism,flash',
+            });
+
+        });
+        var uploadField = $('input[type="file"]');
+
+        $(document).on('change','input[type="file"]',function () {
+            var $this = $(this);
+            $(this.files).each(function (key,value) {
+                if((value.size/1024) > 10240){
+                    alert('"'+value.name+'"'+'exceeds limit of maximum file upload size' )
+                    $this.val("");
+                }
+            })
+        })
+
+    </script>
     <script>
 
         $(document).ready(function () {

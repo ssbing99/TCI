@@ -66,10 +66,70 @@ class HomeController extends Controller
         $sections = Config::where('key', '=', 'layout_' . $type)->first();
         $sections = json_decode($sections->value);
 
-        $popular_courses = Course::withoutGlobalScope('filter')
+        $beginner = Course::withoutGlobalScope('filter')
             ->whereHas('category')
             ->where('published', '=', 1)
-            ->where('popular', '=', 1)->take(6)->get();
+            ->where('beginner', '=', 1)
+            ->take(2)->get();
+        $intermediate = Course::withoutGlobalScope('filter')
+            ->whereHas('category')
+            ->where('published', '=', 1)
+            ->where('intermediate', '=', 1)
+            ->take(2)->get();
+        $advance = Course::withoutGlobalScope('filter')
+            ->whereHas('category')
+            ->where('published', '=', 1)
+            ->where('advance', '=', 1)
+            ->take(2)->get();
+
+        $totalCourse = 2;
+
+        if($beginner == null && $intermediate == null && $advance == null)
+            $totalCourse = 8;
+
+        $popular_courses = new Collection(Course::withoutGlobalScope('filter')
+            ->whereHas('category')
+            ->where('published', '=', 1)
+//            ->where('popular', '=', 1)
+            ->take($totalCourse)->get());
+
+        if($beginner != null) {
+            foreach ($beginner as $b){
+                $canMerge = true;
+                foreach ($popular_courses as $p){
+                    if($p->id == $b->id)
+                        $canMerge = false;
+                }
+
+                if($canMerge)
+                    $popular_courses->push($b);
+            }
+        }
+
+        if($intermediate != null) {
+            foreach ($intermediate as $b){
+                $canMerge = true;
+                foreach ($popular_courses as $p){
+                    if($p->id == $b->id)
+                        $canMerge = false;
+                }
+
+                if($canMerge)
+                    $popular_courses->push($b);
+            }
+        }
+        if($advance != null) {
+            foreach ($advance as $b){
+                $canMerge = true;
+                foreach ($popular_courses as $p){
+                    if($p->id == $b->id)
+                        $canMerge = false;
+                }
+
+                if($canMerge)
+                    $popular_courses->push($b);
+            }
+        }
 
         $featured_courses = Course::withoutGlobalScope('filter')->where('published', '=', 1)
             ->whereHas('category')
@@ -82,7 +142,7 @@ class HomeController extends Controller
             ->where('published', '=', 1)
             ->where('trending', '=', 1)->take(2)->get();
 
-        $teachers = User::role('teacher')->with('courses')->where('active', '=', 1)->take(7)->get();
+        $teachers = User::role('teacher')->with('courses')->where('active', '=', 1)->take(4)->get();
 
         $sponsors = Sponsor::where('status', '=', 1)->get();
 
@@ -114,6 +174,12 @@ class HomeController extends Controller
     {
         $faq_categories = Category::has('faqs', '>', 0)->get();
         return view($this->path . '.faq', compact('faq_categories'));
+    }
+
+    public function howItWork()
+    {
+        $faq_categories = Category::has('faqs', '>', 0)->get();
+        return view($this->path . '.how-it-work', compact('faq_categories'));
     }
 
     public function subscribe(Request $request)
@@ -210,6 +276,7 @@ class HomeController extends Controller
     {
         $recent_news = Blog::orderBy('created_at', 'desc')->take(2)->get();
         $teacher = User::role('teacher')->where('id', '=', $request->id)->first();
+        $teachers = User::role('teacher')->with('courses')->where('active', '=', 1)->take(4)->get();
         $courses = $teacher->courses;
         if (count($teacher->courses) > 0) {
             $courses = $teacher->courses()->paginate(12);
@@ -217,7 +284,7 @@ class HomeController extends Controller
 
         $view_path = returnPathByTheme($this->path . '.teachers.show', 5,'-');
 
-        return view($view_path, compact('teacher', 'recent_news', 'courses'));
+        return view($view_path, compact('teacher', 'recent_news', 'courses', 'teachers'));
     }
 
     public function getDownload(Request $request)

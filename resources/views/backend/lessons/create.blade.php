@@ -76,13 +76,13 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-12 form-group">
-                    {!! Form::label('short_text', trans('labels.backend.lessons.fields.short_text'), ['class' => 'control-label']) !!}
-                    {!! Form::textarea('short_text', old('short_text'), ['class' => 'form-control ', 'placeholder' => trans('labels.backend.lessons.short_description_placeholder')]) !!}
+{{--            <div class="row">--}}
+{{--                <div class="col-12 form-group">--}}
+{{--                    {!! Form::label('short_text', trans('labels.backend.lessons.fields.short_text'), ['class' => 'control-label']) !!}--}}
+{{--                    {!! Form::textarea('short_text', old('short_text'), ['class' => 'form-control ', 'placeholder' => trans('labels.backend.lessons.short_description_placeholder')]) !!}--}}
 
-                </div>
-            </div>
+{{--                </div>--}}
+{{--            </div>--}}
             <div class="row">
                 <div class="col-12 form-group">
                     {!! Form::label('full_text', trans('labels.backend.lessons.fields.full_text'), ['class' => 'control-label']) !!}
@@ -90,44 +90,44 @@
 
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12 form-group">
-                    {!! Form::label('downloadable_files', trans('labels.backend.lessons.fields.downloadable_files').' '.trans('labels.backend.lessons.max_file_size'), ['class' => 'control-label']) !!}
-                    {!! Form::file('downloadable_files[]', [
-                        'multiple',
-                        'class' => 'form-control file-upload',
-                        'id' => 'downloadable_files',
-                        'accept' => "image/jpeg,image/gif,image/png,application/msword,audio/mpeg,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint,application/pdf,video/mp4"
-                        ]) !!}
-                    <div class="photo-block">
-                        <div class="files-list"></div>
-                    </div>
+{{--            <div class="row">--}}
+{{--                <div class="col-12 form-group">--}}
+{{--                    {!! Form::label('downloadable_files', trans('labels.backend.lessons.fields.downloadable_files').' '.trans('labels.backend.lessons.max_file_size'), ['class' => 'control-label']) !!}--}}
+{{--                    {!! Form::file('downloadable_files[]', [--}}
+{{--                        'multiple',--}}
+{{--                        'class' => 'form-control file-upload',--}}
+{{--                        'id' => 'downloadable_files',--}}
+{{--                        'accept' => "image/jpeg,image/gif,image/png,application/msword,audio/mpeg,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint,application/pdf,video/mp4"--}}
+{{--                        ]) !!}--}}
+{{--                    <div class="photo-block">--}}
+{{--                        <div class="files-list"></div>--}}
+{{--                    </div>--}}
 
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 form-group">
-                    {!! Form::label('pdf_files', trans('labels.backend.lessons.fields.add_pdf'), ['class' => 'control-label']) !!}
-                    {!! Form::file('add_pdf', [
-                        'class' => 'form-control file-upload',
-                         'id' => 'add_pdf',
-                        'accept' => "application/pdf"
+{{--                </div>--}}
+{{--            </div>--}}
+{{--            <div class="row">--}}
+{{--                <div class="col-12 form-group">--}}
+{{--                    {!! Form::label('pdf_files', trans('labels.backend.lessons.fields.add_pdf'), ['class' => 'control-label']) !!}--}}
+{{--                    {!! Form::file('add_pdf', [--}}
+{{--                        'class' => 'form-control file-upload',--}}
+{{--                         'id' => 'add_pdf',--}}
+{{--                        'accept' => "application/pdf"--}}
 
-                        ]) !!}
-                </div>
-            </div>
+{{--                        ]) !!}--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
-            <div class="row">
-                <div class="col-12 form-group">
-                    {!! Form::label('audio_files', trans('labels.backend.lessons.fields.add_audio'), ['class' => 'control-label']) !!}
-                    {!! Form::file('add_audio', [
-                        'class' => 'form-control file-upload',
-                         'id' => 'add_audio',
-                        'accept' => "audio/mpeg3"
+{{--            <div class="row">--}}
+{{--                <div class="col-12 form-group">--}}
+{{--                    {!! Form::label('audio_files', trans('labels.backend.lessons.fields.add_audio'), ['class' => 'control-label']) !!}--}}
+{{--                    {!! Form::file('add_audio', [--}}
+{{--                        'class' => 'form-control file-upload',--}}
+{{--                         'id' => 'add_audio',--}}
+{{--                        'accept' => "audio/mpeg3"--}}
 
-                        ]) !!}
-                </div>
-            </div>
+{{--                        ]) !!}--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
 
             <div class="row">

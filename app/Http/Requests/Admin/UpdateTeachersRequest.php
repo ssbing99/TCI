@@ -29,6 +29,7 @@ class UpdateTeachersRequest extends FormRequest
             'gender'              => ['required', 'in:male,female,other'],
             'image'               => ['image'],
             'facebook_link'       => ['nullable', 'url'],
+            'insta_link'       => ['nullable', 'url'],
             'twitter_link'        => ['nullable', 'url'],
             'linkedin_link'       => ['nullable', 'url'],
             'payment_method'      => ['required'],

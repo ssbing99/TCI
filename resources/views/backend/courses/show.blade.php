@@ -90,6 +90,10 @@
                             <td>{{ ($course->free == 1) ? trans('labels.backend.courses.fields.free') : $course->price.' '.$appCurrency['symbol'] }}</td>
                         </tr>
                         <tr>
+                            <th>@lang('labels.backend.courses.fields.price') with Skype</th>
+                            <td>{{ ($course->free == 1) ? trans('labels.backend.courses.fields.free') : $course->price_skype.' '.$appCurrency['symbol'] }}</td>
+                        </tr>
+                        <tr>
                             <th>@lang('labels.backend.courses.fields.course_image')</th>
                             <td>@if($course->course_image)<a
                                         href="{{ asset('storage/uploads/' . $course->course_image) }}"
@@ -110,10 +114,10 @@
                                 @endif
                             </td>
                         </tr>
-                        <tr>
-                            <th>@lang('labels.backend.courses.fields.start_date')</th>
-                            <td>{{ $course->start_date }}</td>
-                        </tr>
+{{--                        <tr>--}}
+{{--                            <th>@lang('labels.backend.courses.fields.start_date')</th>--}}
+{{--                            <td>{{ $course->start_date }}</td>--}}
+{{--                        </tr>--}}
                         <tr>
                             <th>@lang('labels.backend.courses.fields.published')</th>
                             <td>{{ Form::checkbox("published", 1, $course->published == 1 ? true : false, ["disabled"]) }}</td>

@@ -106,6 +106,11 @@ class LessonsController extends Controller
 
                 return $view;
             })
+            ->addColumn('assignments', function ($q) {
+
+                $assignment = '<a href="' . route('admin.assignments.index', ['lesson_id' => $q->id]) . '" class="btn mb-1 btn-warning text-white"><i class="fa fa-arrow-circle-right"></a>';
+                return $assignment;
+            })
             ->editColumn('course', function ($q) {
                 return ($q->course) ? $q->course->title : 'N/A';
             })
@@ -118,7 +123,7 @@ class LessonsController extends Controller
             ->editColumn('published', function ($q) {
                 return ($q->published == 1) ? "Yes" : "No";
             })
-            ->rawColumns(['lesson_image', 'actions'])
+            ->rawColumns(['lesson_image', 'assignments', 'actions'])
             ->make();
     }
 

@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Models\Review;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 use Stripe\Stripe;
 use Stripe\Charge;
@@ -37,62 +38,72 @@ class CoursesController extends Controller
 
     public function all(Request $request)
     {
-        if (request('type') == 'popular') {
+        $paginateCnt = 100; // so far not yet have paginate , original 9
+        if (request('type') == 'popularity') {
                 $courses = Course::withoutGlobalScope('filter')->where('published', 1)
-                    ->where('popular', '=', 1)
-                    ->where(function ($query) use ($request) {
-                        $isPast = request('filter') == 'past';
-                        $isUpcoming = request('filter') == 'upcoming';
-                        if($isPast)
-                            $query->where('start_date', '<', Carbon::today());
-                        if($isUpcoming)
-                            $query->where('start_date', '>', Carbon::today());
+//                    ->where('popular', '=', 1)
+//                    ->where(function ($query) use ($request) {
+//                        $isPast = request('filter') == 'past';
+//                        $isUpcoming = request('filter') == 'upcoming';
+//                        if($isPast)
+//                            $query->where('start_date', '<', Carbon::today());
+//                        if($isUpcoming)
+//                            $query->where('start_date', '>', Carbon::today());
+//
+//                    })
+                    ->orderBy('popular', 'asc')
+                    ->orderBy('trending', 'asc')
+                    ->orderBy('featured', 'asc')
+                    ->paginate($paginateCnt);
 
-                    })
-                    ->orderBy('id', 'desc')->paginate(9);
-
-        } else if (request('type') == 'trending') {
+        } else if (request('type') == 'price') {
             $courses = Course::withoutGlobalScope('filter')->where('published', 1)
-                ->where('trending', '=', 1)
-                ->where(function ($query) use ($request) {
-                    $isPast = request('filter') == 'past';
-                    $isUpcoming = request('filter') == 'upcoming';
-                    if($isPast)
-                        $query->where('start_date', '<', Carbon::today());
-                    if($isUpcoming)
-                        $query->where('start_date', '>', Carbon::today());
+//                ->where('trending', '=', 1)
+//                ->where(function ($query) use ($request) {
+//                    $isPast = request('filter') == 'past';
+//                    $isUpcoming = request('filter') == 'upcoming';
+//                    if($isPast)
+//                        $query->where('start_date', '<', Carbon::today());
+//                    if($isUpcoming)
+//                        $query->where('start_date', '>', Carbon::today());
+//
+//                })
+                ->orderBy('price', 'asc')->paginate($paginateCnt);
 
-                })
-                ->orderBy('id', 'desc')->paginate(9);
-
-        } else if (request('type') == 'featured') {
+        } else if (request('type') == 'duration') {
             $courses = Course::withoutGlobalScope('filter')->where('published', 1)
-                ->where('featured', '=', 1)
-                ->where(function ($query) use ($request) {
-                    $isPast = request('filter') == 'past';
-                    $isUpcoming = request('filter') == 'upcoming';
-                    if($isPast)
-                        $query->where('start_date', '<', Carbon::today());
-                    if($isUpcoming)
-                        $query->where('start_date', '>', Carbon::today());
-
-                })
-                ->orderBy('id', 'desc')->paginate(9);
+//                ->where('featured', '=', 1)
+//                ->where(function ($query) use ($request) {
+//                    $isPast = request('filter') == 'past';
+//                    $isUpcoming = request('filter') == 'upcoming';
+//                    if($isPast)
+//                        $query->where('start_date', '<', Carbon::today());
+//                    if($isUpcoming)
+//                        $query->where('start_date', '>', Carbon::today());
+//
+//                })
+                ->orderBy('duration', 'asc')->paginate($paginateCnt);
 
         } else {
             $courses = Course::withoutGlobalScope('filter')->where('published', 1)
-                ->where(function ($query) use ($request) {
-                    $isPast = request('filter') == 'past';
-                    $isUpcoming = request('filter') == 'upcoming';
-                    if($isPast)
-                        $query->where('start_date', '<', Carbon::today());
-                    if($isUpcoming)
-                        $query->where('start_date', '>', Carbon::today());
-
-                })
-                ->orderBy('id', 'desc')->paginate(9);
+//                ->where(function ($query) use ($request) {
+//                    $isPast = request('filter') == 'past';
+//                    $isUpcoming = request('filter') == 'upcoming';
+//                    if($isPast)
+//                        $query->where('start_date', '<', Carbon::today());
+//                    if($isUpcoming)
+//                        $query->where('start_date', '>', Carbon::today());
+//
+//                })
+                ->orderBy('id', 'desc')->paginate($paginateCnt);
 
         }
+
+        $courses_json = new Collection();
+        foreach ($courses as $course){
+            $courses_json->push($course);
+        }
+        $courses_json = json_encode($courses_json);
 
         $purchased_courses = NULL;
         $purchased_bundles = NULL;
@@ -113,7 +124,7 @@ class CoursesController extends Controller
 
         $view_path = returnPathByTheme($this->path.'.courses.index', 5,'-');
 
-        return view( $view_path, compact('courses', 'purchased_courses', 'recent_news','featured_courses','categories'));
+        return view( $view_path, compact('courses','courses_json', 'purchased_courses', 'recent_news','featured_courses','categories'));
     }
 
     public function show($course_slug)
@@ -160,6 +171,54 @@ class CoursesController extends Controller
         }
 
         $view_path = returnPathByTheme($this->path.'.courses.course', 5,'-');
+
+        return view( $view_path, compact('course', 'purchased_course', 'recent_news', 'course_rating', 'completed_lessons','total_ratings','is_reviewed','lessons','continue_course', 'course_progress_perc'));
+    }
+
+    public function reviewShow($course_slug)
+    {
+        $continue_course=NULL;
+        $recent_news = Blog::orderBy('created_at', 'desc')->take(2)->get();
+        $course = Course::withoutGlobalScope('filter')->where('slug', $course_slug)->with('publishedLessons')->firstOrFail();
+        $purchased_course = \Auth::check() && $course->students()->where('user_id', \Auth::id())->count() > 0;
+        if(($course->published == 0) && ($purchased_course == false)){
+            abort(404);
+        }
+        $course_rating = 0;
+        $course_progress_perc = 0;
+        $total_ratings = 0;
+        $completed_lessons = "";
+        $is_reviewed = false;
+        if(auth()->check() && $course->reviews()->where('user_id','=',auth()->user()->id)->first()){
+            $is_reviewed = true;
+        }
+        if ($course->reviews->count() > 0) {
+            $course_rating = $course->reviews->avg('rating');
+            $total_ratings = $course->reviews()->where('rating', '!=', "")->get()->count();
+        }
+        $lessons = $course->courseTimeline()->orderby('sequence','asc')->get();
+
+        if (\Auth::check()) {
+
+            $completed_lessons = \Auth::user()->chapters()->where('course_id', $course->id)->get()->pluck('model_id')->toArray();
+            $course_lessons = $course->lessons->pluck('id')->toArray();
+            $continue_course  = $course->courseTimeline()
+                ->whereIn('model_id',$course_lessons)
+                ->orderby('sequence','asc')
+                ->whereNotIn('model_id',$completed_lessons)
+
+                ->first();
+            if($continue_course == null){
+                $continue_course = $course->courseTimeline()
+                    ->whereIn('model_id',$course_lessons)
+                    ->orderby('sequence','asc')->first();
+            }
+
+            if(count($lessons) > 0)
+                $course_progress_perc = (count($completed_lessons) / count($lessons)) * 100;
+        }
+
+        $view_path = returnPathByTheme($this->path.'.courses.add-review','','');
 
         return view( $view_path, compact('course', 'purchased_course', 'recent_news', 'course_rating', 'completed_lessons','total_ratings','is_reviewed','lessons','continue_course', 'course_progress_perc'));
     }
@@ -263,6 +322,7 @@ class CoursesController extends Controller
         $review->content = $request->review;
         $review->save();
 
+        Session::flash('success', 'Thanks for your review.');
         return back();
     }
 

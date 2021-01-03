@@ -73,16 +73,16 @@
                                     height="50px" src="{{ asset('storage/uploads/'.$bundle->course_image) }}" class="mt-1"></a>
                     @endif
                 </div>
-                <div class="col-12 col-lg-4 form-group">
-                    {!! Form::label('start_date', trans('labels.backend.bundles.fields.start_date').' (yyyy-mm-dd)', ['class' => 'control-label']) !!}
-                    {!! Form::text('start_date', old('start_date'), ['class' => 'form-control date', 'required' => true, 'pattern' => '(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))', 'placeholder' => trans('labels.backend.bundles.fields.start_date').' (Ex . 2019-01-01)']) !!}
-                    <p class="help-block"></p>
-                    @if($errors->has('start_date'))
-                        <p class="help-block">
-                            {{ $errors->first('start_date') }}
-                        </p>
-                    @endif
-                </div>
+{{--                <div class="col-12 col-lg-4 form-group">--}}
+{{--                    {!! Form::label('start_date', trans('labels.backend.bundles.fields.start_date').' (yyyy-mm-dd)', ['class' => 'control-label']) !!}--}}
+{{--                    {!! Form::text('start_date', old('start_date'), ['class' => 'form-control date', 'required' => true, 'pattern' => '(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))', 'placeholder' => trans('labels.backend.bundles.fields.start_date').' (Ex . 2019-01-01)']) !!}--}}
+{{--                    <p class="help-block"></p>--}}
+{{--                    @if($errors->has('start_date'))--}}
+{{--                        <p class="help-block">--}}
+{{--                            {{ $errors->first('start_date') }}--}}
+{{--                        </p>--}}
+{{--                    @endif--}}
+{{--                </div>--}}
             </div>
             <div class="row">
                 <div class="col-12 form-group">
@@ -93,23 +93,23 @@
                     </div>
                     @if (Auth::user()->isAdmin())
 
-                    <div class="checkbox d-inline mr-4">
-                        {!! Form::hidden('featured', 0) !!}
-                        {!! Form::checkbox('featured', 1, old('featured'), []) !!}
-                        {!! Form::label('featured',  trans('labels.backend.bundles.fields.featured'), ['class' => 'checkbox control-label font-weight-bold']) !!}
-                    </div>
+{{--                    <div class="checkbox d-inline mr-4">--}}
+{{--                        {!! Form::hidden('featured', 0) !!}--}}
+{{--                        {!! Form::checkbox('featured', 1, old('featured'), []) !!}--}}
+{{--                        {!! Form::label('featured',  trans('labels.backend.bundles.fields.featured'), ['class' => 'checkbox control-label font-weight-bold']) !!}--}}
+{{--                    </div>--}}
 
-                    <div class="checkbox d-inline mr-4">
-                        {!! Form::hidden('trending', 0) !!}
-                        {!! Form::checkbox('trending', 1, old('trending'), []) !!}
-                        {!! Form::label('trending',  trans('labels.backend.bundles.fields.trending'), ['class' => 'checkbox control-label font-weight-bold']) !!}
-                    </div>
+{{--                    <div class="checkbox d-inline mr-4">--}}
+{{--                        {!! Form::hidden('trending', 0) !!}--}}
+{{--                        {!! Form::checkbox('trending', 1, old('trending'), []) !!}--}}
+{{--                        {!! Form::label('trending',  trans('labels.backend.bundles.fields.trending'), ['class' => 'checkbox control-label font-weight-bold']) !!}--}}
+{{--                    </div>--}}
 
-                    <div class="checkbox d-inline mr-4">
-                        {!! Form::hidden('popular', 0) !!}
-                        {!! Form::checkbox('popular', 1, old('popular'), []) !!}
-                        {!! Form::label('popular',  trans('labels.backend.bundles.fields.popular'), ['class' => 'checkbox control-label font-weight-bold']) !!}
-                    </div>
+{{--                    <div class="checkbox d-inline mr-4">--}}
+{{--                        {!! Form::hidden('popular', 0) !!}--}}
+{{--                        {!! Form::checkbox('popular', 1, old('popular'), []) !!}--}}
+{{--                        {!! Form::label('popular',  trans('labels.backend.bundles.fields.popular'), ['class' => 'checkbox control-label font-weight-bold']) !!}--}}
+{{--                    </div>--}}
                     @endif
 
                     <div class="checkbox d-inline mr-4">

@@ -26,7 +26,7 @@ class StoreBundlesRequest extends FormRequest
             'courses' => 'required',
             'title' => 'required',
             'category_id' => 'required',
-            'start_date' => 'date_format:'.config('app.date_format'),
+//            'start_date' => 'date_format:'.config('app.date_format'),
         ];
     }
 }

@@ -54,6 +54,10 @@
                             <td>{!! $teacherProfile->facebook_link !!}</td>
                         </tr>
                         <tr>
+                            <th>Instagram Link</th>
+                            <td>{!! $teacherProfile->insta_link !!}</td>
+                        </tr>
+                        <tr>
                             <th>@lang('labels.teacher.twitter_link')</th>
                             <td>{!! $teacherProfile->twitter_link !!}</td>
                         </tr>

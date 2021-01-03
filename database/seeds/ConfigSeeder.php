@@ -89,7 +89,7 @@ class ConfigSeeder extends Seeder
             'favicon_image' => 'popup-logo.png',
             'contact_data' => $contact_data,
             'footer_data' => $footer_data,
-            'app__name' => 'School Of Permaculture',
+            'app__name' => 'The Compelling Image',
             'app__locale' => 'en',
             'app__display_type' => 'ltr',
             'app__currency' => 'USD',

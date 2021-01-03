@@ -137,9 +137,9 @@ class CoursesController extends Controller
                 $text = "";
                 $text = ($q->published == 1) ? "<p class='text-white mb-1 font-weight-bold text-center bg-dark p-1 mr-1' >" . trans('labels.backend.courses.fields.published') . "</p>" : "<p class='text-white mb-1 font-weight-bold text-center bg-primary p-1 mr-1' >" . trans('labels.backend.courses.fields.unpublished') . "</p>";
                 if (auth()->user()->isAdmin()) {
-                    $text .= ($q->featured == 1) ? "<p class='text-white mb-1 font-weight-bold text-center bg-warning p-1 mr-1' >" . trans('labels.backend.courses.fields.featured') . "</p>" : "";
-                    $text .= ($q->trending == 1) ? "<p class='text-white mb-1 font-weight-bold text-center bg-success p-1 mr-1' >" . trans('labels.backend.courses.fields.trending') . "</p>" : "";
-                    $text .= ($q->popular == 1) ? "<p class='text-white mb-1 font-weight-bold text-center bg-primary p-1 mr-1' >" . trans('labels.backend.courses.fields.popular') . "</p>" : "";
+                    $text .= ($q->beginner == 1) ? "<p class='text-white mb-1 font-weight-bold text-center bg-warning p-1 mr-1' >" . 'Beginner' . "</p>" : "";
+                    $text .= ($q->intermediate == 1) ? "<p class='text-white mb-1 font-weight-bold text-center bg-success p-1 mr-1' >" . 'Intermediate' . "</p>" : "";
+                    $text .= ($q->advance == 1) ? "<p class='text-white mb-1 font-weight-bold text-center bg-primary p-1 mr-1' >" . 'Advance' . "</p>" : "";
                 }
 
                 return $text;
@@ -149,6 +149,12 @@ class CoursesController extends Controller
                     return trans('labels.backend.courses.fields.free');
                 }
                 return $q->price;
+            })
+            ->editColumn('price_skype', function ($q) {
+                if ($q->free == 1) {
+                    return trans('labels.backend.courses.fields.free');
+                }
+                return $q->price_skype;
             })
             ->addColumn('category', function ($q) {
                 return $q->category->name;

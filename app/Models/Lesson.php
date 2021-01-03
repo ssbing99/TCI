@@ -193,4 +193,8 @@ class Lesson extends Model
         return $this->hasOne(LessonSlotBooking::class);
     }
 
+    public function comments()
+    {
+        return $this->morphMany('App\Models\Comment', 'reviewable');
+    }
 }

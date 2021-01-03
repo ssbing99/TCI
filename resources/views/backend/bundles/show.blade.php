@@ -102,10 +102,10 @@
                                             src="{{ asset('storage/uploads/' . $bundle->course_image) }}"
                                             height="50px"/></a>@endif</td>
                         </tr>
-                        <tr>
-                            <th>@lang('labels.backend.bundles.fields.start_date')</th>
-                            <td>{{ $bundle->start_date }}</td>
-                        </tr>
+{{--                        <tr>--}}
+{{--                            <th>@lang('labels.backend.bundles.fields.start_date')</th>--}}
+{{--                            <td>{{ $bundle->start_date }}</td>--}}
+{{--                        </tr>--}}
                         <tr>
                             <th>@lang('labels.backend.bundles.fields.published')</th>
                             <td>{{ Form::checkbox("published", 1, $bundle->published == 1 ? true : false, ["disabled"]) }}</td>

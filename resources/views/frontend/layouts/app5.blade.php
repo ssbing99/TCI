@@ -10,7 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 {{--        <title>@yield('title', app_name())</title>--}}
-        <title>School of Permaculture</title>
+        <title>The Compelling Image</title>
         <meta name="description" content="@yield('meta_description', '')">
         <meta name="keywords" content="@yield('meta_keywords', '')">
 
@@ -23,19 +23,20 @@
 
         <link rel="stylesheet" href="{{asset('assets_new/css/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{asset('assets_new/css/font-awesome.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets_new/css/owl.carousel.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets_new/css/owl.theme.default.min.css')}}">
+        <link rel="stylesheet" href="{{asset('assets_new/css/ion.rangeSlider.min.css')}}">
+{{--        <link rel="stylesheet" href="{{asset('assets_new/css/owl.carousel.min.css')}}">--}}
+{{--        <link rel="stylesheet" href="{{asset('assets_new/css/owl.theme.default.min.css')}}">--}}
         <link rel="stylesheet" href="{{asset('assets_new/css/style.css')}}">
-        <link rel="stylesheet" href="{{asset('assets_new/css/custom_style.css')}}">
+{{--        <link rel="stylesheet" href="{{asset('assets_new/css/custom_style.css')}}">--}}
 {{--        @if(config('favicon_image') != "")--}}
 {{--            <link rel="shortcut icon" type="image/x-icon" href="{{asset('storage/logos/'.config('favicon_image'))}}"/>--}}
 {{--        @else--}}
-            <link rel="icon" type="image/x-icon" size="16x16" href="{{asset('assets_new/images/cropped-cropped-cropped-sop-fb-logo-150x150.jpg')}}" />
+            <link rel="icon" type="image/x-icon" size="16x16" href="{{asset('assets_new/images/favicon.png')}}" />
 {{--        @endif--}}
 
-        <link rel="icon" type="image/x-icon" href="{{asset('assets_new/images/cropped-cropped-cropped-sop-fb-logo-150x150.jpg')}}" sizes="32x32" />
-        <link rel="icon" type="image/x-icon" href="{{asset('assets_new/images/cropped-cropped-cropped-sop-fb-logo-300x300.jpg')}}" sizes="192x192" />
-        <link rel="apple-touch-icon-precomposed" href="{{asset('assets_new/images/cropped-cropped-cropped-sop-fb-logo-180x180.jpg')}}" sizes="32x32" />
+        <link rel="icon" type="image/x-icon" href="{{asset('assets_new/images/favicon.png')}}" sizes="32x32" />
+        <link rel="icon" type="image/x-icon" href="{{asset('assets_new/images/favicon.png')}}" sizes="192x192" />
+        <link rel="apple-touch-icon-precomposed" href="{{asset('assets_new/images/favicon.png')}}" sizes="32x32" />
 
         @stack('after-styles')
         @yield('css')
@@ -61,34 +62,7 @@
             </style>
         @endif
     </head>
-    <body class="{{config('layout_type')}}">
-        <div class="topbar clearfix">
-            <div class="container">
-                <div class="row clearfix">
-                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6 desktop">
-                        <ul class="clearfix">
-                            <li><i class="fa fa-envelope"></i> learn@schoolofpermaculture.com</li>
-                            <li><i class="fa fa-phone"></i> (1) 214 856 8477</li>
-                        </ul>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                        <ul class="float-right clearfix">
-                            @if(auth()->check())
-                                @can('view backend')
-                                    <li><a href="{{ route('admin.dashboard') }}">@lang('navs.frontend.dashboard')</a></li>
-                                @endcan
-                                <li><a href="{{ route('frontend.auth.logout') }}">@lang('navs.general.logout')</a></li>
-                            @else
-                                @if(!auth()->check())
-                                    <li><a id="openRegisterModal" href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-user-plus"></i> @lang('navs.general.register')</a></li>
-                                    <li><a id="openLoginModal" href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-sign-in"></i> @lang('navs.general.login')</a></li>
-                                @endif
-                            @endif
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <body class="animate">
 
         <nav class="navbar navbar-expand-md navbar-dark fixed-top" id="navbar">
             <div class="container">
@@ -118,46 +92,49 @@
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{trans('custom-menu.'.$menu_name.'.'.str_slug($menu->label))}}</a>
                                                 <div class="dropdown-menu">
-    {{--                                                <a class="dropdown-item" href="#">Link 1</a>--}}
-    {{--                                                <a class="dropdown-item" href="#">Link 2</a>--}}
-    {{--                                                <a class="dropdown-item" href="#">Link 3</a>--}}
                                                     @foreach($menu->subs as $item)
                                                         @include('frontend.layouts.partials.dropdown3', $item)
                                                     @endforeach
                                                 </div>
                                             </li>
-    {{--                                        <li class="menu-item-has-children ul-li-block">--}}
-    {{--                                            <a href="#!">{{trans('custom-menu.'.$menu_name.'.'.str_slug($menu->label))}}</a>--}}
-    {{--                                            <ul class="sub-menu">--}}
-    {{--                                                @foreach($menu->subs as $item)--}}
-    {{--                                                    @include('frontend.layouts.partials.dropdown', $item)--}}
-    {{--                                                @endforeach--}}
-    {{--                                            </ul>--}}
-    {{--                                        </li>--}}
                                         @endif
                                     @endif
                                 @endif
                             @endforeach
                         @endif
 
-                        <li class="nav-item"><a class="nav-link" href="#search"><i class="fa fa-search"></i></a></li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('cart.index')}}"><div class="bag"><img src="{{asset('assets_new/images/icons/bag.png')}}" />
-                                @if(auth()->check() && Cart::session(auth()->user()->id)->getTotalQuantity() != 0)
-                                    <span class="badge badge-danger position-absolute">{{Cart::session(auth()->user()->id)->getTotalQuantity()}}</span>
+                            @if(auth()->check())
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><img src="{{auth()->user()->picture}}" alt="" class="user-img" /> {{auth()->user()->full_name}}</a>
+                                    <div class="dropdown-menu">
+                                        @can('view backend')
+                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">@lang('navs.frontend.dashboard')</a>
+                                        @endcan
+                                        <a class="dropdown-item" href="{{ route('frontend.auth.logout') }}">@lang('navs.general.logout')</a>
+                                    </div>
+                                </li>
+
+                            @else
+                                @if(!auth()->check())
+                                    <li class="nav-item">
+                                        <a id="openLoginModal" href="#" class="btn btn-primary btn-sm mtlr-12 text-uppercase" data-toggle="modal" data-target="#login">@lang('navs.general.login')</a>
+                                    </li>
                                 @endif
+                            @endif
+
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="courses.html" id="navbardrop" data-toggle="dropdown"><i class="fa fa-bars"></i></a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{route('howitwork')}}">How it Works</a>
+                                    <a class="dropdown-item" href="reviews.html">Review</a>
+                                    <a class="dropdown-item" href="student-gallery.html">Student Gallery</a>
+                                    <a class="dropdown-item" href="#">Blog</a>
+{{--                                    {{route('blogs.index')}}--}}
                                 </div>
-                            </a>
-{{--                            <a class="nav-link" href="#"><div class="bag"><img src="{{asset('assets_new/images/icons/bag.png')}}" /></div></a></li>--}}
-                        </li>
+                            </li>
                     </ul>
-                    <div id="search">
-                        <button type="button" class="close">×</button>
-                        <form action="{{route('search')}}" method="get">
-                            <input type="search" name="q" value="" placeholder="type keyword(s) here" />
-                            <button type="submit" class="btn btn-primary">@lang('labels.frontend.home.search')</button>
-                        </form>
-                    </div>
                 </div>
             </div>
         </nav>
@@ -186,8 +163,10 @@
     <!-- For Js Library -->
         <script src="https://code.jquery.com/jquery.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="{{asset('assets_new/js/popper.min.js')}}"></script>
         <script src="{{asset('assets_new/js/bootstrap.min.js')}}"></script>
-        <script src="{{asset('assets_new/js/owl.carousel.min.js')}}"></script>
+        <script src="{{asset('assets_new/js/ion.rangeSlider.min.js')}}"></script>
+{{--        <script src="{{asset('assets_new/js/owl.carousel.min.js')}}"></script>--}}
         {{--    <script src="{{asset('assets/js/jquery-2.1.4.min.js')}}"></script>--}}
 {{--    <script src="{{asset('assets/js/popper.min.js')}}"></script>--}}
 {{--    <script src="{{asset('assets/js/bootstrap.min.js')}}"></script>--}}
@@ -215,46 +194,69 @@
                     $("#navbar").removeClass("shrink");
                 }
             });
+            $(document).ready(function(){
+                $(".filter-button").click(function(){
+                    var value = $(this).attr('data-filter');
+                    if(value == "all")
+                    {
+                        $('.filter').show('1000');
+                    }
+                    else
+                    {
+                        $(".filter").not('.'+value).hide('3000');
+                        $('.filter').filter('.'+value).show('3000');
+                    }
+                });
+                if ($(".filter-button").removeClass("active")) {
+                    $(this).removeClass("active");
+                }
+                $(this).addClass("active");
+            });
+            $("#demo_0").ionRangeSlider({
+                min: 100,
+                max: 1000,
+                from: 550
+            });
             //Searchbar js Starts
-            $(function () {
-                $('a[href="#search"]').on('click', function(event) {
-                    event.preventDefault();
-                    $('#search').addClass('open');
-                    $('#search > form > input[type="search"]').focus();
-                });
-
-                $('#search, #search button.close').on('click keyup', function(event) {
-                    if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
-                        $(this).removeClass('open');
-                    }
-                });
-
-            });
+            // $(function () {
+            //     $('a[href="#search"]').on('click', function(event) {
+            //         event.preventDefault();
+            //         $('#search').addClass('open');
+            //         $('#search > form > input[type="search"]').focus();
+            //     });
+            //
+            //     $('#search, #search button.close').on('click keyup', function(event) {
+            //         if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
+            //             $(this).removeClass('open');
+            //         }
+            //     });
+            //
+            // });
             //OwlCarousel Js Starts
-            $(document).ready(function() {
-                var owl = $('.owl-carousel');
-                owl.owlCarousel({
-                    margin: 30,
-                    nav: true,
-                    loop: true,
-                    dots: false,
-                    autoplay: true,
-                    responsive: {
-                        0: {
-                            items: 1
-                        },
-                        600: {
-                            items: 3
-                        },
-                        1000: {
-                            items: 3
-                        }
-                    }
-                })
-            });
-            $('#studenttestimonial').carousel({
-                interval: 5000
-            });
+            // $(document).ready(function() {
+            //     var owl = $('.owl-carousel');
+            //     owl.owlCarousel({
+            //         margin: 30,
+            //         nav: true,
+            //         loop: true,
+            //         dots: false,
+            //         autoplay: true,
+            //         responsive: {
+            //             0: {
+            //                 items: 1
+            //             },
+            //             600: {
+            //                 items: 3
+            //             },
+            //             1000: {
+            //                 items: 3
+            //             }
+            //         }
+            //     })
+            // });
+            // $('#studenttestimonial').carousel({
+            //     interval: 5000
+            // });
         </script>
 
     <script>

@@ -78,7 +78,7 @@ trait FileUploadTrait
 
             if ($request->hasFile($key)) {
 
-                if ($key == $downloadable_file_input) {
+                if ($key == $downloadable_file_input && $downloadable_file_input != 'workshop_image') {
                     foreach ($request->file($key) as $item) {
                         $extension = array_last(explode('.',$item->getClientOriginalName()));
                         $name = array_first(explode('.',$item->getClientOriginalName()));
@@ -95,6 +95,31 @@ trait FileUploadTrait
                         ]);
                     }
                     $finalRequest = $finalRequest = new Request($request->except($downloadable_file_input));
+
+
+                } else if ($key == $downloadable_file_input && $downloadable_file_input == 'workshop_image') {
+                    $images = '';
+                    foreach ($request->file($key) as $item) {
+                        $extension = array_last(explode('.',$item->getClientOriginalName()));
+                        $name = array_first(explode('.',$item->getClientOriginalName()));
+                        $filename = time() . '-' . str_slug($name).'.'.$extension;
+                        $size = $item->getSize() / 1024;
+                        $item->move(public_path('storage/uploads'), $filename);
+                        Media::create([
+                            'model_type' => $model_type,
+                            'model_id' => $model->id,
+                            'name' => $filename,
+                            'type' => $item->getClientMimeType(),
+                            'file_name' => $filename,
+                            'size' => $size,
+                        ]);
+
+                        if($images != '')
+                            $images .= ',';
+
+                        $images .= $filename;
+                    }
+                    $finalRequest = new Request(array_merge($finalRequest->all(), ['images' => $images]));
 
 
                 } else {

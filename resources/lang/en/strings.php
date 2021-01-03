@@ -121,7 +121,7 @@ return array (
       'app_delete' => 'Delete',
       'all' => 'All',
       'trashed' => 'Trashed',
-      'boilerplate_link' => 'School of Permaculture',
+      'boilerplate_link' => 'The Compelling Image',
       'continue' => 'Continue',
       'member_since' => 'Member since',
       'minutes' => ' minutes',

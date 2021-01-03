@@ -32,16 +32,15 @@
 
 	<!-- Start of breadcrumb section
 		============================================= -->
-		<section id="breadcrumb" class="breadcrumb-section relative-position backgroud-style">
-			<div class="blakish-overlay"></div>
-			<div class="container">
-				<div class="page-breadcrumb-content text-center">
-					<div class="page-breadcrumb-title">
-						<h2 class="breadcrumb-head black bold">{{env('APP_NAME')}} <span>@lang('labels.frontend.teacher.title')</span></h2>
-					</div>
+	<header>
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-12">
+					<h1>Our Instructors</h1>
 				</div>
 			</div>
-		</section>
+		</div>
+	</header>
 	<!-- End of breadcrumb section
 		============================================= -->
 
@@ -49,56 +48,169 @@
 
 	<!-- Start of teacher section
 		============================================= -->
-		<section id="teacher-page" class="teacher-page-section">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-9">
-						<div class="teachers-archive">
-							<div class="row">
-                                @if(count($teachers) > 0)
-                                @foreach($teachers as $item)
-								<div class="col-md-4 col-sm-6">
-									<div class="teacher-pic-content">
-										<div class="teacher-img-content relative-position">
-											<img src="{{$item->picture}}" alt="">
-											<div class="teacher-hover-item">
-												<div class="teacher-social-name ul-li-block">
-													<ul>
-                                                        <li><a href="#"><i class="fa fa-envelope"></i></a></li>
-                                                        <li><a href="{{route('admin.messages',['teacher_id'=>$item->id])}}"><i class="fa fa-comments"></i></a></li>
-													</ul>
-												</div>
-												{{--<div class="teacher-text">--}}
-													{{--Lorem ipsum dolor  consectuer adipiscing elit, nonummy nibh euismod tincidunt.--}}
-												{{--</div>--}}
-											</div>
-											<div class="teacher-next text-center">
-												<a href="{{route('teachers.show',['id'=>$item->id])}}"><i class="text-gradiant fas fa-arrow-right"></i></a>
-											</div>
-										</div>
-										<div class="teacher-name-designation">
-											<span class="teacher-name">{{$item->full_name}}</span>
-											{{--<span class="teacher-designation">Mobile Apps</span>--}}
-										</div>
-									</div>
+	<section>
+		<div class="container">
+			<div class="row clearfix">
+				@if(count($teachers) > 0)
+					@foreach($teachers as $item)
+						<?php
+						$teacherProfile = $item->teacherProfile?:'';
+						?>
+						<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">
+							<div class="instructors-grid clearfix">
+								<div class="instructors-img clearfix">
+									<img src="{{$item->picture}}" alt="" />
 								</div>
-                                @endforeach
-                                @else
-                                    <h4>@lang('lables.general.no_data_available')</h4>
-                                @endif
-
-
+								<a href="{{route('teachers.show',['id'=>$item->id])}}"><img src="{{$item->picture}}" class="instructors-profile" alt="" /></a>
+								<div class="instructors-content clearfix">
+									<div class="instructors-title clearfix"><a href="{{route('teachers.show',['id'=>$item->id])}}">{{$item->full_name}}<span>{{$teacherProfile->title}}</span></a></div>
+									<p>{{substr(preg_replace('#\<(.*?)\>#', '', $teacherProfile->description), 0,200).'...'}}</p>
+									<ul class="instructors-social clearfix">
+										@if(isset($teacherProfile->facebook_link))
+											<li><a href="{{$teacherProfile->facebook_link}}"><i class="fa fa-facebook"></i></a></li>
+										@endif
+										@if(isset($teacherProfile->insta_link))
+											<li><a href="{{$teacherProfile->insta_link}}"><i class="fa fa-instagram"></i></a></li>
+										@endif
+									</ul>
+								</div>
 							</div>
-							<div class="couse-pagination text-center ul-li">
-                                {{ $teachers->links() }}
-							</div>
-							
 						</div>
-					</div>
-					@include('frontend.layouts.partials.right-sidebar')
-				</div>
+					@endforeach
+{{--				@else--}}
+{{--					<h4>@lang('lables.general.no_data_available')</h4>--}}
+				@endif
+{{--				<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">--}}
+{{--					<div class="instructors-grid clearfix">--}}
+{{--						<div class="instructors-img clearfix">--}}
+{{--							<img src="{{asset("assets_new/images/gmb.jpg")}}" alt="Images goes here" />--}}
+{{--						</div>--}}
+{{--						<a href="instructor-details.html"><img src="{{asset("assets_new/images/gmb-akash.jpg")}}" class="instructors-profile" alt="Images goes here" /></a>--}}
+{{--						<div class="instructors-content clearfix">--}}
+{{--							<div class="instructors-title clearfix"><a href="instructor-details.html">GMB Akash<span>Street Photography with G.M.B. Akash</span></a></div>--}}
+{{--							<p>Akash's passion for photography began in 1996. He attended the World Press Photo seminar in Dhaka for 3 years and graduated with a BA in Photojournalism from Pathshala, Dhaka. He has ...</p>--}}
+{{--							<ul class="instructors-social clearfix">--}}
+{{--								<li><a href="#"><i class="fa fa-facebook"></i></a></li>--}}
+{{--								<li><a href="#"><i class="fa fa-instagram"></i></a></li>--}}
+{{--							</ul>--}}
+{{--						</div>--}}
+{{--					</div>--}}
+{{--				</div>--}}
+{{--				<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">--}}
+{{--					<div class="instructors-grid clearfix">--}}
+{{--						<div class="instructors-img clearfix">--}}
+{{--							<img src="{{asset("assets_new/images/db.jpg")}}" alt="Images goes here" />--}}
+{{--						</div>--}}
+{{--						<a href="instructor-details.html"><img src="{{asset("assets_new/images/david-bathgate.jpg")}}" class="instructors-profile" alt="Images goes here" /></a>--}}
+{{--						<div class="instructors-content clearfix">--}}
+{{--							<div class="instructors-title clearfix"><a href="instructor-details.html">David Bathgate<span>People Photography - with Confidence</span></a></div>--}}
+{{--							<p>David Bathgate is an award-winning documentary and travel photographer whose work appears in such publications as Time, Newsweek, The New York Times, Geo, Stern, The Guardian, The Times of London and the ...</p>--}}
+{{--							<ul class="instructors-social clearfix">--}}
+{{--								<li><a href="#"><i class="fa fa-facebook"></i></a></li>--}}
+{{--								<li><a href="#"><i class="fa fa-instagram"></i></a></li>--}}
+{{--							</ul>--}}
+{{--						</div>--}}
+{{--					</div>--}}
+{{--				</div>--}}
+{{--				<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">--}}
+{{--					<div class="instructors-grid clearfix">--}}
+{{--						<div class="instructors-img clearfix">--}}
+{{--							<img src="{{asset("assets_new/images/ac.jpg")}}" alt="Images goes here" />--}}
+{{--						</div>--}}
+{{--						<a href="instructor-details.html"><img src="{{asset("assets_new/images/arlene-collins.jpg")}}" class="instructors-profile" alt="Images goes here" /></a>--}}
+{{--						<div class="instructors-content clearfix">--}}
+{{--							<div class="instructors-title clearfix"><a href="instructor-details.html">Arlene Collins<span>Travel Photography</span></a></div>--}}
+{{--							<p>Arlene Collins is a New York City based photographer specializing in documenting remote cultures and changing civilizations around the world.  Since 2000 she has produced and lead international photography workshops to ...</p>--}}
+{{--							<ul class="instructors-social clearfix">--}}
+{{--								<li><a href="#"><i class="fa fa-facebook"></i></a></li>--}}
+{{--								<li><a href="#"><i class="fa fa-instagram"></i></a></li>--}}
+{{--							</ul>--}}
+{{--						</div>--}}
+{{--					</div>--}}
+{{--				</div>--}}
+{{--				<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">--}}
+{{--					<div class="instructors-grid clearfix">--}}
+{{--						<div class="instructors-img clearfix">--}}
+{{--							<img src="{{asset("assets_new/images/gg.jpg")}}" alt="Images goes here" />--}}
+{{--						</div>--}}
+{{--						<a href="instructor-details.html"><img src="{{asset("assets_new/images/gina-genis.jpg")}}" class="instructors-profile" alt="Images goes here" /></a>--}}
+{{--						<div class="instructors-content clearfix">--}}
+{{--							<div class="instructors-title clearfix"><a href="instructor-details.html">Gina Genis<span>Capturing Breathetaking Landscapes</span></a></div>--}}
+{{--							<p>Gina Genis is a graduate of Parsons School of Design in N.Y., and Fashion Institute of Design and Merchandising, L.A. She leads the Gina Genis Photography Workshops where she shares the ...</p>--}}
+{{--							<ul class="instructors-social clearfix">--}}
+{{--								<li><a href="#"><i class="fa fa-facebook"></i></a></li>--}}
+{{--								<li><a href="#"><i class="fa fa-instagram"></i></a></li>--}}
+{{--							</ul>--}}
+{{--						</div>--}}
+{{--					</div>--}}
+{{--				</div>--}}
+{{--				<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">--}}
+{{--					<div class="instructors-grid clearfix">--}}
+{{--						<div class="instructors-img clearfix">--}}
+{{--							<img src="{{asset("assets_new/images/gmb.jpg")}}" alt="Images goes here" />--}}
+{{--						</div>--}}
+{{--						<a href="instructor-details.html"><img src="{{asset("assets_new/images/gmb-akash.jpg")}}" class="instructors-profile" alt="Images goes here" /></a>--}}
+{{--						<div class="instructors-content clearfix">--}}
+{{--							<div class="instructors-title clearfix"><a href="instructor-details.html">GMB Akash<span>Street Photography with G.M.B. Akash</span></a></div>--}}
+{{--							<p>Akash's passion for photography began in 1996. He attended the World Press Photo seminar in Dhaka for 3 years and graduated with a BA in Photojournalism from Pathshala, Dhaka. He has ...</p>--}}
+{{--							<ul class="instructors-social clearfix">--}}
+{{--								<li><a href="#"><i class="fa fa-facebook"></i></a></li>--}}
+{{--								<li><a href="#"><i class="fa fa-instagram"></i></a></li>--}}
+{{--							</ul>--}}
+{{--						</div>--}}
+{{--					</div>--}}
+{{--				</div>--}}
+{{--				<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">--}}
+{{--					<div class="instructors-grid clearfix">--}}
+{{--						<div class="instructors-img clearfix">--}}
+{{--							<img src="{{asset("assets_new/images/db.jpg")}}" alt="Images goes here" />--}}
+{{--						</div>--}}
+{{--						<a href="instructor-details.html"><img src="{{asset("assets_new/images/david-bathgate.jpg")}}" class="instructors-profile" alt="Images goes here" /></a>--}}
+{{--						<div class="instructors-content clearfix">--}}
+{{--							<div class="instructors-title clearfix"><a href="instructor-details.html">David Bathgate<span>People Photography - with Confidence</span></a></div>--}}
+{{--							<p>David Bathgate is an award-winning documentary and travel photographer whose work appears in such publications as Time, Newsweek, The New York Times, Geo, Stern, The Guardian, The Times of London and the ...</p>--}}
+{{--							<ul class="instructors-social clearfix">--}}
+{{--								<li><a href="#"><i class="fa fa-facebook"></i></a></li>--}}
+{{--								<li><a href="#"><i class="fa fa-instagram"></i></a></li>--}}
+{{--							</ul>--}}
+{{--						</div>--}}
+{{--					</div>--}}
+{{--				</div>--}}
+{{--				<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">--}}
+{{--					<div class="instructors-grid clearfix">--}}
+{{--						<div class="instructors-img clearfix">--}}
+{{--							<img src="{{asset("assets_new/images/ac.jpg")}}" alt="Images goes here" />--}}
+{{--						</div>--}}
+{{--						<a href="instructor-details.html"><img src="{{asset("assets_new/images/arlene-collins.jpg")}}" class="instructors-profile" alt="Images goes here" /></a>--}}
+{{--						<div class="instructors-content clearfix">--}}
+{{--							<div class="instructors-title clearfix"><a href="instructor-details.html">Arlene Collins<span>Travel Photography</span></a></div>--}}
+{{--							<p>Arlene Collins is a New York City based photographer specializing in documenting remote cultures and changing civilizations around the world.  Since 2000 she has produced and lead international photography workshops to ...</p>--}}
+{{--							<ul class="instructors-social clearfix">--}}
+{{--								<li><a href="#"><i class="fa fa-facebook"></i></a></li>--}}
+{{--								<li><a href="#"><i class="fa fa-instagram"></i></a></li>--}}
+{{--							</ul>--}}
+{{--						</div>--}}
+{{--					</div>--}}
+{{--				</div>--}}
+{{--				<div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">--}}
+{{--					<div class="instructors-grid clearfix">--}}
+{{--						<div class="instructors-img clearfix">--}}
+{{--							<img src="{{asset("assets_new/images/gg.jpg")}}" alt="Images goes here" />--}}
+{{--						</div>--}}
+{{--						<a href="instructor-details.html"><img src="{{asset("assets_new/images/gina-genis.jpg")}}" class="instructors-profile" alt="Images goes here" /></a>--}}
+{{--						<div class="instructors-content clearfix">--}}
+{{--							<div class="instructors-title clearfix"><a href="instructor-details.html">Gina Genis<span>Capturing Breathetaking Landscapes</span></a></div>--}}
+{{--							<p>Gina Genis is a graduate of Parsons School of Design in N.Y., and Fashion Institute of Design and Merchandising, L.A. She leads the Gina Genis Photography Workshops where she shares the ...</p>--}}
+{{--							<ul class="instructors-social clearfix">--}}
+{{--								<li><a href="#"><i class="fa fa-facebook"></i></a></li>--}}
+{{--								<li><a href="#"><i class="fa fa-instagram"></i></a></li>--}}
+{{--							</ul>--}}
+{{--						</div>--}}
+{{--					</div>--}}
+{{--				</div>--}}
 			</div>
-		</section>
+		</div>
+	</section>
 	<!-- End of teacher section
 		============================================= -->
 

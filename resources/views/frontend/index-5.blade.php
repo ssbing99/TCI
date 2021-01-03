@@ -54,58 +54,45 @@
     <!-- End popular course
     ============================================= -->
 
+    <section class="gift-bg">
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <img src="{{asset("assets_new/images/gift.png")}}" alt="Gift">
+                    <p>A virtual classroom / social-interactive experience... As a TCI student, you’ll receive valuable critiques and advice from your instructor, timely answers to your questions and be able to discuss all that is happening on your course with fellow classmates. Sign up for a no-strings-attached account, enroll for a course and you are set to begin!</p>
+                    <center><a class="btn btn-outline-primary btn-lg" href="gifts.html">Gift a Course</a></center>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Start Free Content
         ============================================= -->
-    @if($sections->popular_courses->status == 1)
-        @include('frontend.layouts.partials.free_content')
-    @endif
+{{--    @if($sections->popular_courses->status == 1)--}}
+{{--        @include('frontend.layouts.partials.free_content')--}}
+{{--    @endif--}}
     <!-- End Free Content
     ============================================= -->
 
     <!-- Start secound testimonial section
         ============================================= -->
-    @if($sections->testimonial->status == 1)
-        @include('frontend.layouts.partials.custom_testimonial');
-    @endif
+{{--    @if($sections->testimonial->status == 1)--}}
+{{--        @include('frontend.layouts.partials.custom_testimonial');--}}
+{{--    @endif--}}
     <!-- End secound testimonial section
         ============================================= -->
 
-    @if($sections->contact_us->status == 1)
-        <!-- Start of contact area
+    <!-- Start teacher section
+        ============================================= -->
+        @include('frontend.layouts.partials.our_teachers');
+    <!-- End teacher section
         ============================================= -->
 
-        <section class="get-in-touch clearfix">
-            <div class="container">
-                <div class="row clearfix">
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                        <h5>@lang('labels.frontend.layouts.partials.get_in_touch_text')</h5>
-                        <div class="clearfix"></div>
-                        <form class="mtb-30" action="{{route('contact.send')}}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <input type="text" class="form-control @if($errors->has('name')) border-bottom border-danger @endif" name="name" id="name" placeholder="@lang('labels.frontend.contact.name')" />
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control @if($errors->has('email')) border-bottom border-danger @endif" name="email" id="email" placeholder="@lang('labels.frontend.contact.email')" />
-                            </div>
-{{--                            <div class="form-group">--}}
-{{--                                <input type="text" class="form-control @if($errors->has('address')) border-bottom border-danger @endif" name="address" id="address" placeholder="@lang('labels.frontend.contact.address')" />--}}
-{{--                            </div>--}}
-                            <div class="form-group">
-                                <textarea class="form-control @if($errors->has('message')) border-bottom border-danger @endif" name="message" id="message" placeholder="@lang('labels.frontend.contact.message')"></textarea>
-                            </div>
-                            <button type="submit" name="submit" id="submit" class="btn btn-primary btn-lg" value="@lang('labels.frontend.contact.send')">@lang('labels.frontend.contact.send')</button>
-                        </form>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3344.2766220456865!2d-96.70377268547395!3d33.049183477366554!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864c19b3dc1c0001%3A0xdd9b7cba447aa925!2sSchool%20of%20Permaculture!5e0!3m2!1sen!2sin!4v1601741385740!5m2!1sen!2sin" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- End of contact area
-            ============================================= -->
-    @endif
+    <!-- Start recent blogs section
+        ============================================= -->
+        @include('frontend.layouts.partials.recent_blogs');
+    <!-- End recent blogs section
+        ============================================= -->
 
     <!-- Start of footer with subscribe
         ============================================= -->

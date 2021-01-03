@@ -9,5 +9,8 @@ return array (
     'contact' => 'Contact',
     'courses' => 'Cours',
     'forums' => 'Les forums',
+      'courses' => 'Courses',
+      'instructors' => 'Instructors',
+      'workshop' => 'Workshop',
   ),
 );

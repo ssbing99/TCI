@@ -26,7 +26,7 @@ class Course extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['category_id', 'title', 'slug', 'description', 'price', 'course_image','course_video', 'start_date', 'duration', 'skill_level', 'published', 'free','featured', 'trending', 'popular', 'meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['category_id', 'title', 'slug', 'description', 'price', 'price_skype', 'course_image','course_video', 'start_date', 'duration', 'skill_level', 'published', 'free', 'beginner', 'intermediate', 'advance','featured', 'trending', 'popular', 'meta_title', 'meta_description', 'meta_keywords'];
 
     protected $appends = ['image'];
 
@@ -73,6 +73,14 @@ class Course extends Model
         return $this->attributes['price'];
     }
 
+    public function getPriceSkypeAttribute()
+    {
+        if (($this->attributes['price_skype'] == null)) {
+            return round(0.00);
+        }
+        return $this->attributes['price_skype'];
+    }
+
 
     /**
      * Set attribute to money format
@@ -81,6 +89,14 @@ class Course extends Model
     public function setPriceAttribute($input)
     {
         $this->attributes['price'] = $input ? $input : null;
+    }
+    /**
+     * Set attribute to money format
+     * @param $input
+     */
+    public function setPriceSkypeAttribute($input)
+    {
+        $this->attributes['price_skype'] = $input ? $input : null;
     }
 
     /**
@@ -173,6 +189,34 @@ class Course extends Model
             return true;
         }
         return false;
+    }
+
+    public function getLevelAsCategory(){
+        $cate = '';
+        $cnt = 0;
+
+        if ($this->beginner != 0) {
+            $cate = 'Beginner';
+            $cnt++;
+        }
+
+        if ($this->intermediate != 0) {
+            if($cnt>0)
+                $cate = $cate.', ';
+
+            $cate = 'Intermediate';
+            $cnt++;
+        }
+
+        if ($this->advance != 0) {
+            if($cnt>0)
+                $cate = $cate.', ';
+
+            $cate = 'Advance';
+            $cnt++;
+        }
+
+        return $cate;
     }
 
 

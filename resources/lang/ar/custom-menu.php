@@ -9,5 +9,8 @@ return array (
     'contact' => 'اتصل',
     'courses' => 'الدورات',
     'forums' => 'المنتديات',
+      'courses' => 'Courses',
+      'instructors' => 'Instructors',
+      'workshop' => 'Workshop',
   ),
 );

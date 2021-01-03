@@ -96,6 +96,16 @@
                     </div>
 
                     <div class="form-group row">
+                        {{ html()->label('Instagram Link')->class('col-md-2 form-control-label')->for('insta_link') }}
+
+                        <div class="col-md-10">
+                            {{ html()->text('insta_link')
+                                            ->class('form-control')
+                                            ->placeholder('Instagram Link') }}
+                        </div><!--col-->
+                    </div>
+
+                    <div class="form-group row">
                         {{ html()->label(__('labels.teacher.twitter_link'))->class('col-md-2 form-control-label')->for('twitter_link') }}
 
                         <div class="col-md-10">
@@ -177,11 +187,20 @@
                     </div>
 
                     <div class="form-group row">
+                        {{ html()->label('Title')->class('col-md-2 form-control-label')->for('title') }}
+                        <div class="col-md-10">
+                            {{ html()->text('title')
+                                    ->class('form-control')
+                                    ->placeholder('Title') }}
+                        </div><!--col-->
+                    </div>
+
+                    <div class="form-group row">
                         {{ html()->label(__('labels.teacher.description'))->class('col-md-2 form-control-label')->for('description') }}
 
                         <div class="col-md-10">
-                            {{ html()->textarea('description')
-                                            ->class('form-control')
+                            {{ html()->textarea('description')->id('editor')
+                                            ->class('form-control editor')
                                             ->placeholder(__('labels.teacher.description')) }}
                         </div><!--col-->
                     </div>
@@ -212,6 +231,36 @@
     {{ html()->form()->close() }}
 @endsection
 @push('after-scripts')
+    <script src="{{asset('plugins/bootstrap-tagsinput/bootstrap-tagsinput.js')}}"></script>
+    <script type="text/javascript" src="{{asset('/vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script>
+    <script type="text/javascript" src="{{asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js')}}"></script>
+    <script src="{{asset('/vendor/laravel-filemanager/js/lfm.js')}}"></script>
+    <script>
+        $('.editor').each(function () {
+
+            CKEDITOR.replace($(this).attr('id'), {
+                filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+                filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token={{csrf_token()}}',
+                filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+                filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token={{csrf_token()}}',
+
+                extraPlugins: 'smiley,lineutils,widget,codesnippet,prism,flash',
+            });
+
+        });
+        var uploadField = $('input[type="file"]');
+
+        $(document).on('change','input[type="file"]',function () {
+            var $this = $(this);
+            $(this.files).each(function (key,value) {
+                if((value.size/1024) > 10240){
+                    alert('"'+value.name+'"'+'exceeds limit of maximum file upload size' )
+                    $this.val("");
+                }
+            })
+        })
+
+    </script>
 <script>
     @if(old('payment_method') && old('payment_method') == 'bank')
     $('.paypal_details').hide();

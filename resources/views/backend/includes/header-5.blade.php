@@ -3,7 +3,7 @@
         <button type="button" class="navbar-toggler mr-2 " data-toggle="offcanvas" title="Toggle responsive left sidebar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#" title="School Of Permaculture"><img src="{{asset('assets_new/images/logo_black.png')}}" class="img-fluid" /></a>
+        <a class="navbar-brand" href="#" title="The Compelling Image"><img src="{{asset('assets_new/images/logo_black.png')}}" class="img-fluid" /></a>
     </div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
         <span class="navbar-toggler-icon"></span>

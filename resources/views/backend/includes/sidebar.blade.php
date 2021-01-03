@@ -43,7 +43,7 @@
                     </a>
                 </li>
             @endcan
-            @if((!$logged_in_user->hasRole('student')) && ($logged_in_user->hasRole('teacher') || $logged_in_user->isAdmin() || $logged_in_user->hasAnyPermission(['course_access','lesson_access','test_access','question_access','bundle_access'])))
+            @if((!$logged_in_user->hasRole('student')) && ($logged_in_user->hasRole('teacher') || $logged_in_user->isAdmin() || $logged_in_user->hasAnyPermission(['course_access','lesson_access','test_access','question_access','bundle_access','workshop_access'])))
                 {{--@if($logged_in_user->hasRole('teacher') || $logged_in_user->isAdmin() || $logged_in_user->hasAnyPermission(['course_access','lesson_access','test_access','question_access','bundle_access']))--}}
 
                 <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern(['user/courses*','user/lessons*','user/tests*','user/questions*','user/live-lessons*','user/live-lesson-slots*']), 'open') }}">
@@ -120,6 +120,16 @@
                            href="{{ route('admin.bundles.index') }}">
                             <i class="nav-icon icon-layers"></i>
                             <span class="title">@lang('menus.backend.sidebar.bundles.title')</span>
+                        </a>
+                    </li>
+                @endcan
+
+                @can('workshop_access')
+                    <li class="nav-item ">
+                        <a class="nav-link {{ $request->segment(2) == 'workshops' ? 'active' : '' }}"
+                           href="{{ route('admin.workshops.index') }}">
+                            <i class="nav-icon icon-layers"></i>
+                            <span class="title">@lang('menus.backend.sidebar.workshops.title')</span>
                         </a>
                     </li>
                 @endcan

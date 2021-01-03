@@ -14,6 +14,8 @@ use Carbon\Carbon;
 use Harimayco\Menu\Facades\Menu;
 use Harimayco\Menu\Models\MenuItems;
 use Harimayco\Menu\Models\Menus;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -118,7 +120,7 @@ class AppServiceProvider extends ServiceProvider
 
         if (Schema::hasTable('blogs')) {
 
-            $recent_news = Blog::orderBy('created_at', 'desc')->whereHas('category')->take(2)->get();
+            $recent_news = Blog::orderBy('created_at', 'desc')->whereHas('category')->take(3)->get();
             View::share('recent_news', $recent_news);
 
         }
@@ -176,6 +178,30 @@ class AppServiceProvider extends ServiceProvider
 //            $view->with(compact('locale_full_name'));
 //        });
         }
+
+        /**
+         * Paginate a standard Laravel Collection.
+         *
+         * @param int $perPage
+         * @param int $total
+         * @param int $page
+         * @param string $pageName
+         * @return array
+         */
+        Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
+            $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+
+            return new LengthAwarePaginator(
+                $this->forPage($page, $perPage),
+                $total ?: $this->count(),
+                $perPage,
+                $page,
+                [
+                    'path' => LengthAwarePaginator::resolveCurrentPath(),
+                    'pageName' => $pageName,
+                ]
+            );
+        });
 
 
     }

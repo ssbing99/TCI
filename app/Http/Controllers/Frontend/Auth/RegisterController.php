@@ -60,8 +60,10 @@ class RegisterController extends Controller
     {
         abort_unless(config('access.registration'), 404);
 
+//        return view('frontend.auth.register')
+//            ->withSocialiteLinks((new Socialite)->getSocialLinks());
         return view('frontend.auth.register')
-            ->withSocialiteLinks((new Socialite)->getSocialLinks());
+            ->withSocialiteLinks((new Socialite)->getSocialLinksForSignup());
     }
 
     /**
@@ -119,6 +121,7 @@ class RegisterController extends Controller
                 $user->address = isset($data['address']) ? $data['address'] : NULL;
                 $user->city =  isset($data['city']) ? $data['city'] : NULL;
                 $user->pincode = isset($data['pincode']) ? $data['pincode'] : NULL;
+                $user->postal = isset($data['postal']) ? $data['postal'] : NULL;
                 $user->state = isset($data['state']) ? $data['state'] : NULL;
                 $user->country = isset($data['country']) ? $data['country'] : NULL;
                 $user->save();

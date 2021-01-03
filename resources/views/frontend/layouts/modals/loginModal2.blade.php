@@ -6,154 +6,41 @@
 ?>
 @if(!auth()->check())
 
-    <div class="modal fade bd-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="card">
-                    <div class="login-box">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
-                        <div class="login-snip">
-                            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">@lang('labels.frontend.modal.login')</label>
-                            <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">@lang('labels.frontend.modal.signup')</label>
-                            <div class="login-space">
-                                <div class="login" id="login">
-                                    <span class="error-response text-danger"></span>
-                                    <span class="success-response text-success">{{(session()->get('flash_success'))}}</span>
-                                    <div id="loginSocial" class="optbox clearfix">
-                                        <h6>@lang('labels.frontend.modal.login_with')</h6>
-                                        <div id="loginSocialLinks"></div>
-{{--                                        <div class="imgarea clearfix">--}}
-{{--                                            <a href="#"><img src="{{asset("assets_new/images/fb-icon.jpg")}}" alt="Image goes here" /></a>--}}
-{{--                                            <a href="#"><img src="{{asset("assets_new/images/google-icon.jpg")}}" alt="Image goes here" /></a>--}}
-{{--                                        </div>--}}
-                                    </div>
-                                    <form class="contact_form" id="loginForm" action="{{route('frontend.auth.login.post')}}"
-                                          method="POST" enctype="multipart/form-data">
-{{--                                        <a href="#" class="go-register float-left text-info pl-0">--}}
-{{--                                            @lang('labels.frontend.modal.new_user_note')--}}
-{{--                                        </a>--}}
-                                        <div class="group">
-                                            {{ html()->email('email')
-                                                ->class('input')
-                                                ->placeholder(__('validation.attributes.frontend.email'))
-                                                ->attribute('maxlength', 191)
-                                                }}
-                                            <span id="login-email-error" class="text-danger"></span>
-
-                                        </div>
-
-                                        <div class="group">
-                                            {{ html()->password('password')
-                                                ->class('input')
-                                                ->placeholder(__('validation.attributes.frontend.password'))
-                                                }}
-                                            <span id="login-password-error" class="text-danger"></span>
-
-                                        </div>
-
-{{--                                    <div class="group"><input id="user" type="text" class="input" placeholder="@lang('labels.frontend.modal.enter_y_username')"> </div>--}}
-{{--                                    <div class="group"><input id="pass" type="password" class="input" data-type="password" placeholder="@lang('labels.frontend.modal.enter_y_password')"> </div>--}}
-                                    <div class="group"> <input id="check" name="remember" type="checkbox" class="check" checked value="1"> <label for="check"><span class="icon"></span> @lang('labels.frontend.modal.keep_signin')</label> </div>
-
-                                    @if(config('access.captcha.registration'))
-                                        <div class="group text-center">
-                                            {{ no_captcha()->display() }}
-                                            {{ html()->hidden('captcha_status', 'true') }}
-                                            <span id="login-captcha-error" class="text-danger"></span>
-
-                                        </div><!--col-->
-                                    @endif
-
-                                    <div class="group"> <input type="submit" class="button" value="@lang('labels.frontend.modal.login')"> </div>
-                                    <div class="hr"></div>
-                                    <div class="foot">
-                                        <a href="{{ route('frontend.auth.password.reset') }}">@lang('labels.frontend.passwords.forgot_password')</a>
-                                    </div>
-                                    </form>
-                                </div>
-                                <div class="sign-up-form" id="register">
-                                    <div id="signupSocial" class="optbox clearfix">
-                                        <h6>@lang('labels.frontend.modal.signup_with')</h6>
-                                        <div id="signupSocialLinks"></div>
-{{--                                        <div class="imgarea clearfix">--}}
-{{--                                            <a href="#"><img src="{{asset("assets_new/images/fb-icon.jpg")}}" alt="Image goes here" /></a>--}}
-{{--                                            <a href="#"><img src="{{asset("assets_new/images/google-icon.jpg")}}" alt="Image goes here" /></a>--}}
-{{--                                        </div>--}}
-                                    </div>
-
-                                    <form id="registerForm" class="contact_form"
-                                          action="#"
-                                          method="post">
-                                        {!! csrf_field() !!}
-
-
-                                        <div class="group">
-
-                                            {{ html()->text('first_name')
-                                                ->class('input')
-                                                ->placeholder(__('validation.attributes.frontend.first_name'))
-                                                ->attribute('maxlength', 191) }}
-                                            <span id="first-name-error" class="text-danger"></span>
-                                        </div>
-
-                                        <div class="group">
-                                            {{ html()->text('last_name')
-                                              ->class('input')
-                                              ->placeholder(__('validation.attributes.frontend.last_name'))
-                                              ->attribute('maxlength', 191) }}
-                                            <span id="last-name-error" class="text-danger"></span>
-
-                                        </div>
-
-                                        <div class="group">
-                                            {{ html()->email('email')
-                                               ->class('input')
-                                               ->placeholder(__('validation.attributes.frontend.email'))
-                                               ->attribute('maxlength', 191)
-                                               }}
-                                            <span id="email-error" class="text-danger"></span>
-
-                                        </div>
-                                        <div class="row clearfix">
-                                            <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 group">
-                                                {{ html()->password('password')
-                                                    ->class('input')
-                                                    ->placeholder(__('validation.attributes.frontend.password'))
-                                                     }}
-                                            </div>
-                                            <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 group">
-                                                {{ html()->password('password_confirmation')
-                                                    ->class('input')
-                                                    ->placeholder(__('validation.attributes.frontend.password_confirmation'))
-                                                     }}
-                                            </div>
-                                        </div>
-
-                                        <div class="group">
-                                            <span id="password-error" class="text-danger"></span>
-                                        </div>
-
-
-{{--                                    <div class="group"><input id="user" type="text" class="input" placeholder="Username"></div>--}}
-{{--                                    <div class="group"><input id="email" type="email" class="input" placeholder="Email ID"></div>--}}
-{{--                                    <div class="row clearfix">--}}
-{{--                                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 group"><input id="password" type="password" class="input" data-type="password" placeholder="Password"> </div>--}}
-{{--                                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 group"><input id="confirmPassword" type="password" class="input" data-type="password" placeholder="Retype password"> </div>--}}
-{{--                                    </div>--}}
-                                    <div class="group"> <input type="submit" class="button" value="@lang('labels.frontend.modal.signup')"> </div>
-                                    <div class="hr"></div>
-{{--                                    <div class="foot">--}}
-{{--                                        <a href="{{ route('frontend.auth.teacher.register') }}" >--}}
-{{--                                            @lang('labels.teacher.teacher_register')--}}
-{{--                                        </a>--}}
-{{--                                    </div>--}}
-                                    <div class="foot"> <label for="tab-1" style="color:inherit;">Already Member?</label> </div>
-                                    </form>
-                                </div>
-                            </div>
+                <form class="box" id="loginForm" action="{{route('frontend.auth.login.post')}}"
+                      method="POST" enctype="multipart/form-data">
+                    <a class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+                    <h1>Login</h1>
+                    <p>Fill Your Details</p>
+                    <span class="error-response text-danger"></span>
+                    <span class="success-response text-success">{{(session()->get('flash_success'))}}</span>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa fa-user"></i></span>
+                        <input type="email" name="email" placeholder="Username">
+                    </div>
+                    <span id="login-email-error" class="text-danger"></span>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                        <input type="password" name="password" placeholder="Password">
+                    </div>
+                    <span id="login-password-error" class="text-danger"></span>
+                    <a class="forgot" href="#">Forgot password?</a>
+                    <input type="submit" name="" value="Login">
+                    <div id="loginSocial" class="optbox clearfix">
+                        <div class="divider">OR</div>
+                        <div class="col-md-12" id="loginSocialLinks">
+    {{--                        <ul class="social-network social-circle">--}}
+    {{--                            <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook-f"></i></a></li>--}}
+    {{--                            <li><a href="#" class="icoInstagram" title="Instagram"><i class="fa fa-instagram"></i></a></li>--}}
+    {{--                        </ul>--}}
                         </div>
                     </div>
-                </div>
+                    <div class="label clearfix">Don't have an Account? <a href="{{route('frontend.auth.register')}}">Sign Up</a></div>
+                </form>
             </div>
         </div>
     </div>
@@ -162,7 +49,7 @@
 @push('after-scripts')
     @if (session('openModel'))
         <script>
-            $('#myModal').modal('show');
+            $('#login').modal('show');
         </script>
     @endif
 
@@ -207,14 +94,14 @@
                         success: function (response) {
                             if(response.socialLinks){
                                 $('#loginSocial').show();
-                                $('#signupSocial').show();
+                                // $('#signupSocial').show();
                             }else{
                                 $('#loginSocial').hide();
-                                $('#signupSocial').hide();
+                                // $('#signupSocial').hide();
                             }
                             $('#loginSocialLinks').html(response.socialLinks)
-                            $('#signupSocialLinks').html(response.socialLinks)
-                            $('#myModal').modal('show');
+                            // $('#signupSocialLinks').html(response.socialLinks)
+                            $('#login').modal('show');
                         },
                     });
                 }

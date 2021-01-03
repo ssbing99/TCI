@@ -28,10 +28,10 @@
                             <td>@if($lesson->lesson_image)<a href="{{ asset('storage/uploads/' . $lesson->lesson_image) }}" target="_blank"><img
                                             src="{{ asset('storage/uploads/' . $lesson->lesson_image) }}" height="100px"/></a>@endif</td>
                         </tr>
-                        <tr>
-                            <th>@lang('labels.backend.lessons.fields.short_text')</th>
-                            <td>{!! $lesson->short_text !!}</td>
-                        </tr>
+{{--                        <tr>--}}
+{{--                            <th>@lang('labels.backend.lessons.fields.short_text')</th>--}}
+{{--                            <td>{!! $lesson->short_text !!}</td>--}}
+{{--                        </tr>--}}
                         <tr>
                             <th>@lang('labels.backend.lessons.fields.full_text')</th>
                             <td>{!! $lesson->full_text !!}</td>
@@ -41,60 +41,60 @@
                             <td>{{ $lesson->position }}</td>
                         </tr>
 
-                        <tr>
-                            <th>@lang('labels.backend.lessons.fields.media_pdf')</th>
-                            <td>
-                                @if($lesson->mediaPDF != null )
-                                <p class="form-group">
-                                    <a href="{{$lesson->mediaPDF->url}}" target="_blank">{{$lesson->mediaPDF->url}}</a>
-                                </p>
-                                @else
-                                    <p>No PDF</p>
-                                @endif
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>@lang('labels.backend.lessons.fields.media_audio')</th>
-                            <td>
-                                @if($lesson->mediaAudio != null )
-                                <p class="form-group">
-                                    <a href="{{$lesson->mediaAudio->url}}" target="_blank">{{$lesson->mediaAudio->url}}</a>
-                                </p>
-                                @else
-                                    <p>No Audio</p>
-                                @endif
-                            </td>
-                        </tr>
+{{--                        <tr>--}}
+{{--                            <th>@lang('labels.backend.lessons.fields.media_pdf')</th>--}}
+{{--                            <td>--}}
+{{--                                @if($lesson->mediaPDF != null )--}}
+{{--                                <p class="form-group">--}}
+{{--                                    <a href="{{$lesson->mediaPDF->url}}" target="_blank">{{$lesson->mediaPDF->url}}</a>--}}
+{{--                                </p>--}}
+{{--                                @else--}}
+{{--                                    <p>No PDF</p>--}}
+{{--                                @endif--}}
+{{--                            </td>--}}
+{{--                        </tr>--}}
+{{--                        <tr>--}}
+{{--                            <th>@lang('labels.backend.lessons.fields.media_audio')</th>--}}
+{{--                            <td>--}}
+{{--                                @if($lesson->mediaAudio != null )--}}
+{{--                                <p class="form-group">--}}
+{{--                                    <a href="{{$lesson->mediaAudio->url}}" target="_blank">{{$lesson->mediaAudio->url}}</a>--}}
+{{--                                </p>--}}
+{{--                                @else--}}
+{{--                                    <p>No Audio</p>--}}
+{{--                                @endif--}}
+{{--                            </td>--}}
+{{--                        </tr>--}}
 
-                        <tr>
+{{--                        <tr>--}}
 
-                            <th>@lang('labels.backend.lessons.fields.downloadable_files')</th>
-                            <td>
-                                @if(count($lesson->downloadableMedia) > 0 )
-                                    @foreach($lesson->downloadableMedia as $media)
-                                        <p class="form-group">
-                                            <a href="{{ asset('storage/uploads/'.$media->name) }}"
-                                               target="_blank">{{ $media->name }}
-                                                ({{ $media->size }} KB)</a>
-                                        </p>
-                                    @endforeach
-                                @else
-                                    <p>No Files</p>
-                                @endif
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>@lang('labels.backend.lessons.fields.media_video')</th>
-                            <td>
-                                @if($lesson->mediaVideo !=  null )
-                                        <p class="form-group">
-                                           <a href="{{$lesson->mediaVideo->url}}" target="_blank">{{$lesson->mediaVideo->url}}</a>
-                                        </p>
-                                @else
-                                    <p>No Videos</p>
-                                @endif
-                            </td>
-                        </tr>
+{{--                            <th>@lang('labels.backend.lessons.fields.downloadable_files')</th>--}}
+{{--                            <td>--}}
+{{--                                @if(count($lesson->downloadableMedia) > 0 )--}}
+{{--                                    @foreach($lesson->downloadableMedia as $media)--}}
+{{--                                        <p class="form-group">--}}
+{{--                                            <a href="{{ asset('storage/uploads/'.$media->name) }}"--}}
+{{--                                               target="_blank">{{ $media->name }}--}}
+{{--                                                ({{ $media->size }} KB)</a>--}}
+{{--                                        </p>--}}
+{{--                                    @endforeach--}}
+{{--                                @else--}}
+{{--                                    <p>No Files</p>--}}
+{{--                                @endif--}}
+{{--                            </td>--}}
+{{--                        </tr>--}}
+{{--                        <tr>--}}
+{{--                            <th>@lang('labels.backend.lessons.fields.media_video')</th>--}}
+{{--                            <td>--}}
+{{--                                @if($lesson->mediaVideo !=  null )--}}
+{{--                                        <p class="form-group">--}}
+{{--                                           <a href="{{$lesson->mediaVideo->url}}" target="_blank">{{$lesson->mediaVideo->url}}</a>--}}
+{{--                                        </p>--}}
+{{--                                @else--}}
+{{--                                    <p>No Videos</p>--}}
+{{--                                @endif--}}
+{{--                            </td>--}}
+{{--                        </tr>--}}
                         <tr>
                             <th>@lang('labels.backend.lessons.fields.published')</th>
                             <td>{{ Form::checkbox("published", 1, $lesson->published == 1 ? true : false, ["disabled"]) }}</td>

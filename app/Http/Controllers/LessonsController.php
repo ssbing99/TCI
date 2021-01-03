@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Auth\Auth;
 use App\Mail\Frontend\LiveLesson\StudentMeetingSlotMail;
+use App\Models\Comment;
+use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\LessonSlotBooking;
 use App\Models\LiveLessonSlot;
@@ -102,10 +104,19 @@ class LessonsController extends Controller
             ->pluck('model_id')
             ->toArray();
 
+        $photos = [];
+        preg_match_all('/<img.*?src=[\'"](.*?)[\'"].*?>/i', $lesson->full_text,$matches);
+        \Log::info($matches);
+
+        if($matches!= null && is_array($matches)) {
+            $photos = $matches[1];
+            \Log::info($photos);
+        }
+
         $view_path = returnPathByTheme($this->path.'.courses.lesson', 5,'-');
 
         return view($view_path, compact('lesson', 'previous_lesson', 'next_lesson', 'test_result',
-            'purchased_course', 'test_exists', 'lessons', 'completed_lessons'));
+            'purchased_course', 'test_exists', 'lessons', 'completed_lessons','photos'));
     }
 
     public function test($lesson_slug, Request $request)
@@ -231,4 +242,20 @@ class LessonsController extends Controller
         return back()->with(['success'=> __('alerts.frontend.course.slot_booking')]);
     }
 
+    public function addComment(Request $request)
+    {
+        $this->validate($request, [
+            'comment' => 'required'
+        ]);
+        $lesson = Lesson::findORFail($request->id);
+        $review = new Comment();
+        $review->user_id = auth()->user()->id;
+        $review->reviewable_id = $lesson->id;
+        $review->reviewable_type = Lesson::class;
+        $review->rating = $request->rating;
+        $review->content = $request->comment;
+        $review->save();
+
+        return back();
+    }
 }
