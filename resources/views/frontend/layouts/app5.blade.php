@@ -128,8 +128,8 @@
                                 <a class="nav-link dropdown-toggle" href="courses.html" id="navbardrop" data-toggle="dropdown"><i class="fa fa-bars"></i></a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{route('howitwork')}}">How it Works</a>
-                                    <a class="dropdown-item" href="reviews.html">Review</a>
-                                    <a class="dropdown-item" href="student-gallery.html">Student Gallery</a>
+                                    <a class="dropdown-item" href="#">Review</a>
+                                    <a class="dropdown-item" href="#">Student Gallery</a>
                                     <a class="dropdown-item" href="#">Blog</a>
 {{--                                    {{route('blogs.index')}}--}}
                                 </div>

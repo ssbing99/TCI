@@ -56,6 +56,29 @@
                             @endforeach
                         </div>
                     </div>
+                    @if($course->mediaVideo && $course->mediavideo->count() > 0)
+                            @if($course->mediavideo != "")
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="video-container mb-5" data-id="{{$course->mediavideo->id}}">
+                                        @if($course->mediavideo->type == 'youtube')
+
+
+                                            <div id="player" class="js-player" data-plyr-provider="youtube"
+                                                 data-plyr-embed-id="{{$course->mediavideo->file_name}}"></div>
+                                        @elseif($course->mediavideo->type == 'vimeo')
+                                            <div id="player" class="js-player" data-plyr-provider="vimeo"
+                                                 data-plyr-embed-id="{{$course->mediavideo->file_name}}"></div>
+                                        @elseif($course->mediavideo->type == 'upload')
+                                            <video poster="" id="player" class="js-player" playsinline controls>
+                                                <source src="{{$course->mediavideo->url}}" type="video/mp4"/>
+                                            </video>
+                                        @elseif($course->mediavideo->type == 'embed')
+                                            {!! $course->mediavideo->url !!}
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+                    @endif
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="information-tab" data-toggle="tab" href="#information" role="tab" aria-controls="information" aria-selected="true"><i class="fa fa-info-circle"></i> Information</a>
@@ -73,12 +96,12 @@
                                 <span>Course Brief :</span>
                             </p>
                             {!! $course->description !!}
-                            <p class="course-txt clearfix">
-                                <span>Course Brief :</span>
-                                You don't need to be a photojournalist or professional documentary photographer to create engaging photo essays. Photo essays can showcase any subject, from nature, to portraiture, to wedding shots, family outings, and vacations. So, whether you’re a keen amateur photographer, or an aspiring professional, a well-crafted photo essay is a brilliant way to present a story or even in narrative visual form. But that's not all, producing photo essays is a great way to learn and apply new skills as a photographer, and to bring new enthusiasm to your photography.<br />
-                                In this online and interactive 4-lesson / 4-assignment course, mentored by award-winning professional photographer David Bathgate, you’ll be guided through the entire process of creating your own photo essay narrative. David will be there every step of the way - to answer your questions, critique your work, and offer constructive advice for your success.
-                                <span>Upon completion of this course, you will be able to :</span>
-                            </p>
+{{--                            <p class="course-txt clearfix">--}}
+{{--                                <span>Course Brief :</span>--}}
+{{--                                You don't need to be a photojournalist or professional documentary photographer to create engaging photo essays. Photo essays can showcase any subject, from nature, to portraiture, to wedding shots, family outings, and vacations. So, whether you’re a keen amateur photographer, or an aspiring professional, a well-crafted photo essay is a brilliant way to present a story or even in narrative visual form. But that's not all, producing photo essays is a great way to learn and apply new skills as a photographer, and to bring new enthusiasm to your photography.<br />--}}
+{{--                                In this online and interactive 4-lesson / 4-assignment course, mentored by award-winning professional photographer David Bathgate, you’ll be guided through the entire process of creating your own photo essay narrative. David will be there every step of the way - to answer your questions, critique your work, and offer constructive advice for your success.--}}
+{{--                                <span>Upon completion of this course, you will be able to :</span>--}}
+{{--                            </p>--}}
                         </div>
                         <div class="tab-pane fade" id="instructor" role="tabpanel" aria-labelledby="instructor-tab">
                             @foreach($course->teachers as $key=>$teacher)

@@ -317,6 +317,8 @@
 
                 if ($(this).val() != "") {
                     location.href = '{{url()->current()}}?type=' + $(this).val();
+                }else{
+                    location.href = '{{url()->current()}}';
                 }
             });
 

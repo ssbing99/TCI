@@ -72,7 +72,7 @@ return array (
       ),
       'teachers' =>
       array (
-        'title' => 'Teachers',
+        'title' => 'Instructors',
       ),
       'hero-slider' =>
       array (

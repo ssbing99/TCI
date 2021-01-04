@@ -18,8 +18,27 @@
                 </div>
             </div>
             <div class="row clearfix">
+                <?php
+                $bignCnt = 0;
+                $intCnt = 0;
+                $advCnt = 0;
+                $text = '';
+                ?>
                 @foreach($popular_courses as $item)
-                <div class="gallery_product col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3 filter @if($item->beginner == 1) beginner @elseif($item->intermediate == 1) intermediate @elseif($item->advance == 1) advanced @endif">
+                    <?php
+                    if($item->beginner == 1 && $bignCnt <= 2){
+                        $bignCnt++;
+                        $text = 'beginner';
+                    }elseif($item->intermediate == 1 && $intCnt <= 2){
+                        $intCnt++;
+                        $text = 'intermediate';
+                    } elseif($item->advance == 1 && $advCnt <= 2){
+                        $advCnt++;
+                        $text = 'advanced';
+                    }
+                    ?>
+
+                <div class="gallery_product col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3 filter <?php echo $text ?>">
                     <figure>
                         <a href="{{ route('courses.show', [$item->slug]) }}"><img src="{{asset('storage/uploads/'.$item->course_image)}}" alt="Images goes here" /></a>
                         <figcaption>

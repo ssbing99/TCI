@@ -11,21 +11,21 @@
             </video>
             <div class="carousel-caption d-none d-md-block">
                 <h5>Interactive <span>Photography Courses</span><br /> from the Professionals</h5>
-                <a href="#" class="btn btn-primary btn-lg mb-15">Explore Courses</a>
+                <a href="{{route('courses.all')}}" class="btn btn-primary btn-lg mb-15">Explore Courses</a>
             </div>
         </div>
         <div class="carousel-item">
             <img class="d-block w-100" src="{{asset("assets_new/images/slider-1.jpg")}}" />
             <div class="carousel-caption d-none d-md-block">
                 <h5>Interactive <span>Photography Courses</span><br /> from the Professionals</h5>
-                <a href="#" class="btn btn-primary btn-lg mb-15">Explore Courses</a>
+                <a href="{{route('courses.all')}}" class="btn btn-primary btn-lg mb-15">Explore Courses</a>
             </div>
         </div>
         <div class="carousel-item">
             <img class="d-block w-100" src="{{asset("assets_new/images/slider-1.jpg")}}" />
             <div class="carousel-caption d-none d-md-block">
                 <h5>Interactive <span>Photography Courses</span><br /> from the Professionals</h5>
-                <a href="#" class="btn btn-primary btn-lg mb-15">Explore Courses</a>
+                <a href="{{route('courses.all')}}" class="btn btn-primary btn-lg mb-15">Explore Courses</a>
             </div>
         </div>
     </div>

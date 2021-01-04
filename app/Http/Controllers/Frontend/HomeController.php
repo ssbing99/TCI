@@ -70,16 +70,25 @@ class HomeController extends Controller
             ->whereHas('category')
             ->where('published', '=', 1)
             ->where('beginner', '=', 1)
+            ->orderBy('beginner','desc')
+            ->orderBy('intermediate','asc')
+            ->orderBy('advance','asc')
             ->take(2)->get();
         $intermediate = Course::withoutGlobalScope('filter')
             ->whereHas('category')
             ->where('published', '=', 1)
             ->where('intermediate', '=', 1)
+            ->orderBy('beginner','asc')
+            ->orderBy('intermediate','desc')
+            ->orderBy('advance','asc')
             ->take(2)->get();
         $advance = Course::withoutGlobalScope('filter')
             ->whereHas('category')
             ->where('published', '=', 1)
             ->where('advance', '=', 1)
+            ->orderBy('beginner','asc')
+            ->orderBy('intermediate','asc')
+            ->orderBy('advance','desc')
             ->take(2)->get();
 
         $totalCourse = 2;
