@@ -52,7 +52,7 @@
                         <li><a href="{{route('howitwork')}}">HOW IT WORKS</a></li>
                         <li><a href="{{route('courses.all')}}">COURSES</a></li>
                         <li><a href="{{route('teachers.index')}}">INSTRUCTORS</a></li>
-                        <li><a href="#">REVIEW</a></li>
+                        <li><a href="{{route('courses.reviews.all')}}">REVIEW</a></li>
                         <li><a href="{{route('workshops.all')}}">WORKSHOPS</a></li>
                         <li><a href="#">BLOG</a></li>
                         <li><a href="#">STUDENT GALLERY</a></li>

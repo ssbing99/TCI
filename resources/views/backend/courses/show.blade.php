@@ -124,6 +124,11 @@
                         </tr>
 
                         <tr>
+                            <th>Portfolio Review</th>
+                            <td>{{ Form::checkbox("portfolio_review", 1, $course->portfolio_review == 1 ? true : false, ["disabled"]) }}</td>
+                        </tr>
+
+                        <tr>
                             <th>@lang('labels.backend.courses.fields.meta_title')</th>
                             <td>{{ $course->meta_title }}</td>
                         </tr>

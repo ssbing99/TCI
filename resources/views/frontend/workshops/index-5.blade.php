@@ -116,93 +116,96 @@
                                                     <span>Price</span>
                                                     {{$appCurrency['symbol']}}{{$workshop->price}}
                                                 </div>
-                                                <center><a href="#" class="btn btn-primary br-24 btn-md">Find Out More</a></center>
+                                                <center><a href="{{route('workshops.show', [$workshop->slug])}}" class="btn btn-primary br-24 btn-md">Find Out More</a></center>
                                             </li>
                                         </ul>
                                     @endforeach
+
+                                @else
+                                    <h3>@lang('labels.general.no_data_available')</h3>
                                 @endif
-                                <ul class="workshop clearfix">
-                                    <li class="image">
-                                        <img src="{{asset('assets_new/images/workshop-img-1.jpg')}}" alt="Images goes here" />
-                                    </li>
-                                    <li class="content">
-                                        <div class="workshop-title clearfix">Capturing India's North Land: A Photography Workshop Holiday</div>
-                                        <ul class="subtitle clearfix">
-                                            <li>Instructor : <span>David Bathgate</span></li>
-                                            <li>Date : <span>3-14 November 2020</span></li>
-                                            <li>Deposit : <span class="price">$570.00</span></li>
-                                        </ul>
-                                        <p class="workshop-text clearfix">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                    </li>
-                                    <li class="action">
-                                        <div class="courseprice clearfix">
-                                            <span>Price</span>
-                                            $2295.00
-                                        </div>
-                                        <center><a href="#" class="btn btn-primary br-24 btn-md">Find Out More</a></center>
-                                    </li>
-                                </ul>
-                                <ul class="workshop clearfix">
-                                    <li class="image">
-                                        <img src="{{asset('assets_new/images/workshop-img-2.jpg')}}" alt="Images goes here" />
-                                    </li>
-                                    <li class="content">
-                                        <div class="workshop-title clearfix">Wild Zanskar Trek</div>
-                                        <ul class="subtitle clearfix">
-                                            <li>Instructor : <span>David Bathgate</span></li>
-                                            <li>Date : <span>3-14 November 2020</span></li>
-                                        </ul>
-                                        <p class="workshop-text clearfix">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                    </li>
-                                    <li class="action">
-                                        <div class="courseprice clearfix">
-                                            <span>Price</span>
-                                            $5639.00
-                                        </div>
-                                        <center><a href="#" class="btn btn-primary br-24 btn-md">Find Out More</a></center>
-                                    </li>
-                                </ul>
-                                <ul class="workshop clearfix">
-                                    <li class="image">
-                                        <img src="{{asset('assets_new/images/workshop-img-1.jpg')}}" alt="Images goes here" />
-                                    </li>
-                                    <li class="content">
-                                        <div class="workshop-title clearfix">Capturing India's North Land: A Photography Workshop Holiday</div>
-                                        <ul class="subtitle clearfix">
-                                            <li>Instructor : <span>David Bathgate</span></li>
-                                            <li>Date : <span>3-14 November 2020</span></li>
-                                            <li>Deposit : <span class="price">$570.00</span></li>
-                                        </ul>
-                                        <p class="workshop-text clearfix">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                    </li>
-                                    <li class="action">
-                                        <div class="courseprice clearfix">
-                                            <span>Price</span>
-                                            $2295.00
-                                        </div>
-                                        <center><a href="#" class="btn btn-primary br-24 btn-md">Find Out More</a></center>
-                                    </li>
-                                </ul>
-                                <ul class="workshop clearfix">
-                                    <li class="image">
-                                        <img src="{{asset('assets_new/images/workshop-img-2.jpg')}}" alt="Images goes here" />
-                                    </li>
-                                    <li class="content">
-                                        <div class="workshop-title clearfix">Wild Zanskar Trek</div>
-                                        <ul class="subtitle clearfix">
-                                            <li>Instructor : <span>David Bathgate</span></li>
-                                            <li>Date : <span>3-14 November 2020</span></li>
-                                        </ul>
-                                        <p class="workshop-text clearfix">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                    </li>
-                                    <li class="action">
-                                        <div class="courseprice clearfix">
-                                            <span>Price</span>
-                                            $5639.00
-                                        </div>
-                                        <center><a href="#" class="btn btn-primary br-24 btn-md">Find Out More</a></center>
-                                    </li>
-                                </ul>
+{{--                                <ul class="workshop clearfix">--}}
+{{--                                    <li class="image">--}}
+{{--                                        <img src="{{asset('assets_new/images/workshop-img-1.jpg')}}" alt="Images goes here" />--}}
+{{--                                    </li>--}}
+{{--                                    <li class="content">--}}
+{{--                                        <div class="workshop-title clearfix">Capturing India's North Land: A Photography Workshop Holiday</div>--}}
+{{--                                        <ul class="subtitle clearfix">--}}
+{{--                                            <li>Instructor : <span>David Bathgate</span></li>--}}
+{{--                                            <li>Date : <span>3-14 November 2020</span></li>--}}
+{{--                                            <li>Deposit : <span class="price">$570.00</span></li>--}}
+{{--                                        </ul>--}}
+{{--                                        <p class="workshop-text clearfix">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="action">--}}
+{{--                                        <div class="courseprice clearfix">--}}
+{{--                                            <span>Price</span>--}}
+{{--                                            $2295.00--}}
+{{--                                        </div>--}}
+{{--                                        <center><a href="#" class="btn btn-primary br-24 btn-md">Find Out More</a></center>--}}
+{{--                                    </li>--}}
+{{--                                </ul>--}}
+{{--                                <ul class="workshop clearfix">--}}
+{{--                                    <li class="image">--}}
+{{--                                        <img src="{{asset('assets_new/images/workshop-img-2.jpg')}}" alt="Images goes here" />--}}
+{{--                                    </li>--}}
+{{--                                    <li class="content">--}}
+{{--                                        <div class="workshop-title clearfix">Wild Zanskar Trek</div>--}}
+{{--                                        <ul class="subtitle clearfix">--}}
+{{--                                            <li>Instructor : <span>David Bathgate</span></li>--}}
+{{--                                            <li>Date : <span>3-14 November 2020</span></li>--}}
+{{--                                        </ul>--}}
+{{--                                        <p class="workshop-text clearfix">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="action">--}}
+{{--                                        <div class="courseprice clearfix">--}}
+{{--                                            <span>Price</span>--}}
+{{--                                            $5639.00--}}
+{{--                                        </div>--}}
+{{--                                        <center><a href="#" class="btn btn-primary br-24 btn-md">Find Out More</a></center>--}}
+{{--                                    </li>--}}
+{{--                                </ul>--}}
+{{--                                <ul class="workshop clearfix">--}}
+{{--                                    <li class="image">--}}
+{{--                                        <img src="{{asset('assets_new/images/workshop-img-1.jpg')}}" alt="Images goes here" />--}}
+{{--                                    </li>--}}
+{{--                                    <li class="content">--}}
+{{--                                        <div class="workshop-title clearfix">Capturing India's North Land: A Photography Workshop Holiday</div>--}}
+{{--                                        <ul class="subtitle clearfix">--}}
+{{--                                            <li>Instructor : <span>David Bathgate</span></li>--}}
+{{--                                            <li>Date : <span>3-14 November 2020</span></li>--}}
+{{--                                            <li>Deposit : <span class="price">$570.00</span></li>--}}
+{{--                                        </ul>--}}
+{{--                                        <p class="workshop-text clearfix">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="action">--}}
+{{--                                        <div class="courseprice clearfix">--}}
+{{--                                            <span>Price</span>--}}
+{{--                                            $2295.00--}}
+{{--                                        </div>--}}
+{{--                                        <center><a href="#" class="btn btn-primary br-24 btn-md">Find Out More</a></center>--}}
+{{--                                    </li>--}}
+{{--                                </ul>--}}
+{{--                                <ul class="workshop clearfix">--}}
+{{--                                    <li class="image">--}}
+{{--                                        <img src="{{asset('assets_new/images/workshop-img-2.jpg')}}" alt="Images goes here" />--}}
+{{--                                    </li>--}}
+{{--                                    <li class="content">--}}
+{{--                                        <div class="workshop-title clearfix">Wild Zanskar Trek</div>--}}
+{{--                                        <ul class="subtitle clearfix">--}}
+{{--                                            <li>Instructor : <span>David Bathgate</span></li>--}}
+{{--                                            <li>Date : <span>3-14 November 2020</span></li>--}}
+{{--                                        </ul>--}}
+{{--                                        <p class="workshop-text clearfix">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="action">--}}
+{{--                                        <div class="courseprice clearfix">--}}
+{{--                                            <span>Price</span>--}}
+{{--                                            $5639.00--}}
+{{--                                        </div>--}}
+{{--                                        <center><a href="#" class="btn btn-primary br-24 btn-md">Find Out More</a></center>--}}
+{{--                                    </li>--}}
+{{--                                </ul>--}}
                             </div>
                         </div>
                     </div>

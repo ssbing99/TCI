@@ -127,6 +127,59 @@ class CoursesController extends Controller
         return view( $view_path, compact('courses','courses_json', 'purchased_courses', 'recent_news','featured_courses','categories'));
     }
 
+    public function allReviews(Request $request)
+    {
+        $paginateCnt = 100; // so far not yet have paginate , original 9
+        if (request('type') == 'popularity') {
+                $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                    ->where('portfolio_review', '=', 1)
+                    ->paginate($paginateCnt);
+
+        } else if (request('type') == 'price') {
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('portfolio_review', '=', 1)
+                ->orderBy('price', 'asc')->paginate($paginateCnt);
+
+        } else if (request('type') == 'duration') {
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('portfolio_review', '=', 1)
+                ->orderBy('duration', 'asc')->paginate($paginateCnt);
+
+        } else {
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)
+                ->where('portfolio_review', '=', 1)
+                ->orderBy('id', 'desc')->paginate($paginateCnt);
+
+        }
+
+        $courses_json = new Collection();
+        foreach ($courses as $course){
+            $courses_json->push($course);
+        }
+        $courses_json = json_encode($courses_json);
+
+        $purchased_courses = NULL;
+        $purchased_bundles = NULL;
+        $categories = Category::where('status','=',1)->get();
+
+        if (\Auth::check()) {
+            $purchased_courses = Course::withoutGlobalScope('filter')->whereHas('students', function ($query) {
+                $query->where('id', \Auth::id());
+            })
+                ->with('lessons')
+                ->orderBy('id', 'desc')
+                ->get();
+        }
+        $featured_courses = Course::withoutGlobalScope('filter')->where('published', '=', 1)
+            ->where('featured', '=', 1)->take(8)->get();
+
+        $recent_news = Blog::orderBy('created_at', 'desc')->take(2)->get();
+
+        $view_path = returnPathByTheme($this->path.'.courses.review', 5,'-');
+
+        return view( $view_path, compact('courses','courses_json', 'purchased_courses', 'recent_news','featured_courses','categories'));
+    }
+
     public function show($course_slug)
     {
         $continue_course=NULL;

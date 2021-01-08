@@ -128,7 +128,7 @@
                                 <a class="nav-link dropdown-toggle" href="courses.html" id="navbardrop" data-toggle="dropdown"><i class="fa fa-bars"></i></a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{route('howitwork')}}">How it Works</a>
-                                    <a class="dropdown-item" href="#">Review</a>
+                                    <a class="dropdown-item" href="{{route('courses.reviews.all')}}">Review</a>
                                     <a class="dropdown-item" href="#">Student Gallery</a>
                                     <a class="dropdown-item" href="#">Blog</a>
 {{--                                    {{route('blogs.index')}}--}}
@@ -212,11 +212,7 @@
                 }
                 $(this).addClass("active");
             });
-            $("#demo_0").ionRangeSlider({
-                min: 100,
-                max: 1000,
-                from: 550
-            });
+
             //Searchbar js Starts
             // $(function () {
             //     $('a[href="#search"]').on('click', function(event) {

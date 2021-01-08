@@ -26,7 +26,8 @@ $(function() {
     var $form = $("#payment-form");
 
     $form.on('submit', function(e) {
-        if (!$form.data('cc-on-file')) {
+
+        if (!$form.data('cc-on-file') && ($form.data('pay-type') != 'paypal')) {
             e.preventDefault();
             Stripe.setPublishableKey($form.data('stripe-publishable-key'));
             var exp_month_year = $('.card-expiry-month-year').val();

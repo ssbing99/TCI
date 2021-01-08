@@ -15,6 +15,8 @@ use App\Models\OrderItem;
 use App\Models\Tax;
 use Carbon\Carbon;
 use Cart;
+use GuzzleHttp\Client;
+use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -252,6 +254,278 @@ class CartController extends Controller
         return view( $view_path, compact('courses', 'total', 'taxData'));
     }
 
+    public function singleCheckout(Request $request)
+    {
+        $product = "";
+        $teachers = "";
+        $type = "";
+        $bundle_ids = [];
+        $course_ids = [];
+        $gift = false;
+
+        if($request->has('gift_course')){
+            $gift = true;
+        }
+
+        if ($request->has('course_id')) {
+            $product = Course::findOrFail($request->get('course_id'));
+            $teachers = $product->teachers->pluck('id', 'name');
+            $type = 'course';
+
+        } elseif ($request->has('bundle_id')) {
+            $product = Bundle::findOrFail($request->get('bundle_id'));
+            $teachers = $product->user->name;
+            $type = 'bundle';
+        }
+
+        if ($request->has('isConfirm')) {
+            $isConfirm = true;
+        }
+
+        $cart_items = Cart::session(auth()->user()->id)->getContent()->keys()->toArray();
+        if (!in_array($product->id, $cart_items)) {
+
+            Cart::session(auth()->user()->id)
+                ->add($product->id, $product->title, $product->price, 1,
+                    [
+                        'user_id' => auth()->user()->id,
+                        'description' => $product->description,
+                        'image' => $product->course_image,
+                        'type' => $type,
+                        'teachers' => $teachers,
+                        'gift' => $gift
+                    ]);
+
+        }else{
+            Cart::session(auth()->user()->id)
+                ->update($this->getShoppingCartItemId($product->id, $type),[
+                    'gift' => $gift
+                ]);
+        }
+//        \Log::info(Cart::session(auth()->user()->id)->get($product->id)->attributes->gift);
+
+        foreach (Cart::session(auth()->user()->id)->getContent() as $item) {
+            if ($item->attributes->type == 'bundle') {
+                $bundle_ids[] = $item->id;
+            } else {
+                $course_ids[] = $item->id;
+            }
+        }
+        $courses = Course::find($course_ids);
+//        $bundle = Bundle::find($bundle_ids);
+//        $courses = $bundles->merge($courses);
+
+//        $total = $courses->sum('price');
+
+        //Apply Tax
+        $taxData = $this->applyTax('total');
+
+        $view_path = returnPathByTheme($this->path.'.cart.single-checkout', 5,'-');
+
+        // return view($this->path . '.cart.checkout', compact('courses', 'total', 'taxData'));
+        return view( $view_path, compact('courses', 'taxData', 'gift'));
+    }
+
+    public function singleCheckoutSubmit(Request $request){
+        $this->validate($request, [
+            'paymentMethod' => 'required'
+        ]);
+
+        \Log::info($request->all());
+
+        $coupon = $request->coupon;
+        $couponEnter = $request->coupon;
+        $coupon = Coupon::where('code', '=', $coupon)
+            ->where('status', '=', 1)
+            ->first();
+
+        $course = Course::find($request->productId);
+
+        $withSkype = $request->coursePrice == 'withoutSkype' ? false : true;
+
+        $total = $withSkype ? $course->price_skype : $course->price;
+
+        $subtotal = $total;
+
+        if($request->has('gift_course')){
+            $rec_name = $request->giftName;
+            $rec_email = $request->giftEmail;
+
+            \Log::info($rec_name);
+            \Log::info($rec_email);
+
+            $user = User::query()
+                ->where('email', '=', $rec_email)->get();
+
+            if($user->count() == 0 || strcasecmp(auth()->user()->email, $rec_email) == 0){
+                return redirect()->route('cart.singleCheckout',['course_id' => $course->id, 'gift_course' => true])->withdanger('Invalid Recipient !');
+            }else{
+
+                $purchased_course = $course->students()->where('email', $rec_email)->count() > 0;
+
+                if($purchased_course){
+                    return redirect()->route('cart.singleCheckout',['course_id' => $course->id, 'gift_course' => true])->withdanger('Recipient already own this course!');
+                }
+
+                Cart::session(auth()->user()->id)->removeConditionsByType('gift');
+
+                $condition = new \Darryldecode\Cart\CartCondition(array(
+                    'name' => 'Gift',
+                    'type' => 'gift',
+                    'value' => $user->first()->id,
+                ));
+
+                Cart::session(auth()->user()->id)->condition($condition);
+
+                \Log::info(Cart::session(auth()->user()->id)->getConditions());
+            }
+        }
+
+        if ($coupon != null) {
+            $isCouponValid = false;
+            if ($coupon->useByUser() < $coupon->per_user_limit) {
+                $isCouponValid = true;
+                if (($coupon->min_price != null) && ($coupon->min_price > 0)) {
+                    if ($total >= $coupon->min_price) {
+                        $isCouponValid = true;
+                    }
+                } else {
+                    $isCouponValid = true;
+                }
+                if ($coupon->expires_at != null) {
+                    if (Carbon::parse($coupon->expires_at) >= Carbon::now()) {
+                        $isCouponValid = true;
+                    } else {
+                        $isCouponValid = false;
+                    }
+                }
+
+            }
+
+            if ($isCouponValid == true) {
+                $type = null;
+                if ($coupon->type == 1) {
+                    $subtotal = $subtotal * (1-($coupon->amount / 100));
+                    $type = '-' . $coupon->amount . '%';
+                } else {
+                    $subtotal = $subtotal - $coupon->amount;
+                    $type = '-' . $coupon->amount;
+                }
+
+                $condition = new \Darryldecode\Cart\CartCondition(array(
+                    'name' => $coupon->code,
+                    'type' => 'coupon',
+                    'target' => 'total', // this condition will be applied to cart's subtotal when getSubTotal() is called.
+                    'value' => $type,
+                    'order' => 1
+                ));
+
+                Cart::session(auth()->user()->id)->condition($condition);
+
+            }else{
+                return redirect()->route('cart.singleCheckout',['course_id' => $course->id])->withdanger('Invalid Coupon used !');
+            }
+
+        }
+
+
+        if($couponEnter != null && $coupon == null){
+            return redirect()->route('cart.singleCheckout',['course_id' => $course->id])->withdanger('Invalid Coupon used !');
+
+        }
+
+        if($request->paymentMethod == 'stripe'){
+
+            if ($this->checkDuplicateWithProduct($course, 'course')) {
+                return $this->checkDuplicateWithProduct($course, 'course');
+            }
+            //Making Order
+            $order = $this->makeCourseOrder($course, $total,$subtotal, $coupon);
+
+            $gateway = Omnipay::create('Stripe');
+            $gateway->setApiKey(config('services.stripe.secret'));
+            $token = $request->reservation['stripe_token'];
+
+            $amount = $subtotal;
+            $currency = $this->currency['short_code'];
+            $response = $gateway->purchase([
+                'amount' => $amount,
+                'currency' => $currency,
+                'token' => $token,
+                'confirm' => true,
+                'description' => auth()->user()->name
+            ])->send();
+
+            if ($response->isSuccessful()) {
+                $order->status = 1;
+                $order->payment_type = 1;
+                $order->save();
+                (new EarningHelper)->insert($order);
+                foreach ($order->items as $orderItem) {
+                    //Bundle Entries
+                    if ($orderItem->item_type == Bundle::class) {
+                        foreach ($orderItem->item->courses as $course) {
+                            $course->students()->attach($order->user_id);
+                        }
+                    }
+                    $orderItem->item->students()->attach($order->user_id);
+                }
+
+                //Generating Invoice
+                generateInvoice($order);
+                $this->adminOrderMail($order);
+
+                $this->populatePaymentDisplayInfo();
+                Cart::session(auth()->user()->id)->clear();
+                Session::flash('success', trans('labels.frontend.cart.payment_done'));
+                return redirect()->route('status');
+
+            } else {
+                $order->status = 2;
+                $order->save();
+                \Log::info($response->getMessage() . ' for id = ' . auth()->user()->id);
+                Session::flash('failure', trans('labels.frontend.cart.try_again'));
+                return redirect()->route('cart.index');
+            }
+
+        }elseif($request->paymentMethod == 'paypal'){
+
+            \Log::info('paypalPayment 2');
+            if ($this->checkDuplicateWithProduct($course, 'bundle')) {
+                return $this->checkDuplicateWithProduct($course, 'bundle');
+            }
+
+            $gateway = Omnipay::create('PayPal_Rest');
+            $gateway->setClientId(config('paypal.client_id'));
+            $gateway->setSecret(config('paypal.secret'));
+            $mode = config('paypal.settings.mode') == 'sandbox' ? true : false;
+            $gateway->setTestMode($mode);
+
+            $currency = $this->currency['short_code'];
+            try {
+                $response = $gateway->purchase([
+                    'amount' => $subtotal,
+                    'currency' => $currency,
+                    'description' => auth()->user()->name,
+                    'cancelUrl' => route('cart.paypal.status', ['status' => 0]),
+                    'returnUrl' => route('cart.paypal.status', ['status' => 1]),
+
+                ])->send();
+
+                if ($response->isRedirect()) {
+                    return Redirect::away($response->getRedirectUrl());
+                }
+            } catch (\Exception $e) {
+                \Session::put('failure', trans('labels.frontend.cart.unknown_error'));
+                return Redirect::route('cart.paypal.status');
+            }
+
+            \Session::put('failure', trans('labels.frontend.cart.unknown_error'));
+            return Redirect::route('cart.paypal.status');
+
+        }
+    }
+
     public function clear(Request $request)
     {
         Cart::session(auth()->user()->id)->clear();
@@ -432,12 +706,37 @@ class CartController extends Controller
         return redirect()->route('courses.all');
     }
 
+
+    public function status()
+    {
+        \Log::info(\Session::get('success'));
+        \Log::info(\Session::get('failure'));
+
+        if (request()->get('status')) {
+            if (empty(request()->get('PayerID')) || empty(request()->get('token'))) {
+                \Session::put('failure', trans('labels.frontend.cart.payment_failed'));
+                return Redirect::route('status');
+            }else{
+                \Session::flash('success', trans('labels.frontend.cart.payment_done'));
+            }
+        }
+        return view('frontend.cart.status');
+    }
+
     public function getPaymentStatus()
     {
+        \Log::info('getPaymentStatus');
+        \Log::info(request()->all());
         \Session::forget('failure');
         if (request()->get('status')) {
             if (empty(request()->get('PayerID')) || empty(request()->get('token'))) {
                 \Session::put('failure', trans('labels.frontend.cart.payment_failed'));
+
+                Cart::session(auth()->user()->id)->clear();
+                Cart::session(auth()->user()->id)->clearCartConditions();
+                Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
+                Cart::session(auth()->user()->id)->removeConditionsByType('tax');
+
                 return Redirect::route('status');
             }
             $order = $this->makeOrder();
@@ -470,6 +769,10 @@ class CartController extends Controller
         else {
             \Session::flash('failure', trans('labels.frontend.cart.payment_failed'));
             $this->populatePaymentDisplayInfo();
+            Cart::session(auth()->user()->id)->clear();
+            Cart::session(auth()->user()->id)->clearCartConditions();
+            Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
+            Cart::session(auth()->user()->id)->removeConditionsByType('tax');
             return Redirect::route('status');
         }
 
@@ -649,14 +952,36 @@ class CartController extends Controller
             \Log::info($e->getMessage());
         }
 
+        $course = '';
+
+        foreach (Cart::session(auth()->user()->id)->getContent() as $cartItem) {
+            if ($cartItem->attributes->type == 'course') {
+                $course = $cartItem->id;
+
+            }
+//            if ($cartItem->attributes->type == 'bundle') {
+//                foreach ($order_items->where('item_type', 'App\Models\Bundle') as $item) {
+//                    if ($item->item_id == $cartItem->id) {
+//                        $is_duplicate = true;
+//                        $message .= $cartItem->name . '' . __('alerts.frontend.duplicate_bundle') . '</br>';
+//                    }
+//                }
+//            }
+        }
+
+        $gift = Cart::session(auth()->user()->id)->get($course)->attributes->gift;
+        $gift_user = $gift? Cart::session(auth()->user()->id)->getConditionsByType('gift')->first()->getValue() : auth()->user()->id;
+
         $order = new Order();
-        $order->user_id = auth()->user()->id;
+        $order->user_id = $gift? $gift_user : auth()->user()->id;
+        $order->payer_id = auth()->user()->id;
         $order->reference_no = str_random(8);
         $order->amount = Cart::session(auth()->user()->id)->getTotal();
         $order->status = 1;
         $order->coupon_id = ($coupon == null) ? 0 : $coupon->id;
         $order->payment_type = 3;
-        $order->shipping_address = $savedAddress;
+//        $order->shipping_address = $savedAddress;
+        \Log::info(json_encode($order));
         $order->save();
         //Getting and Adding items
         foreach (Cart::session(auth()->user()->id)->getContent() as $cartItem) {
@@ -683,6 +1008,32 @@ class CartController extends Controller
 
         }
 //        Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
+        return $order;
+    }
+
+    private function makeCourseOrder($course, $total, $subtotal, $coupon)
+    {
+
+        $gift = Cart::session(auth()->user()->id)->get($course->id)->attributes->gift;
+        $gift_user = $gift? Cart::session(auth()->user()->id)->getConditionsByType('gift')->first()->getValue() : auth()->user()->id;
+
+        $order = new Order();
+        $order->user_id = $gift? $gift_user : auth()->user()->id;
+        $order->payer_id = auth()->user()->id;
+        $order->reference_no = str_random(8);
+        $order->amount = $subtotal;
+        $order->status = 1;
+        $order->coupon_id = ($coupon == null) ? 0 : $coupon->id;
+        $order->payment_type = 3;
+        $order->save();
+        //Getting and Adding items
+
+        $type = Course::class;
+        $order->items()->create([
+            'item_id' => $course->id,
+            'item_type' => $type,
+            'price' => $total
+        ]);
         return $order;
     }
 
@@ -713,6 +1064,37 @@ class CartController extends Controller
 
         if ($is_duplicate) {
             return redirect()->back()->withdanger($message);
+        }
+        return false;
+
+    }
+
+    private function checkDuplicateWithProduct($product, $product_type)
+    {
+        $is_duplicate = false;
+        $message = '';
+        $orders = Order::where('user_id', '=', auth()->user()->id)->pluck('id');
+        $order_items = OrderItem::whereIn('order_id', $orders)->get(['item_id', 'item_type']);
+        if ($product_type == 'course') {
+            foreach ($order_items->where('item_type', 'App\Models\Course') as $item) {
+                if ($item->item_id == $product->id) {
+                    $is_duplicate = true;
+                    $message .= $product->title . ' ' . __('alerts.frontend.duplicate_course') . '</br>';
+                }
+            }
+        }
+        if ($product_type == 'bundle') {
+            foreach ($order_items->where('item_type', 'App\Models\Bundle') as $item) {
+                if ($item->item_id == $product->id) {
+                    $is_duplicate = true;
+                    $message .= $product->title . '' . __('alerts.frontend.duplicate_bundle') . '</br>';
+                }
+            }
+        }
+
+        if ($is_duplicate) {
+            return redirect()->back()->withdanger($message);
+            return redirect()->route('cart.singleCheckout',['course_id' => $product->id])->withdanger($message);
         }
         return false;
 
