@@ -419,7 +419,7 @@ class WorkshopsController extends Controller
         }
         else {
             \Session::flash('failure', trans('labels.frontend.cart.payment_failed'));
-            $this->populatePaymentDisplayInfo();
+//            $this->populatePaymentDisplayInfo();
             return Redirect::route('workshops.status');
         }
 
