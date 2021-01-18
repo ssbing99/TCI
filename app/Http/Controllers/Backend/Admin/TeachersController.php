@@ -176,7 +176,13 @@ class TeachersController extends Controller
 //        $request = $this->saveFiles($request);
 
         $teacher = User::findOrFail($id);
-        $teacher->update($request->except('email'));
+
+        if(isset($request->password)){
+            $teacher->update($request->except('email'));
+        }else{
+            $teacher->update($request->except(['email', 'password']));
+        }
+
         if ($request->has('image')) {
             $teacher->avatar_type = 'storage';
             $teacher->avatar_location = $request->image->store('/avatars', 'public');
