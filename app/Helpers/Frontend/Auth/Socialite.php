@@ -65,12 +65,13 @@ class Socialite
             $socialite_enable[] = "<li><a href='".route('frontend.auth.social.login', 'facebook')."' class=\"icoFacebook\"  ><i class=\"fa fa-facebook-f\"></i></a></li>";
         }
 
+        if (config('services.google.active')) {
+            $socialite_enable[] = "<li><a href='".route('frontend.auth.social.login', 'google')."' class=\"icoGoogle\"  ><i class=\"fa fa-google\" style=\"color: #e9ecef;\"></i></a></li>";
+        }
+
         $socialite_enable[] = "<li><a href='#' class=\"icoInstagram\"  ><i class=\"fa fa-instagram\"></i></a></li>";
 
 //
-//        if (config('services.google.active')) {
-//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'google')."' ><img src='".asset("assets_new/images/google-icon.jpg")."' alt='image' /></a>";
-//        }
 //
 //        if (config('services.twitter.active')) {
 //            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'twitter')."' ><img src='".asset("assets_new/images/twitter-icon.jpg")."' alt='image' /></a>";
@@ -111,14 +112,17 @@ class Socialite
         $socialite_enable = [];
         $socialite_links = '';
 
+        $divHead = '<div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 clearfix"><div class="form-group">';
+        $divTail = '</div></div>';
+
         if (config('services.facebook.active')) {
-            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'facebook')."' ><img src='".asset("assets_new/images/facebook.jpg")."' alt='image' /></a>";
+            $socialite_enable[] = $divHead."<a href='".route('frontend.auth.social.login', 'facebook')."' ><img src='".asset("assets_new/images/facebook.jpg")."' alt='image' /></a>".$divTail;
         }
 
 
-//        if (config('services.google.active')) {
-//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'google')."' ><img src='".asset("assets_new/images/google-icon.jpg")."' alt='image' /></a>";
-//        }
+        if (config('services.google.active')) {
+            $socialite_enable[] = $divHead."<a href='".route('frontend.auth.social.login', 'google')."' ><img src='".asset("assets_new/images/google-btn.png")."' alt='image' /></a>".$divTail;
+        }
 //
 //        if (config('services.twitter.active')) {
 //            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'twitter')."' ><img src='".asset("assets_new/images/twitter-icon.jpg")."' alt='image' /></a>";
@@ -134,17 +138,17 @@ class Socialite
 //        }
 
 //        if (config('services.bitbucket.active')) {
-            $socialite_enable[] = "<a href='#' ><img src='".asset("assets_new/images/instagram.jpg")."' alt='image' /></a>";
+            $socialite_enable[] = $divHead."<a href='#' ><img src='".asset("assets_new/images/instagram.jpg")."' alt='image' /></a>".$divTail;
 //        }
 
 
-        if (config('services.github.active')) {
-            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'github')."' ><img src='".asset("assets_new/images/github-icon.jpg")."' alt='image' /></a>";
-        }
+//        if (config('services.github.active')) {
+//            $socialite_enable[] = "<a href='".route('frontend.auth.social.login', 'github')."' ><img src='".asset("assets_new/images/github-icon.jpg")."' alt='image' /></a>";
+//        }
 
 
         if ($count = count($socialite_enable)) {
-            $socialite_links .= '<div class="imgarea clearfix">';
+//            $socialite_links .= '<div class="imgarea clearfix">';
         }
 
         for ($i = 0; $i < $count; $i++) {

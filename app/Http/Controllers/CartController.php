@@ -764,6 +764,7 @@ class CartController extends Controller
             $this->adminOrderMail($order);
             $this->populatePaymentDisplayInfo();
             Cart::session(auth()->user()->id)->clear();
+            Session::flash('success', trans('labels.frontend.cart.payment_done'));
             return Redirect::route('status');
         }
         else {

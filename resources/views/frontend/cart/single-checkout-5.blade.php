@@ -221,7 +221,7 @@
 
             var submit = true;
 
-            if(stripeRadio.checked) {
+            if(stripeRadio && stripeRadio.checked) {
                 stripeRadio.click();
                 var ccname= document.getElementById('card-name');
                 var ccnumber= document.getElementById('cc-number');
@@ -256,7 +256,7 @@
             }
             @endif
 
-            if(paypalRadio.checked){
+            if(paypalRadio && paypalRadio.checked){
                 paypalRadio.click();
             }
             var buttons = document.getElementById('submitBtn');
