@@ -74,7 +74,7 @@
                     </div>
                     <div class="col-lg-1 col-12 form-group">
                         <a href="{{ asset('uploads/'.$lesson->lesson_image) }}" target="_blank"><img
-                                    src="{{ asset('uploads/'.$lesson->lesson_image) }}" height="65px"
+                                    src="{{ $lesson->image }}" height="65px"
                                     width="65px"></a>
                     </div>
                 @else
