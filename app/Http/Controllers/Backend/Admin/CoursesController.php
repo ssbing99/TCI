@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Course;
 use App\Models\CourseTimeline;
 use App\Models\Media;
+use Arcanedev\NoCaptcha\Rules\CaptchaRule;
 use function foo\func;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCoursesRequest;
 use App\Http\Requests\Admin\UpdateCoursesRequest;
 use App\Http\Controllers\Traits\FileUploadTrait;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class CoursesController extends Controller
@@ -130,6 +132,16 @@ class CoursesController extends Controller
                 $lesson = '<a href="' . route('admin.lessons.create', ['course_id' => $q->id]) . '" class="btn btn-success mb-1"><i class="fa fa-plus-circle"></i></a>  <a href="' . route('admin.lessons.index', ['course_id' => $q->id]) . '" class="btn mb-1 btn-warning text-white"><i class="fa fa-arrow-circle-right"></a>';
                 return $lesson;
             })
+            ->addColumn('enrollments', function ($q) {
+
+                $enrl = 0;
+                foreach ($q->students as $student) {
+                    $enrl++;
+                }
+
+                $enrollment = '<a href="' . route('admin.courses.enrollment', ['course_id' => $q->id]) . '" class="btn mb-1 btn-warning text-white">'.$enrl.'</a>';
+                return $enrollment;
+            })
             ->editColumn('course_image', function ($q) {
                 return ($q->course_image != null) ? '<img height="50px" src="' . asset('storage/uploads/' . $q->course_image) . '">' : 'N/A';
             })
@@ -159,7 +171,7 @@ class CoursesController extends Controller
             ->addColumn('category', function ($q) {
                 return $q->category->name;
             })
-            ->rawColumns(['teachers', 'lessons', 'course_image', 'actions', 'status'])
+            ->rawColumns(['teachers', 'lessons','enrollments', 'course_image', 'actions', 'status'])
             ->make();
     }
 
@@ -466,6 +478,28 @@ class CoursesController extends Controller
     }
 
 
+
+    /**
+     * Display Course.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function courseEnrollment($id)
+    {
+        if (!Gate::allows('course_view')) {
+            return abort(401);
+        }
+        $teachers = User::get()->pluck('name', 'id');
+        $lessons = \App\Models\Lesson::where('course_id', $id)->get();
+        $tests = \App\Models\Test::where('course_id', $id)->get();
+
+        $course = Course::findOrFail($id);
+        $courseTimeline = $course->courseTimeline()->orderBy('sequence', 'asc')->get();
+
+        return view('backend.students.index', compact('course'));
+    }
+
     /**
      * Remove Course from storage.
      *
@@ -583,5 +617,127 @@ class CoursesController extends Controller
         $course->save();
 
         return back()->withFlashSuccess(trans('alerts.backend.general.updated'));
+    }
+
+    public function courseEnrollmentEdit($course_id, $student_id)
+    {
+        if (!Gate::allows('course_edit')) {
+            return abort(401);
+        }
+
+        \Log::info('$course_id : '.$course_id);
+        \Log::info('$student_id : '.$student_id);
+
+        $course = Course::findOrFail($course_id);
+        $student = User::findOrFail($student_id);
+        $courses = $courses = Course::has('category')->ofTeacher()->pluck('title', 'id')->prepend('Please select', '');
+
+
+        return view('backend.students.edit', compact('course','courses','student'));
+    }
+
+    public function updateEnrollment(Request $request)
+    {
+        if (!Gate::allows('course_edit')) {
+            return abort(401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'new_course_id' => 'required|filled',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $course = Course::findOrFail($request->course_id);
+        $newCourse = Course::findOrFail($request->new_course_id);
+        $student = User::findOrFail($request->student_id);
+
+        if($validator->passes()){
+            if($request->course_id != $request->new_course_id){
+
+                $exist_stud = [];
+
+                foreach ($course->students as $stud){
+                    if($stud->id != $request->student_id){
+                        $exist_stud[] = $stud->id;
+                    }
+                }
+                $course->students()->sync($exist_stud);
+
+                $newCourse->students()->attach($student->id);
+            }
+        }
+
+        $courses = $courses = Course::has('category')->ofTeacher()->pluck('title', 'id')->prepend('Please select', '');
+
+
+        return view('backend.courses.index');
+    }
+
+    public function courseEnrollmentDelete($course_id, $student_id)
+    {
+        if (!Gate::allows('course_edit')) {
+            return abort(401);
+        }
+
+        $course = Course::findOrFail($course_id);
+        $student = User::findOrFail(student_id);
+
+        return view('backend.students.index', compact('course'));
+    }
+
+    public function deleteEnrollment(Request $request)
+    {
+        if (!Gate::allows('course_edit')) {
+            return abort(401);
+        }
+
+        $course = Course::findOrFail($request->course_id);
+        $student = User::findOrFail($request->student_id);
+
+        if($course != null && $student != null){
+            $course->students()->detach($request->student_id);
+        }
+
+        return view('backend.students.index', compact('course'));
+    }
+
+    public function studentEnrollment($course_id)
+    {
+        if (!Gate::allows('course_edit')) {
+            return abort(401);
+        }
+
+        $course = Course::findOrFail($course_id);
+        $students = \App\Models\Auth\User::whereHas('roles', function ($q) {
+            $q->where('role_id', 3);
+        })->get()->pluck('name', 'id');
+        \Log::info(json_encode($students));
+
+
+        return view('backend.students.create', compact('course','students'));
+    }
+
+
+    public function addEnrollment(Request $request)
+    {
+        if (!Gate::allows('course_edit')) {
+            return abort(401);
+        }
+
+        $course = Course::findOrFail($request->course_id);
+        $student = User::findOrFail($request->student_id);
+
+        if($course != null && $student != null && $student->id != null){
+            if(!$course->students()->find($student->id)) {
+                $course->students()->attach($student->id);
+            }
+        }
+        \Log::info(json_encode($student));
+
+
+        return view('backend.courses.index');
     }
 }

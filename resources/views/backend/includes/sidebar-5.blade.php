@@ -70,43 +70,43 @@
                             </li>
                         @endcan
 
-                        @can('test_access')
-                            <li class="nav-item ">
-                                <a class="nav-link {{ $request->segment(2) == 'tests' ? 'active' : '' }}"
-                                   href="{{ route('admin.tests.index') }}">
-                                    <span class="title">@lang('menus.backend.sidebar.tests.title')</span>
-                                </a>
-                            </li>
-                        @endcan
+{{--                        @can('test_access')--}}
+{{--                            <li class="nav-item ">--}}
+{{--                                <a class="nav-link {{ $request->segment(2) == 'tests' ? 'active' : '' }}"--}}
+{{--                                   href="{{ route('admin.tests.index') }}">--}}
+{{--                                    <span class="title">@lang('menus.backend.sidebar.tests.title')</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                        @endcan--}}
 
 
-                        @can('question_access')
-                            <li class="nav-item">
-                                <a class="nav-link {{ $request->segment(2) == 'questions' ? 'active' : '' }}"
-                                   href="{{ route('admin.questions.index') }}">
-                                    <span class="title">@lang('menus.backend.sidebar.questions.title')</span>
-                                </a>
-                            </li>
-                        @endcan
+{{--                        @can('question_access')--}}
+{{--                            <li class="nav-item">--}}
+{{--                                <a class="nav-link {{ $request->segment(2) == 'questions' ? 'active' : '' }}"--}}
+{{--                                   href="{{ route('admin.questions.index') }}">--}}
+{{--                                    <span class="title">@lang('menus.backend.sidebar.questions.title')</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                        @endcan--}}
 
 
-                        @can('live_lesson_access')
-                            <li class="nav-item ">
-                                <a class="nav-link {{ $request->segment(2) == 'live-lessons' ? 'active' : '' }}"
-                                   href="{{ route('admin.live-lessons.index') }}">
-                                    <span class="title">@lang('menus.backend.sidebar.live_lessons.title')</span>
-                                </a>
-                            </li>
-                        @endcan
+{{--                        @can('live_lesson_access')--}}
+{{--                            <li class="nav-item ">--}}
+{{--                                <a class="nav-link {{ $request->segment(2) == 'live-lessons' ? 'active' : '' }}"--}}
+{{--                                   href="{{ route('admin.live-lessons.index') }}">--}}
+{{--                                    <span class="title">@lang('menus.backend.sidebar.live_lessons.title')</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                        @endcan--}}
 
-                        @can('live_lesson_slot_access')
-                            <li class="nav-item ">
-                                <a class="nav-link {{ $request->segment(2) == 'live-lesson-slots' ? 'active' : '' }}"
-                                   href="{{ route('admin.live-lesson-slots.index') }}">
-                                    <span class="title">@lang('menus.backend.sidebar.live_lesson_slots.title')</span>
-                                </a>
-                            </li>
-                        @endcan
+{{--                        @can('live_lesson_slot_access')--}}
+{{--                            <li class="nav-item ">--}}
+{{--                                <a class="nav-link {{ $request->segment(2) == 'live-lesson-slots' ? 'active' : '' }}"--}}
+{{--                                   href="{{ route('admin.live-lesson-slots.index') }}">--}}
+{{--                                    <span class="title">@lang('menus.backend.sidebar.live_lesson_slots.title')</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                        @endcan--}}
 
                     </ul>
                 </li>
