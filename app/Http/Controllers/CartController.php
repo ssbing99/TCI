@@ -282,6 +282,9 @@ class CartController extends Controller
             $isConfirm = true;
         }
 
+        //clear for only single
+        Cart::session(auth()->user()->id)->clear();
+
         $cart_items = Cart::session(auth()->user()->id)->getContent()->keys()->toArray();
         if (!in_array($product->id, $cart_items)) {
 
@@ -302,7 +305,6 @@ class CartController extends Controller
                     'gift' => $gift
                 ]);
         }
-//        \Log::info(Cart::session(auth()->user()->id)->get($product->id)->attributes->gift);
 
         foreach (Cart::session(auth()->user()->id)->getContent() as $item) {
             if ($item->attributes->type == 'bundle') {
@@ -346,6 +348,11 @@ class CartController extends Controller
         $total = $withSkype ? $course->price_skype : $course->price;
 
         $subtotal = $total;
+
+        Cart::session(auth()->user()->id)
+            ->update($this->getShoppingCartItemId($course->id, 'course'),[
+                'price' => $total
+            ]);
 
         if($request->has('gift_course')){
             $rec_name = $request->giftName;
@@ -440,7 +447,7 @@ class CartController extends Controller
                 return $this->checkDuplicateWithProduct($course, 'course');
             }
             //Making Order
-            $order = $this->makeCourseOrder($course, $total,$subtotal, $coupon);
+            $order = $this->makeCourseOrder($course, $total,$subtotal, $coupon, $withSkype);
 
             $gateway = Omnipay::create('Stripe');
             $gateway->setApiKey(config('services.stripe.secret'));
@@ -489,6 +496,17 @@ class CartController extends Controller
             }
 
         }elseif($request->paymentMethod == 'paypal'){
+
+            Cart::session(auth()->user()->id)->removeConditionsByType('skypePrice');
+
+            $skypecondition = new \Darryldecode\Cart\CartCondition(array(
+                'name' => 'SkypePrice',
+                'type' => 'skypePrice',
+                'value' => $withSkype,
+            ));
+
+            Cart::session(auth()->user()->id)->condition($skypecondition);
+
 
             \Log::info('paypalPayment 2');
             if ($this->checkDuplicateWithProduct($course, 'bundle')) {
@@ -541,6 +559,7 @@ class CartController extends Controller
             Cart::session(auth()->user()->id)->clearCartConditions();
             Cart::session(auth()->user()->id)->removeConditionsByType('tax');
             Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
+            Cart::session(auth()->user()->id)->removeConditionsByType('skypePrice');
             Cart::session(auth()->user()->id)->clear();
         }
         if ($request->has('course')) {
@@ -736,6 +755,7 @@ class CartController extends Controller
                 Cart::session(auth()->user()->id)->clearCartConditions();
                 Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
                 Cart::session(auth()->user()->id)->removeConditionsByType('tax');
+                Cart::session(auth()->user()->id)->removeConditionsByType('skypePrice');
 
                 return Redirect::route('status');
             }
@@ -774,6 +794,7 @@ class CartController extends Controller
             Cart::session(auth()->user()->id)->clearCartConditions();
             Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
             Cart::session(auth()->user()->id)->removeConditionsByType('tax');
+            Cart::session(auth()->user()->id)->removeConditionsByType('skypePrice');
             return Redirect::route('status');
         }
 
@@ -973,11 +994,18 @@ class CartController extends Controller
         $gift = Cart::session(auth()->user()->id)->get($course)->attributes->gift;
         $gift_user = $gift? Cart::session(auth()->user()->id)->getConditionsByType('gift')->first()->getValue() : auth()->user()->id;
 
+        $skype = Cart::session(auth()->user()->id)->getConditionsByType('skypePrice')->first();
+        $withSkype = false;
+        if ($skype != null) {
+            $withSkype = Cart::session(auth()->user()->id)->getConditionsByType('skypePrice')->first()->getValue();
+        }
+
         $order = new Order();
         $order->user_id = $gift? $gift_user : auth()->user()->id;
         $order->payer_id = auth()->user()->id;
         $order->reference_no = str_random(8);
         $order->amount = Cart::session(auth()->user()->id)->getTotal();
+        $order->is_skype = $withSkype;
         $order->status = 1;
         $order->coupon_id = ($coupon == null) ? 0 : $coupon->id;
         $order->payment_type = 3;
@@ -1012,7 +1040,7 @@ class CartController extends Controller
         return $order;
     }
 
-    private function makeCourseOrder($course, $total, $subtotal, $coupon)
+    private function makeCourseOrder($course, $total, $subtotal, $coupon, $withSkype)
     {
 
         $gift = Cart::session(auth()->user()->id)->get($course->id)->attributes->gift;
@@ -1023,6 +1051,7 @@ class CartController extends Controller
         $order->payer_id = auth()->user()->id;
         $order->reference_no = str_random(8);
         $order->amount = $subtotal;
+        $order->is_skype = $withSkype;
         $order->status = 1;
         $order->coupon_id = ($coupon == null) ? 0 : $coupon->id;
         $order->payment_type = 3;
