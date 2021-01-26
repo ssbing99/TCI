@@ -94,7 +94,7 @@
                 <div class="row">
                     <div class="col-12 col-lg-4 form-group">
                         {!! Form::label('duration',  trans('labels.backend.courses.fields.duration').' ('.'Days'.')', ['class' => 'control-label']) !!}
-                        {!! Form::number('duration', old('duration'), ['class' => 'form-control', 'placeholder' => trans('labels.frontend.layouts.partials.hours'),'step' => 'any', 'pattern' => "[0-9]"]) !!}
+                        {!! Form::number('duration', old('duration'), ['class' => 'form-control', 'placeholder' => 'Days','step' => 'any', 'pattern' => "[0-9]"]) !!}
                     </div>
 {{--                    <div class="col-12 col-lg-4  form-group">--}}
 {{--                        {!! Form::label('skill_level', trans('labels.backend.courses.fields.skill_level'), ['class' => 'control-label']) !!}--}}
