@@ -91,12 +91,12 @@
                                 <input type="text" name="filterSkill" id="filterSkill" class="form-control" placeholder="Filter by Skill Level" />
                             </div>
                             <div class="form-group">
-                                <input type="text" name="filterDuration" id="filterDuration" class="form-control" placeholder="Filter by Duration" />
+                                <input type="number" min="0" name="filterDuration" id="filterDuration" class="form-control" placeholder="Filter by Duration" />
                             </div>
                             <div class="form-group">
                                 <label class="label">Course Price</label>
                                 <div class="demo__body">
-                                    <input id="demo_0" type="text" name="" value="" />
+                                    <input id="demo_0" type="text" name="coursePrice" value="" />
                                 </div>
                             </div>
                         </form>
@@ -124,12 +124,12 @@
                                 @endif
                         </div>
                     </div>
-                    <div class="row clearfix">
+                    <div class="row clearfix" id="course_list">
 
                         @if($courses->count() > 0)
 
                             @foreach($courses as $course)
-                                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 course-filter {{'course-id-'.$course->id}}">
                                     <div class="course clearfix">
                                         <div class="course-img clearfix">
                                             <a href="{{ route('courses.show', [$course->slug]) }}"><img src="@if($course->course_image != "") {{asset('storage/uploads/'.$course->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif" alt="" /></a>
@@ -158,132 +158,6 @@
                             @endforeach
                         @endif
 
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="course clearfix">
-                                <div class="course-img clearfix">
-                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-1.jpg")}}" alt="Images goes here" /></a>
-                                    <div class="over">
-                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
-                                    </div>
-                                </div>
-                                <div class="course-content clearfix">
-                                    <p class="title clearfix"><a href="course-details.html">Photography Portfolio Review with David Bathgate</a></p>
-                                    <div class="desc clearfix">By : David Bathgate<span class="duration">60 Days</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="course clearfix">
-                                <div class="course-img clearfix">
-                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-2.jpg")}}" alt="Images goes here" /></a>
-                                    <div class="over">
-                                        <div class="price"><span>$</span> 159 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 179</div></div>
-                                    </div>
-                                </div>
-                                <div class="course-content clearfix">
-                                    <p class="title clearfix"><a href="course-details.html">Art of Culinary Photography</a></p>
-                                    <div class="desc clearfix">By : Meeta Khurana<span class="duration">90 Days</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="course clearfix">
-                                <div class="course-img clearfix">
-                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-3.jpg")}}" alt="Images goes here" /></a>
-                                    <div class="over">
-                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
-                                    </div>
-                                </div>
-                                <div class="course-content clearfix">
-                                    <p class="title clearfix"><a href="course-details.html">Capturing Breathtaking Landscapes</a></p>
-                                    <div class="desc clearfix">By : Gina Genis<span class="duration">30 Days</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="course clearfix">
-                                <div class="course-img clearfix">
-                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-1.jpg")}}" alt="Images goes here" /></a>
-                                    <div class="over">
-                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
-                                    </div>
-                                </div>
-                                <div class="course-content clearfix">
-                                    <p class="title clearfix"><a href="course-details.html">Photography Portfolio Review with David Bathgate</a></p>
-                                    <div class="desc clearfix">By : David Bathgate<span class="duration">60 Days</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="course clearfix">
-                                <div class="course-img clearfix">
-                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-2.jpg")}}" alt="Images goes here" /></a>
-                                    <div class="over">
-                                        <div class="price"><span>$</span> 159 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 179</div></div>
-                                    </div>
-                                </div>
-                                <div class="course-content clearfix">
-                                    <p class="title clearfix"><a href="course-details.html">Art of Culinary Photography</a></p>
-                                    <div class="desc clearfix">By : Meeta Khurana<span class="duration">90 Days</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="course clearfix">
-                                <div class="course-img clearfix">
-                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-3.jpg")}}" alt="Images goes here" /></a>
-                                    <div class="over">
-                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
-                                    </div>
-                                </div>
-                                <div class="course-content clearfix">
-                                    <p class="title clearfix"><a href="course-details.html">Capturing Breathtaking Landscapes</a></p>
-                                    <div class="desc clearfix">By : Gina Genis<span class="duration">30 Days</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="course clearfix">
-                                <div class="course-img clearfix">
-                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-1.jpg")}}" alt="Images goes here" /></a>
-                                    <div class="over">
-                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
-                                    </div>
-                                </div>
-                                <div class="course-content clearfix">
-                                    <p class="title clearfix"><a href="course-details.html">Photography Portfolio Review with David Bathgate</a></p>
-                                    <div class="desc clearfix">By : David Bathgate<span class="duration">60 Days</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="course clearfix">
-                                <div class="course-img clearfix">
-                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-2.jpg")}}" alt="Images goes here" /></a>
-                                    <div class="over">
-                                        <div class="price"><span>$</span> 159 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 179</div></div>
-                                    </div>
-                                </div>
-                                <div class="course-content clearfix">
-                                    <p class="title clearfix"><a href="course-details.html">Art of Culinary Photography</a></p>
-                                    <div class="desc clearfix">By : Meeta Khurana<span class="duration">90 Days</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="course clearfix">
-                                <div class="course-img clearfix">
-                                    <a href="course-details.html"><img src="{{asset("assets_new/images/course-3.jpg")}}" alt="Images goes here" /></a>
-                                    <div class="over">
-                                        <div class="price"><span>$</span> 149 <div class="float-right"><i class="fa fa-skype"></i> <span>$</span> 169</div></div>
-                                    </div>
-                                </div>
-                                <div class="course-content clearfix">
-                                    <p class="title clearfix"><a href="course-details.html">Capturing Breathtaking Landscapes</a></p>
-                                    <div class="desc clearfix">By : Gina Genis<span class="duration">30 Days</span></div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -307,6 +181,109 @@
         $(document).ready(function () {
             var cjson = {!! $courses_json !!};
             console.log(cjson);
+
+            var filtered = [];
+            var filteredOut = [];
+            var courseSearch = '';
+            var filterSkill = '';
+            var filterDuration = '';
+            var filterPrice = 500;
+
+            function refreshFilter(){
+                filteredOut = [];
+                filtered = cjson;
+                courseSearch = $('#courseSearch').val();
+                filterSkill = $('#filterSkill').val();
+                filterDuration = $('#filterDuration').val();
+
+                // console.log('courseSearch',courseSearch);
+                // console.log('filterSkill',filterSkill);
+                // console.log('filterDuration',filterDuration);
+                // console.log('filterPrice',filterPrice);
+
+                filtered =
+                    filtered.filter(value1 => {
+                        var remain = true;
+
+                        if(courseSearch != '') {
+                            if(!value1.title.toLowerCase().includes(courseSearch.toLowerCase()))
+                                remain = false;
+                        }
+
+                        if(remain && filterSkill != ''){
+                            var skill_text = (value1.beginner == 0? '':'beginner');
+                            skill_text += (skill_text != ''? ',':'') + (value1.intermediate == 0? '':'intermediate');
+                            skill_text += (skill_text != ''? ',':'') + (value1.advance == 0? '':'advanced');
+
+                            if(!skill_text.toLowerCase().includes(filterSkill.toLowerCase()))
+                                remain = false;
+                        }
+
+                        if(remain && filterDuration != ''){
+                            if(value1.duration != filterDuration)
+                                remain = false;
+                        }
+
+                        if(remain && filterPrice != 0){
+                            if(value1.price > filterPrice)
+                                remain = false;
+                        }
+
+                        if(!remain)
+                            filteredOut.push(value1);
+
+                        return remain;
+
+                    })
+                ;
+
+                // console.log('filter', filtered);
+                // console.log('filterOut', filteredOut);
+
+                // if(filteredOut.length == 0){
+                //     $('.course-filter').show('1000');
+                // }
+
+                $(filteredOut).each(function (key,value) {
+                    $('.course-id-'+value.id).hide('1000');
+                });
+
+                $(filtered).each(function (key,value) {
+                    $('.course-id-'+value.id).show('1000');
+                });
+            }
+
+            $(document).on('keyup','#courseSearch',function () {
+                var $this = $(this);
+                refreshFilter();
+            });
+            $(document).on('keyup','#filterSkill',function () {
+                var $this = $(this);
+                refreshFilter();
+            });
+            $(document).on('keyup','#filterDuration',function () {
+                var $this = $(this);
+                refreshFilter();
+            });
+
+            $("#demo_0").ionRangeSlider({
+                min: 100,
+                max: 1000,
+                from: 550,
+                // onChange: function (data) {
+                //     // fired on every range slider update
+                //     console.log('rangeSlider', data);
+                // },
+                onFinish: function (data) {
+                    console.log('rangeSlider', data.from);
+                    filterPrice = data.from;
+                    refreshFilter();
+                },
+                // onUpdate: function (data) {
+                //     // fired on changing slider with Update method
+                //     console.log('onUpdate', data);
+                // }
+            });
 
             $('#list').click(function(event){event.preventDefault();$('#products .item').addClass('list-group-item');});
             $('#grid').click(function(event){event.preventDefault();$('#products .item').removeClass('list-group-item');$('#products .item').addClass('grid-group-item');});

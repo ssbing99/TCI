@@ -125,6 +125,11 @@
                         {!! Form::checkbox('published', 1, false, []) !!}
                         {!! Form::label('published',  trans('labels.backend.courses.fields.published'), ['class' => 'checkbox control-label font-weight-bold']) !!}
                     </div>
+                    <div class="checkbox d-inline mr-3">
+                        {!! Form::hidden('portfolio_review', 0) !!}
+                        {!! Form::checkbox('portfolio_review', 1, false, []) !!}
+                        {!! Form::label('portfolio_review',  'Portfolio Review', ['class' => 'checkbox control-label font-weight-bold']) !!}
+                    </div>
 
                     @if (Auth::user()->isAdmin())
 

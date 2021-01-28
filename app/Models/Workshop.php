@@ -92,6 +92,22 @@ class Workshop extends Model
         return NULL;
     }
 
+    public function getAmountByType($type = null){
+
+        if($type == null)
+            return $this->price;
+
+        if($type == 'deposit')
+            return $this->deposit;
+        elseif($type == 'balance')
+            return $this->balance;
+        elseif($type == 'supplement')
+            return $this->single_supplement;
+        else
+            return $this->deposit;
+
+    }
+
     public function getPriceAttribute()
     {
         if (($this->attributes['price'] == null)) {

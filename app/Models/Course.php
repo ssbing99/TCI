@@ -21,14 +21,15 @@ use Illuminate\Support\Facades\File;
  * @property string $course_image
  * @property string $start_date
  * @property tinyInteger $published
+ * @property tinyInteger $portfolio_review
  */
 class Course extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['category_id', 'title', 'slug', 'description', 'price', 'price_skype', 'course_image','course_video', 'start_date', 'duration', 'skill_level', 'published', 'free', 'beginner', 'intermediate', 'advance','featured', 'trending', 'popular', 'meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['category_id', 'title', 'slug', 'description', 'price', 'price_skype', 'course_image','course_video', 'start_date', 'duration', 'skill_level', 'published', 'free', 'beginner', 'intermediate', 'advance','featured', 'trending', 'popular', 'portfolio_review', 'meta_title', 'meta_description', 'meta_keywords'];
 
-    protected $appends = ['image'];
+    protected $appends = ['image', 'teacher_json'];
 
 
     protected static function boot()
@@ -127,6 +128,19 @@ class Course extends Model
         } else {
             return '';
         }
+    }
+
+    public function getTeacherJsonAttribute()
+    {
+        $teacherJson = [];
+        foreach ($this->teachers as $teacher) {
+            array_push($teacherJson, array(
+                'name' => $teacher->full_name
+            ));
+
+        }
+
+        return $teacherJson;
     }
 
     public function teachers()

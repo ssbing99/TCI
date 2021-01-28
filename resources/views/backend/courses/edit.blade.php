@@ -94,7 +94,7 @@
                 <div class="row">
                     <div class="col-12 col-lg-4 form-group">
                         {!! Form::label('duration',  trans('labels.backend.courses.fields.duration').' ('.'Days'.')', ['class' => 'control-label']) !!}
-                        {!! Form::number('duration', old('duration'), ['class' => 'form-control', 'placeholder' => trans('labels.frontend.layouts.partials.hours'),'step' => 'any', 'pattern' => "[0-9]"]) !!}
+                        {!! Form::number('duration', old('duration'), ['class' => 'form-control', 'placeholder' => 'Days','step' => 'any', 'pattern' => "[0-9]"]) !!}
                     </div>
 {{--                    <div class="col-12 col-lg-4  form-group">--}}
 {{--                        {!! Form::label('skill_level', trans('labels.backend.courses.fields.skill_level'), ['class' => 'control-label']) !!}--}}
@@ -141,6 +141,12 @@
                         {!! Form::hidden('published', 0) !!}
                         {!! Form::checkbox('published', 1, old('published'), []) !!}
                         {!! Form::label('published', trans('labels.backend.courses.fields.published'), ['class' => 'checkbox control-label font-weight-bold']) !!}
+                    </div>
+
+                    <div class="checkbox d-inline mr-3">
+                        {!! Form::hidden('portfolio_review', 0) !!}
+                        {!! Form::checkbox('portfolio_review', 1, old('portfolio_review'), []) !!}
+                        {!! Form::label('portfolio_review',  'Portfolio Review', ['class' => 'checkbox control-label font-weight-bold']) !!}
                     </div>
 
                     @if (Auth::user()->isAdmin())

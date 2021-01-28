@@ -197,19 +197,34 @@
                                    class="btn btn-primary btn-block mb-15"
                                    data-target="#myModal" href="#">Gift this Course</a>
                             @elseif(auth()->check() && (auth()->user()->hasRole('student')))
-                                <form action="{{ route('cart.checkout') }}" method="POST" class="mb-2">
+                                <form action="{{ route('cart.singleCheckout') }}" method="POST" class="mb-2">
                                     @csrf
                                     <input type="hidden" name="course_id" value="{{ $course->id }}"/>
                                     <input type="hidden" name="amount" value="{{($course->free == 1) ? 0 : $course->price}}"/>
                                     <button class="btn btn-primary btn-block mb-15"
                                             href="#">Enroll on this Course</button>
                                 </form>
-                                <a href="#" class="btn btn-primary btn-block mb-15">Gift this Course</a>
+                                <form action="{{ route('cart.singleCheckout') }}" method="POST" class="mb-2">
+                                    @csrf
+                                    <input type="hidden" name="course_id" value="{{ $course->id }}"/>
+                                    <input type="hidden" name="gift_course" value="true"/>
+                                    <input type="hidden" name="amount" value="{{($course->free == 1) ? 0 : $course->price}}"/>
+                                    <button class="btn btn-primary btn-block mb-15"
+                                            href="#">Gift this Course</button>
+                                </form>
                             @else
                                 <h6 class="alert alert-danger"> @lang('labels.frontend.course.buy_note')</h6>
                             @endif
 {{--                        <a href="#" class="btn btn-primary btn-block mb-15">Enroll on this Course</a>--}}
                         @else
+                            <form action="{{ route('cart.singleCheckout') }}" method="POST" class="mb-2">
+                                @csrf
+                                <input type="hidden" name="course_id" value="{{ $course->id }}"/>
+                                <input type="hidden" name="gift_course" value="true"/>
+                                <input type="hidden" name="amount" value="{{($course->free == 1) ? 0 : $course->price}}"/>
+                                <button class="btn btn-primary btn-block mb-15"
+                                        href="#">Gift this Course</button>
+                            </form>
 
 {{--                            @if($continue_course)--}}
 {{--                                <a href="{{route('lessons.show',['course_id' => $course->id,'slug'=>$continue_course->model->slug])}}"--}}

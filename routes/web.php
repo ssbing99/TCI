@@ -74,6 +74,8 @@ Route::get('courses/review/{id}/edit', ['uses' => 'CoursesController@editReview'
 Route::post('courses/review/{id}/edit', ['uses' => 'CoursesController@updateReview', 'as' => 'courses.review.update']);
 Route::get('courses/review/{id}/delete', ['uses' => 'CoursesController@deleteReview', 'as' => 'courses.review.delete']);
 
+Route::get('reviews', ['uses' => 'CoursesController@allReviews', 'as' => 'courses.reviews.all']);
+
 //============Longterm Program Routes=================//
 Route::get('programs', ['uses' => 'ProgramsController@all', 'as' => 'programs.all']);
 Route::get('programs/{slug}', ['uses' => 'ProgramsController@show', 'as' => 'programs.show']);
@@ -106,6 +108,10 @@ Route::post('workshops/{id}/review', ['uses' => 'WorkshopsController@addReview',
 Route::get('workshops/review/{id}/edit', ['uses' => 'WorkshopsController@editReview', 'as' => 'workshops.review.edit']);
 Route::post('workshops/review/{id}/edit', ['uses' => 'WorkshopsController@updateReview', 'as' => 'workshops.review.update']);
 Route::get('workshops/review/{id}/delete', ['uses' => 'WorkshopsController@deleteReview', 'as' => 'workshops.review.delete']);
+Route::post('workshops/{id}/enroll', ['uses' => 'WorkshopsController@paypalPayment', 'as' => 'workshops.enroll']);
+Route::get('workshops/{id}/enroll', ['uses' => 'WorkshopsController@paypalPayment', 'as' => 'workshops.enroll']);
+Route::get('workshops/paypal-payment/status', ['uses' => 'WorkshopsController@getPaymentStatus'])->name('workshops.paypal.status');
+Route::get('workshops/enroll/status', ['uses' => 'WorkshopsController@status'])->name('workshops.status');
 
 
 //============Bundle Routes=================//
@@ -151,6 +157,9 @@ Route::get('download', ['uses' => 'Frontend\HomeController@getDownload', 'as' =>
 
 Route::group(['middleware' => 'auth'], function () {
     Route::post('cart/checkout', ['uses' => 'CartController@checkout', 'as' => 'cart.checkout']);
+    Route::post('cart/course-checkout', ['uses' => 'CartController@singleCheckout', 'as' => 'cart.singleCheckout']);
+    Route::get('cart/course-checkout', ['uses' => 'CartController@singleCheckout', 'as' => 'cart.singleCheckout']);
+    Route::post('cart/course-checkout/submit', ['uses' => 'CartController@singleCheckoutSubmit', 'as' => 'cart.singleCheckoutSubmit']);
     Route::post('cart/cart-checkout', ['uses' => 'CartController@index', 'as' => 'cart.cartCheckOut']);
     Route::get('cart/cart-checkout', ['uses' => 'CartController@index', 'as' => 'cart.cartCheckOut']);
     Route::post('cart/add', ['uses' => 'CartController@addToCart', 'as' => 'cart.addToCart']);
@@ -163,9 +172,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('cart/paypal-payment', ['uses' => 'CartController@paypalPayment', 'as' => 'cart.paypal.payment']);
     Route::get('cart/paypal-payment/status', ['uses' => 'CartController@getPaymentStatus'])->name('cart.paypal.status');
 
-    Route::get('status', function () {
-        return view('frontend.cart.status');
-    })->name('status');
+    Route::get('status', ['uses' => 'CartController@status'])->name('status');
+
+//    Route::get('status', function () {
+//        return view('frontend.cart.status');
+//    })->name('status');
     Route::post('cart/offline-payment', ['uses' => 'CartController@offlinePayment', 'as' => 'cart.offline.payment']);
     Route::post('cart/getnow',['uses'=>'CartController@getNow','as' =>'cart.getnow']);
 });

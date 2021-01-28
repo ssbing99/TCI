@@ -36,6 +36,19 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>Product Type</th>
+                            <td>
+                                @foreach($order->items as $key=>$item)
+                                    @php $key++ @endphp
+                                    @if($item->item_type == 'App\Models\Course')
+                                        Course
+                                    @elseif($item->item_type == 'App\Models\Workshop')
+                                        Workshop
+                                    @endif
+                                @endforeach
+                            </td>
+                        </tr>
+                        <tr>
                             <th>@lang('labels.backend.orders.fields.ordered_by')</th>
                             <td>
                                 Name    : <b>{{$order->user->name}}</b><br>
