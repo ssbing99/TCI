@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Auth\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -11,46 +12,62 @@ use Illuminate\Support\Facades\File;
 use Mtownsend\ReadTime\ReadTime;
 
 
-class Assignment extends Model
+/**
+ * Class Lesson
+ *
+ * @package App
+// * @property string $course
+ * @property string $title
+ * @property string $slug
+ * @property string $attach_file
+ * @property string $attach_video
+ * @property string $vimeo_id
+ * @property string $youtube_id
+ * @property text $full_text
+ * @property integer $position
+ * @property string $meta_title
+ */
+class Attachment extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['title', 'slug', 'assignment_image', 'summary', 'full_text', 'position', 'downloadable_files', 'free_lesson', 'published', 'lesson_id'];
+    protected $fillable = ['title', 'slug', 'attach_file', 'attach_video', 'vimeo_id', 'youtube_id',
+        'full_text', 'position', 'published', 'submission_id','user_id','meta_title', 'meta_description', 'meta_keywords'];
+
 
     public static function boot()
     {
         parent::boot();
 
-        static::deleting(function ($lesson) { // before delete() method call this
-            if ($lesson->isForceDeleting()) {
-                $media = $lesson->media;
+        static::deleting(function ($attachment) { // before delete() method call this
+            if ($attachment->isForceDeleting()) {
+                $media = $attachment->media;
                 foreach ($media as $item) {
                     if (File::exists(public_path('/storage/uploads/' . $item->name))) {
                         File::delete(public_path('/storage/uploads/' . $item->name));
                     }
                 }
-                $lesson->media()->delete();
+                $attachment->media()->delete();
             }
 
         });
     }
 
+
     /**
      * Set to null if empty
      * @param $input
      */
-    public function setLessonIdAttribute($input)
+    public function setSubmissionIdAttribute($input)
     {
-        $this->attributes['lesson_id'] = $input ? $input : null;
+        $this->attributes['submission_id'] = $input ? $input : null;
     }
 
-    public function getImageAttribute()
+    public function setUserIdAttribute($input)
     {
-        if ($this->attributes['lesson_image'] != NULL) {
-            return url('storage/uploads/'.$this->lesson_image);
-        }
-        return NULL;
+        $this->attributes['user_id'] = $input ? $input : null;
     }
+
 
     /**
      * Set attribute to money format
@@ -61,29 +78,23 @@ class Assignment extends Model
         $this->attributes['position'] = $input ? $input : null;
     }
 
-    public function lesson()
+    public function submission()
     {
-        return $this->belongsTo(Lesson::class);
+        return $this->belongsTo(Submission::class);
     }
 
-    public function submissions()
-    {
-        return $this->hasMany(Submission::class)->orderBy('created_at');
-    }
-
-    public function submissionsById($user_id)
-    {
-        return $this->hasMany(Submission::class)->where('user_id', '=', $user_id)->orderBy('created_at');
-    }
-
-    public function submissionsByOtherId($user_id)
-    {
-        return $this->hasMany(Submission::class)->where('user_id', '!=', $user_id)->orderBy('created_at');
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
     public function media()
     {
         return $this->morphMany(Media::class, 'model');
+    }
+
+    public function chapterStudents()
+    {
+        return $this->morphMany(ChapterStudent::class, 'model');
     }
 
     public function downloadableMedia()
@@ -119,5 +130,4 @@ class Assignment extends Model
     {
         return $this->morphMany('App\Models\Comment', 'reviewable');
     }
-
 }

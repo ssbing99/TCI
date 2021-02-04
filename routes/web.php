@@ -136,6 +136,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('lesson/book-slot','LessonsController@bookSlot')->name('lessons.course.book-slot');
 });
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('assignment/{id}/student/', ['uses' => 'AssignmentController@show', 'as' => 'assignment.show']);
+    Route::post('assignment/{id}/comment', ['uses' => 'AssignmentController@addComment', 'as' => 'assignment.comment']);
+    Route::get('submission/{id}/student', ['uses' => 'AssignmentController@showSubmission', 'as' => 'submission.show']);
+    Route::get('submission/{id}/create', ['uses' => 'AssignmentController@createSubmission', 'as' => 'submission.create']);
+    Route::post('submission/{assignment_id}/create', ['uses' => 'AssignmentController@storeSubmission', 'as' => 'submission.store']);
+});
+
 Route::get('/search', [HomeController::class, 'searchAll'])->name('search');
 Route::get('/search-course', [HomeController::class, 'searchCourse'])->name('search-course');
 Route::get('/search-bundle', [HomeController::class, 'searchBundle'])->name('search-bundle');

@@ -2,6 +2,7 @@
 
 namespace App\Models\Auth;
 
+use App\Models\Attachment;
 use App\Models\Bundle;
 use App\Models\Certificate;
 use App\Models\ChapterStudent;
@@ -13,6 +14,7 @@ use App\Models\LessonSlotBooking;
 use App\Models\Media;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Submission;
 use App\Models\Traits\Uuid;
 use App\Models\VideoProgress;
 use Illuminate\Support\Collection;
@@ -132,6 +134,10 @@ class User extends Authenticatable
         return $this->hasMany(Bundle::class);
     }
 
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class, 'user_id');
+    }
 
     public function invoices()
     {

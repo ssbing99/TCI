@@ -13,7 +13,7 @@ use \App\Http\Controllers\Backend\Auth\User\UserPasswordController;
 //===== General Routes =====//
 Route::redirect('/', '/user/dashboard', 301);
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+Route::get('student/dashboard', [DashboardController::class, 'studentIndex'])->name('student.dashboard');
 
 Route::group(['middleware' => 'role:teacher|administrator'], function () {
     Route::resource('orders', 'Admin\OrderController');
@@ -282,6 +282,7 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
     Route::get('account', [AccountController::class, 'index'])->name('account');
     Route::patch('account/{email?}', [UserPasswordController::class, 'update'])->name('account.post');
     Route::patch('profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('student/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.updateProfile');
 });
 
 

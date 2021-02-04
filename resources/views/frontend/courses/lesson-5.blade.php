@@ -244,6 +244,17 @@
                     </div>
                     @endif
 
+                    <div class="side-bg clearfix">
+                        <div class="side-title clearfix">Assignments</div>
+                        <ul class="sidelinks clearfix">
+                            @if($lesson->assignments->count() > 0)
+                                @foreach($lesson->assignments as $key=>$assignment)
+                                    <li><a href="{{route('assignment.show',$assignment->id)}}">{{$assignment->title}}</a></li>
+                                @endforeach
+                            @endif
+                        </ul>
+                    </div>
+
                 <!-- Photo -->
 
                     <div class="side-bg clearfix">
