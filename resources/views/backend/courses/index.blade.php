@@ -58,6 +58,7 @@
                         <th>@lang('labels.backend.courses.fields.price') with Skype<br><small>(in {{$appCurrency['symbol']}})</small></th>
                             <th>@lang('labels.backend.courses.fields.status')</th>
                             <th>@lang('labels.backend.lessons.title')</th>
+                            <th>Enrollments</th>
                         @if( request('show_deleted') == 1 )
                             <th>&nbsp; @lang('strings.backend.general.actions')</th>
                         @else
@@ -136,6 +137,7 @@
                     {data: "price_skype", name: "price_skype"},
                     {data: "status", name: "status"},
                     {data: "lessons", name: "lessons"},
+                    {data: "enrollments", name: "enrollments"},
                     {data: "actions", name: "actions"}
                 ],
                 @if(request('show_deleted') != 1)
