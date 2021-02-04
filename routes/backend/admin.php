@@ -196,6 +196,13 @@ Route::post('courses_restore/{id}', ['uses' => 'Admin\CoursesController@restore'
 Route::delete('courses_perma_del/{id}', ['uses' => 'Admin\CoursesController@perma_del', 'as' => 'courses.perma_del']);
 Route::post('course-save-sequence', ['uses' => 'Admin\CoursesController@saveSequence', 'as' => 'courses.saveSequence']);
 Route::get('course-publish/{id}', ['uses' => 'Admin\CoursesController@publish', 'as' => 'courses.publish']);
+Route::get('course-enrollment/{course_id}', ['uses' => 'Admin\CoursesController@courseEnrollment', 'as' => 'courses.enrollment']);
+Route::get('course-enrollment/{course_id}/create', ['uses' => 'Admin\CoursesController@studentEnrollment', 'as' => 'courses.enrollment.create']);
+Route::post('course-enrollment/{course_id}/add', ['uses' => 'Admin\CoursesController@addEnrollment', 'as' => 'courses.enrollment.add']);
+Route::get('course-enrollment/{course_id}/edit/{student_id}', ['uses' => 'Admin\CoursesController@courseEnrollmentEdit', 'as' => 'courses.enrollment.edit']);
+Route::post('course-enrollment/{course_id}/edit/{student_id}', ['uses' => 'Admin\CoursesController@updateEnrollment', 'as' => 'courses.updateEnrollment']);
+Route::get('course-enrollment/{course_id}/delete/{student_id}', ['uses' => 'Admin\CoursesController@courseEnrollmentDelete', 'as' => 'courses.enrollment.delete']);
+Route::delete('course-enrollment/{course_id}/delete/{student_id}', ['uses' => 'Admin\CoursesController@deleteEnrollment', 'as' => 'courses.enrollment.delete']);
 
 
 //===== Bundles Routes =====//
