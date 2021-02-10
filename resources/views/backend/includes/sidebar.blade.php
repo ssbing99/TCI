@@ -114,15 +114,15 @@
 
                     </ul>
                 </li>
-                @can('bundle_access')
-                    <li class="nav-item ">
-                        <a class="nav-link {{ $request->segment(2) == 'bundles' ? 'active' : '' }}"
-                           href="{{ route('admin.bundles.index') }}">
-                            <i class="nav-icon icon-layers"></i>
-                            <span class="title">@lang('menus.backend.sidebar.bundles.title')</span>
-                        </a>
-                    </li>
-                @endcan
+{{--                @can('bundle_access')--}}
+{{--                    <li class="nav-item ">--}}
+{{--                        <a class="nav-link {{ $request->segment(2) == 'bundles' ? 'active' : '' }}"--}}
+{{--                           href="{{ route('admin.bundles.index') }}">--}}
+{{--                            <i class="nav-icon icon-layers"></i>--}}
+{{--                            <span class="title">@lang('menus.backend.sidebar.bundles.title')</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                @endcan--}}
 
                 @can('workshop_access')
                     <li class="nav-item ">
@@ -193,14 +193,14 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('reason_access')
-                            <li class="nav-item">
-                                <a class="nav-link {{ $request->segment(2) == 'reasons' ? 'active' : '' }}"
-                                   href="{{ route('admin.reasons.index') }}">
-                                    <span class="title">@lang('menus.backend.sidebar.reasons.title')</span>
-                                </a>
-                            </li>
-                        @endcan
+{{--                        @can('reason_access')--}}
+{{--                            <li class="nav-item">--}}
+{{--                                <a class="nav-link {{ $request->segment(2) == 'reasons' ? 'active' : '' }}"--}}
+{{--                                   href="{{ route('admin.reasons.index') }}">--}}
+{{--                                    <span class="title">@lang('menus.backend.sidebar.reasons.title')</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                        @endcan--}}
                         @if ($logged_in_user->isAdmin())
                             <li class="nav-item">
                                 <a class="nav-link {{ active_class(Active::checkUriPattern('admin/menu-manager')) }}"
@@ -214,24 +214,24 @@
                                     <span class="title">@lang('menus.backend.sidebar.hero-slider.title')</span>
                                 </a>
                             </li>
-                            <li class="nav-item ">
-                                <a class="nav-link {{ $request->segment(2) == 'sponsors' ? 'active' : '' }}"
-                                   href="{{ route('admin.sponsors.index') }}">
-                                    <span class="title">@lang('menus.backend.sidebar.sponsors.title')</span>
-                                </a>
-                            </li>
+{{--                            <li class="nav-item ">--}}
+{{--                                <a class="nav-link {{ $request->segment(2) == 'sponsors' ? 'active' : '' }}"--}}
+{{--                                   href="{{ route('admin.sponsors.index') }}">--}}
+{{--                                    <span class="title">@lang('menus.backend.sidebar.sponsors.title')</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
                             <li class="nav-item ">
                                 <a class="nav-link {{ $request->segment(2) == 'testimonials' ? 'active' : '' }}"
                                    href="{{ route('admin.testimonials.index') }}">
                                     <span class="title">@lang('menus.backend.sidebar.testimonials.title')</span>
                                 </a>
                             </li>
-                            <li class="nav-item ">
-                                <a class="nav-link {{ $request->segment(2) == 'forums-category' ? 'active' : '' }}"
-                                   href="{{ route('admin.forums-category.index') }}">
-                                    <span class="title">@lang('menus.backend.sidebar.forums-category.title')</span>
-                                </a>
-                            </li>
+{{--                            <li class="nav-item ">--}}
+{{--                                <a class="nav-link {{ $request->segment(2) == 'forums-category' ? 'active' : '' }}"--}}
+{{--                                   href="{{ route('admin.forums-category.index') }}">--}}
+{{--                                    <span class="title">@lang('menus.backend.sidebar.forums-category.title')</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
                             <li class="nav-item ">
                                 <a class="nav-link {{ $request->segment(2) == 'faqs' ? 'active' : '' }}"
                                    href="{{ route('admin.faqs.index') }}">
@@ -337,13 +337,13 @@
                         <span class="title">@lang('menus.backend.sidebar.coupons.title')</span>
                     </a>
                 </li>
-                <li class="nav-item ">
-                    <a class="nav-link {{ $request->segment(1) == 'contact-requests' ? 'active' : '' }}"
-                       href="{{ route('admin.tax.index') }}">
-                        <i class="nav-icon icon-credit-card"></i>
-                        <span class="title">@lang('menus.backend.sidebar.tax.title')</span>
-                    </a>
-                </li>
+{{--                <li class="nav-item ">--}}
+{{--                    <a class="nav-link {{ $request->segment(1) == 'contact-requests' ? 'active' : '' }}"--}}
+{{--                       href="{{ route('admin.tax.index') }}">--}}
+{{--                        <i class="nav-icon icon-credit-card"></i>--}}
+{{--                        <span class="title">@lang('menus.backend.sidebar.tax.title')</span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 <li class="nav-item ">
                     <a class="nav-link {{ $request->segment(1) == 'contact-requests' ? 'active' : '' }}"
                        href="{{ route('admin.payments.requests') }}">
@@ -450,13 +450,13 @@
                     </ul>
                 </li>
 
-                <li class="nav-item ">
-                    <a class="nav-link {{ $request->segment(1) == 'translation-manager' ? 'active' : '' }}"
-                       href="{{ asset('user/translations') }}">
-                        <i class="nav-icon icon-docs"></i>
-                        <span class="title">@lang('menus.backend.sidebar.translations.title')</span>
-                    </a>
-                </li>
+{{--                <li class="nav-item ">--}}
+{{--                    <a class="nav-link {{ $request->segment(1) == 'translation-manager' ? 'active' : '' }}"--}}
+{{--                       href="{{ asset('user/translations') }}">--}}
+{{--                        <i class="nav-icon icon-docs"></i>--}}
+{{--                        <span class="title">@lang('menus.backend.sidebar.translations.title')</span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
 
                 <li class="nav-item ">
                     <a class="nav-link {{ $request->segment(1) == 'backup' ? 'active' : '' }}"
