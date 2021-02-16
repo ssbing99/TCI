@@ -1103,7 +1103,7 @@ class CartController extends Controller
     {
         $is_duplicate = false;
         $message = '';
-        $orders = Order::where('user_id', '=', auth()->user()->id)->pluck('id');
+        $orders = Order::where('status', '=', 1)->where('user_id', '=', auth()->user()->id)->pluck('id');
         $order_items = OrderItem::whereIn('order_id', $orders)->get(['item_id', 'item_type']);
         if ($product_type == 'course') {
             foreach ($order_items->where('item_type', 'App\Models\Course') as $item) {
