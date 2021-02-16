@@ -492,7 +492,7 @@ class CartController extends Controller
                 $order->save();
                 \Log::info($response->getMessage() . ' for id = ' . auth()->user()->id);
                 Session::flash('failure', trans('labels.frontend.cart.try_again'));
-                return redirect()->route('cart.index');
+                return redirect()->route('status');
             }
 
         }elseif($request->paymentMethod == 'paypal'){
@@ -1123,7 +1123,6 @@ class CartController extends Controller
         }
 
         if ($is_duplicate) {
-            return redirect()->back()->withdanger($message);
             return redirect()->route('cart.singleCheckout',['course_id' => $product->id])->withdanger($message);
         }
         return false;
