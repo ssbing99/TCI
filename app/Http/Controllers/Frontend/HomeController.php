@@ -191,6 +191,10 @@ class HomeController extends Controller
         return view($this->path . '.how-it-work', compact('faq_categories'));
     }
 
+    public function facebookDeleteData(Request $request){
+        return view($this->path . '.deauthorized', compact('request'));
+    }
+
     public function subscribe(Request $request)
     {
         $this->validate($request, [
