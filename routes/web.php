@@ -198,6 +198,11 @@ Route::get('certificate-verification','Backend\CertificateController@getVerifica
 Route::post('certificate-verification','Backend\CertificateController@verifyCertificate')->name('frontend.certificates.verify');
 Route::get('certificates/download', ['uses' => 'Backend\CertificateController@download', 'as' => 'certificates.download']);
 
+Route::post('facebook/delete-data', 'Frontend\HomeController@facebookDeleteData')->name('delete-data');
+
+Route::get('facebook/deletion/{id}', function ($id) {
+    return $id.' Not Found';
+});
 
 if(config('show_offers') == 1){
     Route::get('offers',['uses' => 'CartController@getOffers', 'as' => 'frontend.offers']);
