@@ -66,7 +66,7 @@ class Socialite
         }
 
         if (config('services.google.active')) {
-            $socialite_enable[] = "<li><a href='".route('frontend.auth.social.login', 'google')."' class=\"icoGoogle\"  ><i class=\"fa fa-google\" style=\"color: #e9ecef;\"></i></a></li>";
+            $socialite_enable[] = "<li><a href='".route('frontend.auth.social.login', 'google')."' class=\"icoGoogle\"  ><i class=\"fa fa-google\"></i></a></li>";
         }
 
 //        $socialite_enable[] = "<li><a href='#' class=\"icoInstagram\"  ><i class=\"fa fa-instagram\"></i></a></li>";
