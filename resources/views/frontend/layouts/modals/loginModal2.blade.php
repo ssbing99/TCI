@@ -29,6 +29,10 @@
                     </div>
                     <span id="login-password-error" class="text-danger"></span>
                     <a class="forgot" href="#">Forgot password?</a>
+                    <input type="hidden" name="enrollId" id="enrollId" value="">
+                    <input type="hidden" name="isGift" id="isGift" value="">
+                    <input type="hidden" name="workshopId" id="workshopId" value="">
+                    <input type="hidden" name="workshopType" id="workshopType" value="">
                     <input type="submit" name="" value="Login">
                     <div id="loginSocial" class="optbox clearfix">
                         <div class="divider">OR</div>
@@ -41,12 +45,23 @@
                     </div>
                     <div class="label clearfix">Don't have an Account? <a href="{{route('frontend.auth.register')}}">Sign Up</a></div>
                 </form>
+                <form id="redirectForm" action="{{ route('cart.singleCheckout') }}" method="POST" class="mb-2">
+                    <input type="hidden" name="_token" value=""/>
+                    <input type="hidden" name="course_id" value=""/>
+                    <input type="hidden" name="gift_course" value=""/>
+                </form>
+                <form id="redirectWorkshpoForm" action="{{ route('workshops.enroll.post') }}" method="POST" class="mb-2">
+                    <input type="hidden" name="_token" value=""/>
+                    <input type="hidden" name="id" value=""/>
+                    <input type="hidden" name="type" value=""/>
+                </form>
             </div>
         </div>
     </div>
 @endif
 
 @push('after-scripts')
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     @if (session('openModel'))
         <script>
             $('#login').modal('show');
@@ -71,6 +86,17 @@
             $('#signupSocial').hide();
 
             $(document).ready(function () {
+
+                $('#login').on('hidden.bs.modal', function () {
+                    //if close then clear value
+                    $('#workshopId').val('');
+                    $('#workshopType').val('');
+
+                    $('#enrollId').val('');
+                    $('#isGift').val('false');
+                })
+
+
                 $(document).on('click', '#openRegisterModal', function () {
                     $('#tab-1').removeAttr('checked');
                     $('#tab-2').prop('checked','checked');
@@ -146,7 +172,23 @@
                             if (response.success) {
                                 $('#loginForm')[0].reset();
                                 if (response.redirect == 'back') {
-                                    location.reload();
+                                    if($('#enrollId').val().length > 0) {
+
+                                        var form = document.getElementById('redirectForm');
+                                        form.elements[0].value = response._newToken;
+                                        form.elements[1].value = $('#enrollId').val();
+                                        form.elements[2].value = $('#isGift').val();
+                                        form.submit();
+                                    }else if($('#workshopId').val().length > 0) {
+
+                                        var form = document.getElementById('redirectWorkshpoForm');
+                                        form.elements[0].value = response._newToken;
+                                        form.elements[1].value = $('#workshopId').val();
+                                        form.elements[2].value = $('#workshopType').val();
+                                        form.submit();
+                                    }else {
+                                        location.reload();
+                                    }
                                 } else {
                                     window.location.href = "{{route('admin.dashboard')}}"
                                 }
