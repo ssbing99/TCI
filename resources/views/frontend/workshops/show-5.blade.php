@@ -49,6 +49,20 @@
                     <div class="workshopdetail-box clearfix">
                         <img src="{{$workshop->getFirstImage()}}" class="img-full" alt="" />
                         <span>
+                @if(!auth()->check())
+                 <div class="row clearfix">
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 col-xxl-4">
+                      <a class="btn btn-primary btn-block mb-15" onclick="openLoginWithSession('deposit')" href="#">Enroll on this Workshop(Pay Deposit)</a>
+                  </div>
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 col-xxl-4">
+                      <a class="btn btn-primary btn-block mb-15" onclick="openLoginWithSession('balance')" href="#">Enroll on this Workshop(Pay Balance)</a>
+                  </div>
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 col-xxl-4">
+                      <a class="btn btn-primary btn-block mb-15" onclick="openLoginWithSession('supplement')" href="#">Enroll on this Workshop(Pay Supplement)</a>
+                  </div>
+                </div>
+
+                @elseif(auth()->check() && (auth()->user()->hasRole('student')))
                 <div class="row clearfix">
                   <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 col-xxl-4">
                     <a href="{{route('workshops.enroll',['id'=>$workshop->id, 'type'=>'deposit'])}}" class="btn btn-primary btn-sm">Enroll on this Workshop(Pay Deposit)</a>
@@ -60,6 +74,7 @@
                     <a href="{{route('workshops.enroll',['id'=>$workshop->id, 'type'=>'supplement'])}}" class="btn btn-primary btn-sm">Enroll on this Workshop(Pay Supplement)</a>
                   </div>
                 </div>
+                @endif
               </span>
                     </div>
                 </div>
@@ -84,3 +99,22 @@
     <!-- End  of teacher details area
         ============================================= -->
 @endsection
+
+@push('after-scripts')
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+    <script>
+
+        function openLoginWithSession(type){
+            //clean
+            $('#enrollId').val('');
+            $('#isGift').val('false');
+
+            $('#workshopId').val('{{$workshop->id}}');
+            $('#workshopType').val(type);
+            Cookies.set('withWorkshop', '{"workshopId": "{{$workshop->id}}", "type": "'+type+'"}');
+            $('#openLoginModal').click();
+        }
+
+    </script>
+@endpush

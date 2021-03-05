@@ -208,6 +208,7 @@
 @endsection
 
 @push('after-scripts')
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     @if(config('services.stripe.active') == 1)
         <script type="text/javascript" src="{{asset('js/stripe-form.js')}}"></script>
     @endif
@@ -268,6 +269,11 @@
         }
 
         $(document).ready(function () {
+            //Clean cookies
+            if(Cookies.get('withEnroll'))
+                Cookies.remove('withEnroll');
+
+
             $(document).on('click', 'input[type="radio"]:checked', function () {
                 $('#accordion .check-out-form').addClass('disabled')
                 $(this).closest('.payment-method').find('.check-out-form').removeClass('disabled')

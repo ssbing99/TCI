@@ -190,12 +190,15 @@
                             @if(auth()->check() && (auth()->user()->hasRole('student')) && (Cart::session(auth()->user()->id)->get( $course->id)))
 
                             @elseif(!auth()->check())
+{{--                                <a id="openLoginModal"--}}
+{{--                                   class="btn btn-primary btn-block mb-15"--}}
+{{--                                   data-target="#myModal" href="#">Enroll on this Course</a>--}}
+                                <a
+                                   class="btn btn-primary btn-block mb-15"
+                                   onclick="openLoginWithSession(false)" href="#">Enroll on this Course</a>
                                 <a id="openLoginModal"
                                    class="btn btn-primary btn-block mb-15"
-                                   data-target="#myModal" href="#">Enroll on this Course</a>
-                                <a id="openLoginModal"
-                                   class="btn btn-primary btn-block mb-15"
-                                   data-target="#myModal" href="#">Gift this Course</a>
+                                   onclick="openLoginWithSession(true)" href="#">Gift this Course</a>
                             @elseif(auth()->check() && (auth()->user()->hasRole('student')))
                                 <form action="{{ route('cart.singleCheckout') }}" method="POST" class="mb-2">
                                     @csrf
@@ -254,8 +257,21 @@
 
 @push('after-scripts')
     <script src="https://cdn.plyr.io/3.5.3/plyr.polyfilled.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
     <script>
+
+        function openLoginWithSession(isGift){
+            //clean
+            $('#workshopId').val('');
+            $('#workshopType').val('');
+
+            $('#enrollId').val('{{$course->id}}');
+            $('#isGift').val(isGift);
+            Cookies.set('withEnroll', '{"courseId": "{{$course->id}}", "giftCourse": "'+isGift+'"}');
+            $('#openLoginModal').click();
+        }
+
         const player = new Plyr('#player');
 
         $(document).on('change', 'input[name="stars"]', function () {
