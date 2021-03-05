@@ -43,3 +43,15 @@
         </div>
     </section>
 @endsection
+@push('after-scripts')
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            //Clean cookies
+            if(Cookies.get('withEnroll'))
+                Cookies.remove('withEnroll');
+
+        })
+    </script>
+@endpush
