@@ -108,6 +108,7 @@ Route::post('workshops/{id}/review', ['uses' => 'WorkshopsController@addReview',
 Route::get('workshops/review/{id}/edit', ['uses' => 'WorkshopsController@editReview', 'as' => 'workshops.review.edit']);
 Route::post('workshops/review/{id}/edit', ['uses' => 'WorkshopsController@updateReview', 'as' => 'workshops.review.update']);
 Route::get('workshops/review/{id}/delete', ['uses' => 'WorkshopsController@deleteReview', 'as' => 'workshops.review.delete']);
+Route::post('workshops/post/enroll', ['uses' => 'WorkshopsController@paypalPayment', 'as' => 'workshops.enroll.post']);
 Route::post('workshops/{id}/enroll', ['uses' => 'WorkshopsController@paypalPayment', 'as' => 'workshops.enroll']);
 Route::get('workshops/{id}/enroll', ['uses' => 'WorkshopsController@paypalPayment', 'as' => 'workshops.enroll']);
 Route::get('workshops/paypal-payment/status', ['uses' => 'WorkshopsController@getPaymentStatus'])->name('workshops.paypal.status');
@@ -206,6 +207,11 @@ Route::get('certificate-verification','Backend\CertificateController@getVerifica
 Route::post('certificate-verification','Backend\CertificateController@verifyCertificate')->name('frontend.certificates.verify');
 Route::get('certificates/download', ['uses' => 'Backend\CertificateController@download', 'as' => 'certificates.download']);
 
+Route::post('facebook/delete-data', 'Frontend\HomeController@facebookDeleteData')->name('delete-data');
+
+Route::get('facebook/deletion/{id}', function ($id) {
+    return $id.' Not Found';
+});
 
 if(config('show_offers') == 1){
     Route::get('offers',['uses' => 'CartController@getOffers', 'as' => 'frontend.offers']);

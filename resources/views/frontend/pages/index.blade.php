@@ -39,13 +39,15 @@
     <!-- Start of breadcrumb section
         ============================================= -->
     @if(config('theme_layout') == 5)
-        <div class="banner custom-banner-bg">
+        <header>
             <div class="container">
-                <div class="page-heading">
-                    {{$page->title}}
+                <div class="row clearfix">
+                    <div class="col-12">
+                        <h1>{{$page->title}}</h1>
+                    </div>
                 </div>
             </div>
-        </div>
+        </header>
     @else
         <section id="breadcrumb" class="breadcrumb-section relative-position backgroud-style">
             <div class="blakish-overlay"></div>

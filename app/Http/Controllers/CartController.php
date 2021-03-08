@@ -263,7 +263,7 @@ class CartController extends Controller
         $course_ids = [];
         $gift = false;
 
-        if($request->has('gift_course')){
+        if($request->has('gift_course') && $request->get('gift_course') == 'true'){
             $gift = true;
         }
 
@@ -492,7 +492,7 @@ class CartController extends Controller
                 $order->save();
                 \Log::info($response->getMessage() . ' for id = ' . auth()->user()->id);
                 Session::flash('failure', trans('labels.frontend.cart.try_again'));
-                return redirect()->route('cart.index');
+                return redirect()->route('status');
             }
 
         }elseif($request->paymentMethod == 'paypal'){
@@ -1103,7 +1103,7 @@ class CartController extends Controller
     {
         $is_duplicate = false;
         $message = '';
-        $orders = Order::where('user_id', '=', auth()->user()->id)->pluck('id');
+        $orders = Order::where('status', '=', 1)->where('user_id', '=', auth()->user()->id)->pluck('id');
         $order_items = OrderItem::whereIn('order_id', $orders)->get(['item_id', 'item_type']);
         if ($product_type == 'course') {
             foreach ($order_items->where('item_type', 'App\Models\Course') as $item) {
@@ -1123,7 +1123,6 @@ class CartController extends Controller
         }
 
         if ($is_duplicate) {
-            return redirect()->back()->withdanger($message);
             return redirect()->route('cart.singleCheckout',['course_id' => $product->id])->withdanger($message);
         }
         return false;
