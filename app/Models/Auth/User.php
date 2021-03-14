@@ -203,6 +203,15 @@ class User extends Authenticatable
         return $courses;
     }
 
+    public function enrolledCourses()
+    {
+        $courses = Course::withoutGlobalScope('filter')->whereHas('students', function ($query) {
+            $query->where('id', $this->id);
+        })->with('lessons')
+            ->get();
+        return $courses;
+    }
+
     public function purchasedBundles()
     {
         $orders = Order::where('status', '=', 1)

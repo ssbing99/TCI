@@ -275,6 +275,9 @@ return array (
   'uuid' => 'The :attribute must be a valid UUID.',
   'custom' => 
   array (
+      'attachment_file' => [
+        'required' => 'Upload a file or insert video ID'
+      ],
     'attribute-name' => 
     array (
       'rule-name' => 'custom-message',

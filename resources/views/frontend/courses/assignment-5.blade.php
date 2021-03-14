@@ -43,7 +43,7 @@
                         @if($assignment->submissionsById(auth()->user()->id)->count() > 0)
                             <p class="assign-txt clearfix"><span><a href="{{route('submission.show', $assignment->id)}}">{{$assignment->submissionsById(auth()->user()->id)->first()->title}}</a></span>Created over {{$assignment->created_at->diffforhumans()}}</p>
                         @else
-                            <p class="assign-txt clearfix"><span><a href="{{route('submission.show', $assignment->id)}}">Create your submission</a></span></p>
+                            <p class="assign-txt clearfix"><span><a href="{{route('submission.create', $assignment->id)}}">Create your submission</a></span></p>
                         @endif
 
                     </div>
@@ -91,9 +91,9 @@
                         @csrf
                         <input type="hidden" name="rating" id="rating">
 
-                        <textarea class="form-control custom-input mb-15  @if($errors->has('review')) border-bottom border-danger @endif" name="comment" id="textarea" rows="3" placeholder="Enter Text"></textarea>
+                        <textarea class="form-control custom-input mb-15  @if($errors->has('comment')) border-bottom border-danger @endif" name="comment" id="textarea" rows="3" placeholder="Enter Text"></textarea>
                         @if($errors->has('comment'))
-                            <span class="help-block text-danger">{{ $errors->first('review', ':message') }}</span>
+                            <span class="help-block text-danger">{{ $errors->first('comment', ':message') }}</span>
                         @endif
 
                         <button type="submit" name="submit" id="submit" class="btn btn-primary br-24 btn-padding btn-lg" value="Submit">CREATE</button>

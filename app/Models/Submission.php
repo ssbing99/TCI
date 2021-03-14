@@ -60,6 +60,21 @@ class Submission extends Model
 
     public function attachments()
     {
-        return $this->hasMany(Attachment::class);
+        return $this->hasMany(Attachment::class)->orderBy('position');
+    }
+
+    public function attachmentsById($user_id)
+    {
+        return $this->hasMany(Attachment::class)->where('user_id', '=', $user_id)->orderBy('position');
+    }
+
+    public function critiques()
+    {
+        return $this->morphMany('App\Models\Comment', 'reviewable');
+    }
+
+    public function critiquesById($user_id)
+    {
+        return $this->morphMany('App\Models\Comment', 'reviewable')->where('user_id', '=', $user_id)->orderBy('created_at');
     }
 }

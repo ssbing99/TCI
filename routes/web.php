@@ -142,7 +142,24 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('assignment/{id}/comment', ['uses' => 'AssignmentController@addComment', 'as' => 'assignment.comment']);
     Route::get('submission/{id}/student', ['uses' => 'AssignmentController@showSubmission', 'as' => 'submission.show']);
     Route::get('submission/{id}/create', ['uses' => 'AssignmentController@createSubmission', 'as' => 'submission.create']);
+
+    // submission
+    Route::get('submission/{assignment_id}/{submission_id}/edit', ['uses' => 'AssignmentController@editSubmission', 'as' => 'submission.edit']);
+    Route::post('submission/{assignment_id}/{submission_id}/update', ['uses' => 'AssignmentController@updateSubmission', 'as' => 'submission.update']);
     Route::post('submission/{assignment_id}/create', ['uses' => 'AssignmentController@storeSubmission', 'as' => 'submission.store']);
+    Route::get('submission/{assignment_id}/{submission_id}/critique', ['uses' => 'AssignmentController@showCritiques', 'as' => 'submission.all.critique']);
+    Route::post('submission/{assignment_id}/add/{submission_id}/critique', ['uses' => 'AssignmentController@addCritique', 'as' => 'submission.critique']);
+
+    //attachment
+    Route::get('submission/{assignment_id}/attachment/{submission_id}', ['uses' => 'AssignmentController@createAttachment', 'as' => 'submission.attachment.create']);
+    Route::post('submission/{assignment_id}/attachment/{submission_id}/create', ['uses' => 'AssignmentController@storeAttachment', 'as' => 'submission.attachment.store']);
+    Route::get('submission/{assignment_id}/attachment/{submission_id}/edit/{id}', ['uses' => 'AssignmentController@editAttachment', 'as' => 'submission.attachment.edit']);
+    Route::post('submission/{assignment_id}/attachment/{submission_id}/update/{id}', ['uses' => 'AssignmentController@updateAttachment', 'as' => 'submission.attachment.update']);
+    Route::get('submission/{assignment_id}/attachment/{submission_id}/delete/{id}', ['uses' => 'AssignmentController@deleteAttachment', 'as' => 'submission.attachment.delete']);
+
+    //sequence
+    Route::get('submission/{assignment_id}/attachment/{submission_id}/sequence', ['uses' => 'AssignmentController@attachmentSequence', 'as' => 'submission.attachment.sequence']);
+    Route::post('submission/{assignment_id}/attachment/{submission_id}/sequence/update', ['uses' => 'AssignmentController@updateSequence', 'as' => 'submission.attachment.sequence.update']);
 });
 
 Route::get('/search', [HomeController::class, 'searchAll'])->name('search');

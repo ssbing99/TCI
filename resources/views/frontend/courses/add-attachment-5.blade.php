@@ -10,7 +10,7 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-12">
-                    <h1>Submission</h1>
+                    <h1>Attachment Details</h1>
                 </div>
             </div>
         </div>
@@ -23,30 +23,12 @@
     <section>
         <div class="container">
             @include('includes.partials.messages')
-            <form action="{{route('submission.store',[$assignment->id])}}" method="POST" enctype="multipart/form-data" role="form" id="edit-assignment">
+            <form action="{{route('submission.attachment.store',['assignment_id'=> $assignment->id, 'submission_id'=>$submission->id])}}" method="POST" enctype="multipart/form-data" role="form" id="edit-assignment">
                 {{ csrf_field() }}
-                <div class="row clearfix">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">
-                        <label>Title<span>*</span>
-                            <input type="text" name="title" id="title" class="form-control" placeholder="Project Statement" />
-                        </label>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">
-                        <label>Description
-                            <textarea class="form-control" name="description" id="description" placeholder="Description" rows="3"></textarea>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="row clearfix">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">
-                        <h3>Attachment Details</h3>
-                    </div>
-                </div>
 
                     <div class="row clearfix">
                         <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 form-group">
-                            <input type="text" name="title_attach" id="title" class="form-control" placeholder="Title" />
+                            <input type="text" name="title_attach" id="title_attach" class="form-control" placeholder="Title" />
                         </div>
                         <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 form-group">
                             <input type="text" name="metaData" id="metaData" class="form-control" placeholder="Meta Data" />
@@ -78,7 +60,7 @@
                             <textarea class="form-control" name="description_attach" id="description" placeholder="Description" rows="3"></textarea>
                         </div>
                     </div>
-                <input type="button" name="submitBtn" id="submitBtn" class="btn btn-primary br-24 btn-padding" value="CREATE"  onclick="onSubmit(this.form)"/>
+                    <input type="button" name="submitBtn" id="submitBtn" class="btn btn-primary br-24 btn-padding" value="CREATE"  onclick="onSubmit(this.form)"/>
 
                 </form>
         </div>
@@ -90,7 +72,6 @@
 @push('after-scripts')
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
-
         function onSubmit(thisform){
             var vfile = thisform.video_file.files[0];
             var file = thisform.attachment_file.files[0];
@@ -119,6 +100,7 @@
 
         }
         $(document).ready(function () {
+
         });
 
 

@@ -100,7 +100,7 @@ class DashboardController extends Controller
         $purchased_bundles = NULL;
         if (\Auth::check()) {
 
-            $purchased_courses = auth()->user()->purchasedCourses();
+            $purchased_courses = auth()->user()->enrolledCourses();
             $purchased_bundles = auth()->user()->purchasedBundles();
             $purchased_items = auth()->user()->purchasedItems();
             $pending_orders = auth()->user()->pendingOrders();

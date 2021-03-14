@@ -19,6 +19,8 @@ use Mtownsend\ReadTime\ReadTime;
 // * @property string $course
  * @property string $title
  * @property string $slug
+ * @property string $submission_id
+ * @property string $user_id
  * @property string $attach_file
  * @property string $attach_video
  * @property string $vimeo_id
@@ -114,16 +116,16 @@ class Attachment extends Model
 
     }
 
-    public function mediaPDF()
+    public function mediaVimeo()
     {
         return $this->morphOne(Media::class, 'model')
-            ->where('type', '=', 'lesson_pdf');
+            ->where('type', '=', 'vimeo');
     }
 
-    public function mediaAudio()
+    public function mediaYoutube()
     {
         return $this->morphOne(Media::class, 'model')
-            ->where('type', '=', 'lesson_audio');
+            ->where('type', '=', 'youtube');
     }
 
     public function comments()
