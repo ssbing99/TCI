@@ -138,7 +138,7 @@ class Socialite
 //        }
 
 //        if (config('services.bitbucket.active')) {
-            $socialite_enable[] = $divHead."<a href='#' ><img src='".asset("assets_new/images/instagram.jpg")."' alt='image' /></a>".$divTail;
+//            $socialite_enable[] = $divHead."<a href='#' ><img src='".asset("assets_new/images/instagram.jpg")."' alt='image' /></a>".$divTail;
 //        }
 
 
