@@ -45,12 +45,12 @@
                     </div>
                     <div class="label clearfix">Don't have an Account? <a href="{{route('frontend.auth.register')}}">Sign Up</a></div>
                 </form>
-                <form id="redirectForm" action="{{ route('cart.singleCheckout') }}" method="POST" class="mb-2">
+                <form id="redirectForm" action="{{ route('cart.singleCheckout') }}" method="POST" class="mb-2" style="position: absolute;">
                     <input type="hidden" name="_token" value=""/>
                     <input type="hidden" name="course_id" value=""/>
                     <input type="hidden" name="gift_course" value=""/>
                 </form>
-                <form id="redirectWorkshpoForm" action="{{ route('workshops.enroll.post') }}" method="POST" class="mb-2">
+                <form id="redirectWorkshpoForm" action="{{ route('workshops.enroll.post') }}" method="POST" class="mb-2" style="position: absolute;">
                     <input type="hidden" name="_token" value=""/>
                     <input type="hidden" name="id" value=""/>
                     <input type="hidden" name="type" value=""/>
