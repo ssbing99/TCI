@@ -83,42 +83,42 @@
                                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <span id="password-error" class="text-danger"></span>
                                         </div>
-                                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                            <div class="input-group custom-group form-group">
-                                                <span class="input-group-text"><i class="fa fa-building"></i></span>
-                                                {{ html()->text('address')
-                                                ->class('form-control')
-                                                ->placeholder(__('validation.attributes.frontend.street_addr'))
-                                                 }}
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                            <div class="input-group custom-group form-group">
-                                                <span class="input-group-text"><i class="fa fa-building"></i></span>
-                                                {{ html()->text('city')
-                                                ->class('form-control')
-                                                ->placeholder(__('validation.attributes.frontend.locality'))
-                                                ->attribute('maxlength', 191) }}
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                            <div class="input-group custom-group form-group">
-                                                <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
-                                                {{ html()->text('state')
-                                                ->class('form-control')
-                                                ->placeholder(__('validation.attributes.frontend.region'))
-                                                ->attribute('maxlength', 191) }}
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                            <div class="input-group custom-group form-group">
-                                                <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
-                                                {{ html()->text('postal')
-                                                ->class('form-control')
-                                                ->placeholder(__('validation.attributes.frontend.postal_code'))
-                                                ->attribute('maxlength', 191) }}
-                                            </div>
-                                        </div>
+{{--                                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">--}}
+{{--                                            <div class="input-group custom-group form-group">--}}
+{{--                                                <span class="input-group-text"><i class="fa fa-building"></i></span>--}}
+{{--                                                {{ html()->text('address')--}}
+{{--                                                ->class('form-control')--}}
+{{--                                                ->placeholder(__('validation.attributes.frontend.street_addr'))--}}
+{{--                                                 }}--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">--}}
+{{--                                            <div class="input-group custom-group form-group">--}}
+{{--                                                <span class="input-group-text"><i class="fa fa-building"></i></span>--}}
+{{--                                                {{ html()->text('city')--}}
+{{--                                                ->class('form-control')--}}
+{{--                                                ->placeholder(__('validation.attributes.frontend.locality'))--}}
+{{--                                                ->attribute('maxlength', 191) }}--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">--}}
+{{--                                            <div class="input-group custom-group form-group">--}}
+{{--                                                <span class="input-group-text"><i class="fa fa-map-marker"></i></span>--}}
+{{--                                                {{ html()->text('state')--}}
+{{--                                                ->class('form-control')--}}
+{{--                                                ->placeholder(__('validation.attributes.frontend.region'))--}}
+{{--                                                ->attribute('maxlength', 191) }}--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">--}}
+{{--                                            <div class="input-group custom-group form-group">--}}
+{{--                                                <span class="input-group-text"><i class="fa fa-map-marker"></i></span>--}}
+{{--                                                {{ html()->text('postal')--}}
+{{--                                                ->class('form-control')--}}
+{{--                                                ->placeholder(__('validation.attributes.frontend.postal_code'))--}}
+{{--                                                ->attribute('maxlength', 191) }}--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
                                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="input-group custom-group form-group">
                                                 <span class="input-group-text"><i class="fa fa-globe"></i></span>
