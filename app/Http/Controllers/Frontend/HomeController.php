@@ -195,6 +195,28 @@ class HomeController extends Controller
         return view($this->path . '.deauthorized', compact('request'));
     }
 
+    public function showMentorship()
+    {
+        $news = Blog::orderBy('created_at', 'desc')->take(2)->get();
+
+        $testimonials = Testimonial::where('status', '=', 1)->orderBy('created_at', 'desc')->get();
+
+        $teachers = User::role('teacher')->paginate(12);
+
+        return view($this->path . '.mentorship.index', compact('teachers', 'news', 'testimonials'));
+    }
+
+    public function registerMentorship()
+    {
+        $news = Blog::orderBy('created_at', 'desc')->take(2)->get();
+
+        $testimonials = Testimonial::where('status', '=', 1)->orderBy('created_at', 'desc')->get();
+
+        $teachers = User::role('teacher')->paginate(12);
+
+        return view($this->path . '.mentorship.index', compact('teachers', 'news', 'testimonials'));
+    }
+
     public function subscribe(Request $request)
     {
         $this->validate($request, [

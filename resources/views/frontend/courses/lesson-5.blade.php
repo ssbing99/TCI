@@ -256,15 +256,36 @@
                     </div>
 
                 <!-- Photo -->
-
+                    @php
+                        $lesson_attachments = isset($lesson) ? $lesson->attachments : [];
+                    @endphp
                     <div class="side-bg clearfix">
                         <div class="side-title clearfix">Photo's</div>
                         <div class="photos clearfix">
-                            @if(count($photos) > 0)
-                                @foreach($photos as $photo)
-                            <a href="#" data-toggle="modal" data-target="#gridPhotos"><img src="{{$photo}}" alt="" /></a>
-                                @endforeach
-                            @endif
+                            @foreach($lesson_attachments as $item)
+                                @if(isset($item->media) && !$item->media->isEmpty())
+                                    @foreach($item->media as $_media)
+                                        @if($_media->type == 'upload')
+                                            <a href="#" data-toggle="modal" data-target="#gridPhotos"><img src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a>
+                                        @elseif(str_contains($_media->type,'image'))
+                                            <a href="#" data-toggle="modal" data-target="#gridPhotos"><img src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a>
+                                        @elseif(str_contains($_media->type,'youtube'))
+                                            <a href="#" data-toggle="modal" data-target="#gridPhotos"><img src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a>
+
+                                        @elseif(str_contains($_media->type,'vimeo'))
+                                            <a href="#" data-toggle="modal" data-target="#gridPhotos"><img src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a>
+
+                                        @endif
+                                    @endforeach
+
+
+                                @endif
+                            @endforeach
+{{--                            @if(count($photos) > 0)--}}
+{{--                                @foreach($photos as $photo)--}}
+{{--                            <a href="#" data-toggle="modal" data-target="#gridPhotos"><img src="{{$photo}}" alt="" /></a>--}}
+{{--                                @endforeach--}}
+{{--                            @endif--}}
                         </div>
 {{--                        <a href="#" class="btn btn-primary br-24 btn-padding">VIEW MORE</a>--}}
                     </div>
@@ -284,11 +305,30 @@
                 </div>
                 <div class="modal-body">
                     <div class="photos clearfix">
-                        @if(count($photos) > 0)
-                            @foreach($photos as $photo)
-                                <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img src="{{$photo}}" alt="" /></a>
-                            @endforeach
-                        @endif
+                        @foreach($lesson_attachments as $item)
+                            @if(isset($item->media) && !$item->media->isEmpty())
+                                @foreach($item->media as $_media)
+                                    @if($_media->type == 'upload')
+                                        <a href="{{$_media->url}}" target="_blank"><img src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a>
+                                    @elseif(str_contains($_media->type,'image'))
+                                        <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a>
+
+                                    @elseif(str_contains($_media->type,'youtube'))
+                                        <a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a>
+
+                                    @elseif(str_contains($_media->type,'vimeo'))
+                                        <a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a>
+
+                                    @endif
+                                @endforeach
+
+                            @endif
+                        @endforeach
+{{--                        @if(count($photos) > 0)--}}
+{{--                            @foreach($photos as $photo)--}}
+{{--                                <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img src="{{$photo}}" alt="" /></a>--}}
+{{--                            @endforeach--}}
+{{--                        @endif--}}
                     </div>
                 </div>
             </div>

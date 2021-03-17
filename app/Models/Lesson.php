@@ -202,4 +202,10 @@ class Lesson extends Model
     {
         return $this->morphMany('App\Models\Comment', 'reviewable');
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(LessonAttachment::class)->orderBy('position');
+    }
+
 }

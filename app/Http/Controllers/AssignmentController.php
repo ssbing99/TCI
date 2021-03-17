@@ -173,6 +173,12 @@ class AssignmentController extends Controller
             $hasAttacment = true;
         }
 
+        if($request->hasFile('video_file') || $request->hasFile('attachment_file')){
+            $hasAttacment = true;
+        }
+
+        \Log::info('$hasAttacment: '.$hasAttacment);
+
         if($hasAttacment){
             $attachment->submission_id = $submission->id;
             $attachment->user_id = auth()->user()->id;
@@ -706,6 +712,20 @@ class AssignmentController extends Controller
             // means remove compared to DB
             $attachment->youtube_id = null;
             $deleteMedia[] = ('youtube');
+        }
+
+        //check existing media
+        if(!$hasAttacment){
+            if($attachment->media->count() > 0){
+                foreach($attachment->media as $_media){
+                    if(str_contains($_media->type,'image') || $_media->type == 'upload'){
+                        //upload file is not removable
+                        $hasAttacment = true;
+                        break;
+                    }
+                }
+
+            }
         }
 
         if(!$hasAttacment){

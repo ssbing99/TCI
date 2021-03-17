@@ -32,7 +32,7 @@
                         </label>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">
-                        <label>Description
+                        <label>Description<span>*</span>
                             <textarea class="form-control" name="description" id="description" placeholder="Description" rows="3" >{!! $submission->description!!}</textarea>
                         </label>
                     </div>

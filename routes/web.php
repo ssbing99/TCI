@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\MentorshipsController;
 
 /*
  * Global Routes
@@ -171,6 +172,9 @@ Route::get('/search-blog', [HomeController::class, 'searchBlog'])->name('blogs.s
 Route::get('/faqs', 'Frontend\HomeController@getFaqs')->name('faqs');
 
 Route::get('/how-it-works', [HomeController::class, 'howItWork'])->name('howitwork');
+
+Route::get('/mentorship', [HomeController::class, 'showMentorship'])->name('mentorship');
+Route::post('/mentorship-register', ['uses' => 'CartController@singleCheckoutMentorship', 'as' => 'mentorship.enroll']);
 
 /*=============== Theme blades routes ends ===================*/
 

@@ -73,33 +73,53 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
         function onSubmit(thisform){
-            var vfile = thisform.video_file.files[0];
-            var file = thisform.attachment_file.files[0];
-            var msg = '';
-
-            if(vfile){
-                var vfsize = vfile.size / 1024;
-                if(vfsize > (5 * 1024)){
-                    msg = 'Video file too big, cannot more than 5MB. '
-                }
-            }
-
-            if(file){
-                var ffile = file.size / 1024;
-                if(ffile > (5 * 1024)){
-                    msg += '\nFile too big, cannot more than 5MB. '
-                }
-            }
-
-            if(msg != ''){
-                alert(msg);
-            }else{
+            // var vfile = thisform.video_file.files[0];
+            // var file = thisform.attachment_file.files[0];
+            // var msg = '';
+            //
+            // if(vfile){
+            //     var vfsize = vfile.size / 1024;
+            //     if(vfsize > (5 * 1024)){
+            //         msg = 'Video file too big, cannot more than 5MB. '
+            //     }
+            // }
+            //
+            // if(file){
+            //     var ffile = file.size / 1024;
+            //     if(ffile > (5 * 1024)){
+            //         msg += '\nFile too big, cannot more than 5MB. '
+            //     }
+            // }
+            //
+            // if(msg != ''){
+            //     alert(msg);
+            // }else{
                 thisform.submit();
-            }
+            // }
 
 
         }
         $(document).ready(function () {
+            var uploadField = $('input[type="file"]');
+
+            $(document).on('change', 'input[name="video_file"]', function () {
+                var $this = $(this);
+                $(this.files).each(function (key, value) {
+                    if (value.size > 5000000) {
+                        alert('"' + value.name + '"' + 'exceeds limit of maximum file upload size')
+                        $this.val("");
+                    }
+                })
+            });
+            $(document).on('change', 'input[name="attachment_file"]', function () {
+                var $this = $(this);
+                $(this.files).each(function (key, value) {
+                    if (value.size > 5000000) {
+                        alert('"' + value.name + '"' + 'exceeds limit of maximum file upload size')
+                        $this.val("");
+                    }
+                })
+            });
 
         });
 

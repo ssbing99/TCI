@@ -17,6 +17,7 @@ Route::get('student/dashboard', [DashboardController::class, 'studentIndex'])->n
 
 Route::group(['middleware' => 'role:teacher|administrator'], function () {
     Route::resource('orders', 'Admin\OrderController');
+    Route::resource('mentorships', 'Admin\MentorshipController');
 });
 Route::group(['middleware' => 'role:administrator'], function () {
 
@@ -39,6 +40,12 @@ Route::group(['middleware' => 'role:administrator'], function () {
     Route::post('orders_mass_destroy', ['uses' => 'Admin\OrderController@massDestroy', 'as' => 'orders.mass_destroy']);
     Route::post('orders/complete', ['uses' => 'Admin\OrderController@complete', 'as' => 'orders.complete']);
     Route::delete('orders_perma_del/{id}', ['uses' => 'Admin\OrderController@perma_del', 'as' => 'orders.perma_del']);
+
+    //===== Mentorships Routes =====//
+    Route::get('get-mentorships-data', ['uses' => 'Admin\MentorshipController@getData', 'as' => 'mentorships.get_data']);
+//    Route::post('orders_mass_destroy', ['uses' => 'Admin\OrderController@massDestroy', 'as' => 'orders.mass_destroy']);
+//    Route::post('orders/complete', ['uses' => 'Admin\OrderController@complete', 'as' => 'orders.complete']);
+//    Route::delete('orders_perma_del/{id}', ['uses' => 'Admin\OrderController@perma_del', 'as' => 'orders.perma_del']);
 
 
     //===== Settings Routes =====//
@@ -221,6 +228,16 @@ Route::get('get-lessons-data', ['uses' => 'Admin\LessonsController@getData', 'as
 Route::post('lessons_mass_destroy', ['uses' => 'Admin\LessonsController@massDestroy', 'as' => 'lessons.mass_destroy']);
 Route::post('lessons_restore/{id}', ['uses' => 'Admin\LessonsController@restore', 'as' => 'lessons.restore']);
 Route::delete('lessons_perma_del/{id}', ['uses' => 'Admin\LessonsController@perma_del', 'as' => 'lessons.perma_del']);
+
+Route::get('lessons/{lesson_id}/attachment', ['uses' => 'Admin\LessonsController@attachment', 'as' => 'lessons.attachment']);
+Route::post('lessons/{lesson_id}/attachment', ['uses' => 'Admin\LessonsController@storeAttachment', 'as' => 'lessons.attachment.create']);
+Route::get('lessons/{lesson_id}/attachment/edit/{id}', ['uses' => 'Admin\LessonsController@editAttachment', 'as' => 'lessons.attachment.edit']);
+Route::post('lessons/{lesson_id}/attachment/update/{id}', ['uses' => 'Admin\LessonsController@updateAttachment', 'as' => 'lessons.attachment.update']);
+Route::get('lessons/{lesson_id}/attachment/delete/{id}', ['uses' => 'Admin\LessonsController@deleteAttachment', 'as' => 'lessons.attachment.delete']);
+
+//sequence
+Route::get('lessons/{lesson_id}/attachment/sequence', ['uses' => 'Admin\LessonsController@attachmentSequence', 'as' => 'lessons.attachment.sequence']);
+Route::post('lessons/{lesson_id}/attachment/sequence/update', ['uses' => 'Admin\LessonsController@updateSequence', 'as' => 'lessons.attachment.sequence.update']);
 
 
 //===== Assignments Routes =====//
