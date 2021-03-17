@@ -75,7 +75,7 @@
                     {!! Form::hidden('course_image_max_width', 4000) !!}
                     {!! Form::hidden('course_image_max_height', 4000) !!}
                     @if ($course->course_image)
-                        <a href="{{ asset('storage/uploads/'.$course->course_image) }}" target="_blank"><img
+                        <a id="courseImgDisplay" href="{{ asset('storage/uploads/'.$course->course_image) }}" target="_blank"><img
                                     height="50px" src="{{ asset('storage/uploads/'.$course->course_image) }}"
                                     class="mt-1"></a>
                     @endif
@@ -176,6 +176,16 @@
                     </div>
 
                 </div>
+
+                <div class="col-12 form-group">
+                    <div class="checkbox d-inline mr-3">
+                        {!! Form::hidden('mentorship', 0) !!}
+                        {!! Form::checkbox('mentorship', 1, old('mentorship'), ['onchange' => 'mentorshipClick()']) !!}
+                        {!! Form::label('mentorship',  'One-to-One Mentorship', ['class' => 'checkbox control-label font-weight-bold']) !!}
+                    </div>
+
+                </div>
+
             </div>
 
             <div class="row">
@@ -238,6 +248,19 @@
 
     </script>
     <script>
+
+        function mentorshipClick(){
+            var chk = document.getElementsByName('mentorship')[1];
+            var cimageDis = document.getElementById('courseImgDisplay');
+
+            if(chk.checked){
+                document.getElementsByName('course_image')[0].required = false;
+            }else{
+                if(!cimageDis) {
+                    document.getElementsByName('course_image')[0].required = true;
+                }
+            }
+        }
 
         $(document).ready(function () {
             $('#start_date').datepicker({

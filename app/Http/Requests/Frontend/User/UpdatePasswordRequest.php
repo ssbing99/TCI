@@ -32,7 +32,7 @@ class UpdatePasswordRequest extends FormRequest
     {
 
         return [
-            'old_password' => [Rule::requiredIf(!auth()->user()->isAdmin())],
+//            'old_password' => [Rule::requiredIf(!auth()->user()->isAdmin())],
             'password'     => [
                 'required',
                 'confirmed',

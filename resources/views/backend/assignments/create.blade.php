@@ -1,5 +1,5 @@
 @extends('backend.layouts.app')
-@section('title', __('labels.backend.lessons.title').' | '.app_name())
+@section('title', __('labels.backend.assignments.title').' | '.app_name())
 
 @push('after-styles')
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-tagsinput/bootstrap-tagsinput.css')}}">

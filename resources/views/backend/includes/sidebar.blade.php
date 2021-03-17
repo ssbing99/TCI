@@ -27,6 +27,15 @@
             @if ($logged_in_user->isAdmin())
                 <li class="nav-item ">
                     <a class="nav-link {{ $request->segment(2) == 'teachers' ? 'active' : '' }}"
+                       href="{{ route('admin.mentorships.index') }}">
+                        <i class="nav-icon icon-user"></i>
+                        <span class="title">Mentorships</span>
+                    </a>
+                </li>
+            @endif
+            @if ($logged_in_user->isAdmin())
+                <li class="nav-item ">
+                    <a class="nav-link {{ $request->segment(2) == 'teachers' ? 'active' : '' }}"
                        href="{{ route('admin.teachers.index') }}">
                         <i class="nav-icon icon-directions"></i>
                         <span class="title">@lang('menus.backend.sidebar.teachers.title')</span>
