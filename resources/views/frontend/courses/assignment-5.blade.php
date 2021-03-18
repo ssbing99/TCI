@@ -49,8 +49,8 @@
                     </div>
                     <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                         <div class="assign-title clearfix">Other Submission</div>
-                        @if($assignment->submissionsByOtherId(auth()->user()->id)->count() > 0)
-                            <p class="assign-txt clearfix">View Submissions by Fellow Students<span><a href="submissions.html">{{$assignment->submissionsByOtherId(auth()->user()->id)->first()->title}}</a></span>Created about 2 months ago by {{$assignment->submissionsByOtherId(auth()->user()->id)->first()->user()->full_name}}</p>
+                        @if($otherSubmission->count() > 0)
+                            <p class="assign-txt clearfix">View Submissions by Fellow Students<span><a>{{$otherSubmission->first()->title}}</a></span>Created about 2 months ago by {{$otherSubmission->first()->user->full_name}}</p>
                         @else
                             <p class="assign-txt clearfix">There are no other submissions for this assignment.</p>
                         @endif
