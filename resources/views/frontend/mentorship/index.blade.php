@@ -101,6 +101,28 @@
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 hidden-mobile"></div>
+                    @if(!auth()->check())
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+                            <select class="form-control drp mt-15 1month" name="instructor_list" id="instructor_list_ids">
+                                <option value="">- Select Mentor -</option>
+                                @if(count($teachers) > 0)
+                                    @foreach($teachers as $item)
+                                        <option value="{{$item->id}}">{{$item->full_name}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <p style="color: red; display: none;" class="err">Please select instructor !!</p>
+                            <input type="hidden" name="mentorship" id="price" value="">
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 hidden-mobile"></div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <center>
+                                <a id="openLoginModal"
+                                   class="btn btn-primary mtb-15"
+                                   data-target="#myModal" href="#">SIGN UP</a>
+                            </center>
+                        </div>
+                    @elseif(auth()->check() && (auth()->user()->hasRole('student')))
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
                         <select class="form-control drp mt-15 1month" name="instructor_list" id="instructor_list_ids">
                             <option value="">- Select Mentor -</option>
@@ -119,6 +141,7 @@
                             <button type="button" name="btnSubmit" class="btn btn-primary mtb-15" onclick="onSubmit(this.form)">SIGN UP</button>
                         </center>
                     </div>
+                    @endif
                 </div>
             </form>
         </div>
@@ -144,6 +167,7 @@
 @endsection
 
 @push('after-scripts')
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
         function onSubmit(thisform){
             if(thisform.instructor_list.value == ""){

@@ -42,7 +42,7 @@
                             <img src="{{auth()->user()->picture}}" alt="" class="profile-img" />
                         </div>
                         <div class="profile-user clearfix">{{auth()->user()->full_name}}</div>
-                        <center><a href="#" class="btn btn-primary btn-md br-24 mtb-15">Edit Profile</a></center>
+{{--                        <center><a class="btn btn-primary btn-md br-24 mtb-15" data-toggle="pill" href="#my-account" role="tab" aria-controls="v-pills-my-account"  aria-selected="false">Edit Profile</a></center>--}}
                         <hr />
                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <a class="nav-link active" id="v-pills-dashboard" data-toggle="pill" href="#dashboard" role="tab" aria-controls="v-pills-dashboard" aria-selected="true">Dashboard</a>
