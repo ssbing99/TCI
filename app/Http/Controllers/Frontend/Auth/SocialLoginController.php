@@ -110,6 +110,10 @@ class SocialLoginController extends Controller
             return redirect()->route('workshops.enroll', ['id'=>$workshop['workshopId'], 'type' => $workshop['type']]);
         }
 
+        \Log::info(auth()->user()->hasRole('student'));
+        if(auth()->user()->hasRole('student')){
+            return redirect()->intended(route('admin.student.dashboard'));
+        }
         // Return to the intended url or default to the class property
         return redirect()->intended(route(home_route()));
     }
