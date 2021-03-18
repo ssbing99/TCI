@@ -22,12 +22,13 @@ use Illuminate\Support\Facades\File;
  * @property string $start_date
  * @property tinyInteger $published
  * @property tinyInteger $portfolio_review
+ * @property tinyInteger $mentorship
  */
 class Course extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['category_id', 'title', 'slug', 'description', 'price', 'price_skype', 'course_image','course_video', 'start_date', 'duration', 'skill_level', 'published', 'free', 'beginner', 'intermediate', 'advance','featured', 'trending', 'popular', 'portfolio_review', 'meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['category_id', 'title', 'slug', 'description', 'price', 'price_skype', 'course_image','course_video', 'start_date', 'duration', 'skill_level', 'published', 'free', 'beginner', 'intermediate', 'advance','featured', 'trending', 'popular', 'portfolio_review', 'mentorship', 'meta_title', 'meta_description', 'meta_keywords'];
 
     protected $appends = ['image', 'teacher_json'];
 

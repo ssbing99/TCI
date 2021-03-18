@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Backend\Admin;
 
+use App\Http\Requests\Admin\StoreAttachmentsRequest;
 use App\Models\Course;
 use App\Models\CourseTimeline;
 use App\Models\Lesson;
+use App\Models\LessonAttachment;
 use App\Models\Media;
 use App\Models\Test;
 use Illuminate\Http\Request;
@@ -111,6 +113,11 @@ class LessonsController extends Controller
                 $assignment = '<a href="' . route('admin.assignments.index', ['lesson_id' => $q->id]) . '" class="btn mb-1 btn-warning text-white"><i class="fa fa-arrow-circle-right"></a>';
                 return $assignment;
             })
+            ->addColumn('sequence', function ($q) {
+
+                $sequence = '<a href="' . route('admin.lessons.attachment', ['lesson_id' => $q->id]) . '" class="btn btn-success mb-1"><i class="fa fa-plus-circle"></i></a>  <a href="' . route('admin.lessons.attachment.sequence', ['lesson_id' => $q->id]) . '" class="btn mb-1 btn-warning text-white"><i class="fa fa-arrow-circle-right"></a>';
+                return $sequence;
+            })
             ->editColumn('course', function ($q) {
                 return ($q->course) ? $q->course->title : 'N/A';
             })
@@ -123,7 +130,7 @@ class LessonsController extends Controller
             ->editColumn('published', function ($q) {
                 return ($q->published == 1) ? "Yes" : "No";
             })
-            ->rawColumns(['lesson_image', 'assignments', 'actions'])
+            ->rawColumns(['lesson_image', 'assignments', 'sequence', 'actions'])
             ->make();
     }
 
@@ -257,7 +264,6 @@ class LessonsController extends Controller
 
         return redirect()->route('admin.lessons.index', ['course_id' => $request->course_id])->withFlashSuccess(__('alerts.backend.general.created'));
     }
-
 
     /**
      * Show the form for editing Lesson.
@@ -515,5 +521,359 @@ class LessonsController extends Controller
 
 
         return back()->withFlashSuccess(trans('alerts.backend.general.deleted'));
+    }
+
+    public function attachment($id)
+    {
+        if (!Gate::allows('lesson_view')) {
+            return abort(401);
+        }
+        $courses = Course::get()->pluck('title', 'id')->prepend('Please select', '');
+
+        $tests = Test::where('lesson_id', $id)->get();
+
+        $lesson = Lesson::findOrFail($id);
+
+
+        return view('backend.lessons.attachment', compact('lesson', 'tests', 'courses'));
+    }
+
+
+    public function storeAttachment(StoreAttachmentsRequest $request, $lesson_id)
+    {
+        $request->all();
+
+        $lesson = Lesson::findOrFail($lesson_id);
+        $position = LessonAttachment::where('lesson_id', $lesson_id)->max('position') + 1;
+        $course = $lesson->course;
+
+        \Log::info($position);
+
+        //TODO: Need to separate as attachment
+
+        $attachment = new LessonAttachment();
+        $hasAttacment = false;
+
+        if(isset($request->title_attach)){
+            $attachment->title = $request->title_attach;
+        }
+        if(isset($request->description_attach)){
+            $attachment->full_text = $request->description_attach;
+        }
+        if(isset($request->vimeoVideo)){
+            $attachment->vimeo_id = $request->vimeoVideo;
+            $hasAttacment = true;
+        }
+        if(isset($request->youtubeVideo)){
+            $attachment->youtube_id = $request->youtubeVideo;
+            $hasAttacment = true;
+        }
+        if(isset($request->position)){
+            $attachment->position = $request->position;
+        }else{
+            $attachment->position = 1;
+        }
+        if(isset($request->metaData)){
+            $attachment->meta_title = $request->metaData;
+        }
+
+        if($request->hasFile('video_file') || $request->hasFile('attachment_file')){
+            $hasAttacment = true;
+        }
+
+        if(!$hasAttacment){
+            return back()->withFlashDanger('Upload a file or insert video ID.');
+        }
+        /**
+         *
+         * OLD-FLOW : All media in one attachment
+         */
+
+        if($hasAttacment){
+            $attachment->lesson_id = $lesson->id;
+            $attachment->user_id = auth()->user()->id;
+            $attachment->position = $position;
+            $attachment->save();
+
+
+            if ($request->input('vimeoVideo')) {
+                $video = $request->vimeoVideo;
+                $url = $video;
+                $video_id = array_last(explode('/', $request->vimeoVideo));
+
+                $media = new Media();
+                $media->model_type = LessonAttachment::class;;
+                $media->model_id = $attachment->id;;
+                $media->name = $video_id;
+                $media->url = $url;
+                $media->type = 'vimeo';
+                $media->file_name = $video_id;
+                $media->size = 0;
+                $media->save();
+            }
+
+            if ($request->input('youtubeVideo')) {
+                $video = $request->youtubeVideo;
+                $url = $video;
+                $video_id = array_last(explode('/', $request->youtubeVideo));
+
+                $media = new Media();
+                $media->model_type = LessonAttachment::class;;
+                $media->model_id = $attachment->id;;
+                $media->name = $video_id;
+                $media->url = $url;
+                $media->type = 'youtube';
+                $media->file_name = $video_id;
+                $media->size = 0;
+                $media->save();
+            }
+
+            //Saving  videos
+            if($request->hasFile('video_file')){
+                $model_type = LessonAttachment::class;
+                $model_id = $attachment->id;
+                $name = $attachment->title . ' - video';
+
+                $file = \Illuminate\Support\Facades\Request::file('video_file');
+                $filename = time() . '-' . $file->getClientOriginalName();
+                $size = $file->getSize() / 1024;
+                \Log::info('SIZE :::: :'.$size);
+                $path = public_path() . '/storage/uploads/';
+                $file->move($path, $filename);
+
+                $video_id = $filename;
+                $url = asset('storage/uploads/' . $filename);
+
+                $media = Media::where('url', $video_id)
+                    ->where('type', '=', 'upload')
+                    ->where('model_type', '=', 'App\Models\LessonAttachment')
+                    ->where('model_id', '=', $lesson->id)
+                    ->first();
+
+                if ($media == null) {
+                    $media = new Media();
+                }
+                $media->model_type = $model_type;
+                $media->model_id = $model_id;
+                $media->name = $name;
+                $media->url = $url;
+                $media->type = 'upload';
+                $media->file_name = $video_id;
+                $media->size = 0;
+                $media->save();
+
+            }
+
+            $request = $this->saveAllFiles($request, 'attachment_file', LessonAttachment::class, $attachment, true);
+
+        }
+
+        return redirect()->route('admin.lessons.index',['course_id'=>$course->id])->withFlashSuccess(__('alerts.backend.general.created'));
+    }
+
+    public function editAttachment($lesson_id, $id)
+    {
+        $lesson = Lesson::findOrFail($lesson_id);
+        $attachment = LessonAttachment::findOrFail($id);
+
+
+        return view('backend.lessons.edit-attachment', compact('lesson', 'attachment'));
+    }
+
+    public function updateAttachment(Request $request, $lesson_id, $id)
+    {
+        $lesson = Lesson::findOrFail($lesson_id);
+        $attachment = LessonAttachment::findOrFail($id);
+
+        \Log::info($request->all());
+
+        $hasAttacment = false;
+        $addVimeo = false;
+        $addYoutube = false;
+        $deleteMedia = [];
+
+        if(isset($request->title_attach)){
+            $attachment->title = $request->title_attach;
+        }
+        if(isset($request->description_attach)){
+            $attachment->full_text = $request->description_attach;
+        }
+        if(isset($request->position)){
+            $attachment->position = $request->position;
+        }else{
+            $attachment->position = 1;
+        }
+        if(isset($request->metaData)){
+            $attachment->meta_title = $request->metaData;
+        }
+
+        if(isset($request->vimeoVideo)){
+            $addVimeo = true;
+            if($attachment->vimeo_id !==$request->vimeoVideo){
+                $deleteMedia[] = ('vimeo');
+            }else{
+                $addVimeo = false;
+            }
+
+            $attachment->vimeo_id = $request->vimeoVideo;
+            $hasAttacment = true;
+        }elseif(!isset($request->vimeoVideo) && isset($attachment->vimeo_id)){
+            // means remove compared to DB
+            $attachment->vimeo_id = null;
+            $deleteMedia[] = ('vimeo');
+        }
+
+        if(isset($request->youtubeVideo)){
+            $addYoutube = true;
+            if($attachment->youtube_id !== $request->youtubeVideo){
+                $deleteMedia[] = ('youtube');
+            }else{
+                $addYoutube = false;
+            }
+
+            $attachment->youtube_id = $request->youtubeVideo;
+            $hasAttacment = true;
+        }elseif(!isset($request->youtubeVideo) && isset($attachment->youtube_id)){
+            // means remove compared to DB
+            $attachment->youtube_id = null;
+            $deleteMedia[] = ('youtube');
+        }
+
+        //check existing media
+        if(!$hasAttacment){
+            if($attachment->media->count() > 0){
+                foreach($attachment->media as $_media){
+                    if(str_contains($_media->type,'image') || $_media->type == 'upload'){
+                        //upload file is not removable
+                        $hasAttacment = true;
+                        break;
+                    }
+                }
+
+            }
+        }
+
+        if(!$hasAttacment){
+            return back()->withFlashDanger('Upload a file or insert video ID.');
+        }
+
+        // compare prev and before for vimeo / youtube
+        if($hasAttacment){
+            $attachment->save();
+
+            // delete
+            foreach ($deleteMedia as $delItem) {
+                if($delItem == 'vimeo'){
+                    $this->deleteMedia($attachment->mediaVimeo);
+                }
+
+                if($delItem == 'youtube'){
+                    $this->deleteMedia($attachment->mediaYoutube);
+                }
+            }
+
+            if ($addVimeo && $request->input('vimeoVideo')) {
+                $video = $request->vimeoVideo;
+                $url = $video;
+                $video_id = array_last(explode('/', $request->vimeoVideo));
+
+                $media = new Media();
+                $media->model_type = LessonAttachment::class;;
+                $media->model_id = $attachment->id;;
+                $media->name = $video_id;
+                $media->url = $url;
+                $media->type = 'vimeo';
+                $media->file_name = $video_id;
+                $media->size = 0;
+                $media->save();
+            }
+
+            if ($addYoutube && $request->input('youtubeVideo')) {
+                $video = $request->youtubeVideo;
+                $url = $video;
+                $video_id = array_last(explode('/', $request->youtubeVideo));
+
+                $media = new Media();
+                $media->model_type = LessonAttachment::class;;
+                $media->model_id = $attachment->id;;
+                $media->name = $video_id;
+                $media->url = $url;
+                $media->type = 'youtube';
+                $media->file_name = $video_id;
+                $media->size = 0;
+                $media->save();
+            }
+
+        }
+
+
+        return redirect()->route('admin.lessons.attachment.sequence', ['lesson_id' => $lesson->id]);
+    }
+
+    public function attachmentSequence($lesson_id)
+    {
+        $lesson = Lesson::findOrFail($lesson_id);
+
+        return view('backend.lessons.sequence', compact('lesson'));
+    }
+
+    public function updateSequence(Request $request, $lesson_id)
+    {
+
+        \Log::info($request->changeSeq);
+
+        if(isset($request->changeSeq)) {
+            $changeSeq = json_decode($request->changeSeq);
+
+            $seqArray = [];
+            foreach ($changeSeq as $key => $val) {
+                $seqArray['d' . $key] = $val;
+            }
+
+            $lesson = Lesson::findOrFail($lesson_id);
+
+            foreach ($lesson->attachments as $item) {
+                if (!empty($seqArray['d' . $item->id])) {
+                    $new_seq = $seqArray['d' . $item->id];
+                    $item->position = $new_seq;
+                    $item->save();
+                }
+            }
+        }
+        return back()->withFlashSuccess(__('alerts.backend.general.updated'));
+
+    }
+
+    public function deleteAttachment($lesson_id, $id)
+    {
+//        $assignment = Assignment::where('id', $assignment_id)->where('published', '=', 1)->first();
+//        $submission = Submission::where('id', $submission_id)->first();
+        $attachment = LessonAttachment::findOrFail($id);
+
+        if($attachment != null){
+            foreach ($attachment->media as $delItem) {
+                $this->deleteMedia($delItem);
+            }
+
+            $attachment->delete();
+        }
+
+        return back();
+    }
+
+    public function deleteMedia($media)
+    {
+        if($media){
+            //Delete Related data
+            $filename = $media->file_name;
+
+            $media->delete();
+
+            //Delete Photo
+            $destinationPath = public_path() . '/storage/uploads/'.$filename;
+            if (file_exists($destinationPath)) {
+                unlink($destinationPath);
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\MentorshipsController;
 
 /*
  * Global Routes
@@ -137,6 +138,31 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('lesson/book-slot','LessonsController@bookSlot')->name('lessons.course.book-slot');
 });
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('assignment/{id}/student/', ['uses' => 'AssignmentController@show', 'as' => 'assignment.show']);
+    Route::post('assignment/{id}/comment', ['uses' => 'AssignmentController@addComment', 'as' => 'assignment.comment']);
+    Route::get('submission/{id}/student', ['uses' => 'AssignmentController@showSubmission', 'as' => 'submission.show']);
+    Route::get('submission/{id}/create', ['uses' => 'AssignmentController@createSubmission', 'as' => 'submission.create']);
+
+    // submission
+    Route::get('submission/{assignment_id}/{submission_id}/edit', ['uses' => 'AssignmentController@editSubmission', 'as' => 'submission.edit']);
+    Route::post('submission/{assignment_id}/{submission_id}/update', ['uses' => 'AssignmentController@updateSubmission', 'as' => 'submission.update']);
+    Route::post('submission/{assignment_id}/create', ['uses' => 'AssignmentController@storeSubmission', 'as' => 'submission.store']);
+    Route::get('submission/{assignment_id}/{submission_id}/critique', ['uses' => 'AssignmentController@showCritiques', 'as' => 'submission.all.critique']);
+    Route::post('submission/{assignment_id}/add/{submission_id}/critique', ['uses' => 'AssignmentController@addCritique', 'as' => 'submission.critique']);
+
+    //attachment
+    Route::get('submission/{assignment_id}/attachment/{submission_id}', ['uses' => 'AssignmentController@createAttachment', 'as' => 'submission.attachment.create']);
+    Route::post('submission/{assignment_id}/attachment/{submission_id}/create', ['uses' => 'AssignmentController@storeAttachment', 'as' => 'submission.attachment.store']);
+    Route::get('submission/{assignment_id}/attachment/{submission_id}/edit/{id}', ['uses' => 'AssignmentController@editAttachment', 'as' => 'submission.attachment.edit']);
+    Route::post('submission/{assignment_id}/attachment/{submission_id}/update/{id}', ['uses' => 'AssignmentController@updateAttachment', 'as' => 'submission.attachment.update']);
+    Route::get('submission/{assignment_id}/attachment/{submission_id}/delete/{id}', ['uses' => 'AssignmentController@deleteAttachment', 'as' => 'submission.attachment.delete']);
+
+    //sequence
+    Route::get('submission/{assignment_id}/attachment/{submission_id}/sequence', ['uses' => 'AssignmentController@attachmentSequence', 'as' => 'submission.attachment.sequence']);
+    Route::post('submission/{assignment_id}/attachment/{submission_id}/sequence/update', ['uses' => 'AssignmentController@updateSequence', 'as' => 'submission.attachment.sequence.update']);
+});
+
 Route::get('/search', [HomeController::class, 'searchAll'])->name('search');
 Route::get('/search-course', [HomeController::class, 'searchCourse'])->name('search-course');
 Route::get('/search-bundle', [HomeController::class, 'searchBundle'])->name('search-bundle');
@@ -146,6 +172,9 @@ Route::get('/search-blog', [HomeController::class, 'searchBlog'])->name('blogs.s
 Route::get('/faqs', 'Frontend\HomeController@getFaqs')->name('faqs');
 
 Route::get('/how-it-works', [HomeController::class, 'howItWork'])->name('howitwork');
+
+Route::get('/mentorship', [HomeController::class, 'showMentorship'])->name('mentorship');
+Route::post('/mentorship-register', ['uses' => 'CartController@singleCheckoutMentorship', 'as' => 'mentorship.enroll']);
 
 /*=============== Theme blades routes ends ===================*/
 

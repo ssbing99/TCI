@@ -163,6 +163,15 @@
 
                 </div>
 
+                    <div class="col-12 form-group">
+                        <div class="checkbox d-inline mr-3">
+                            {!! Form::hidden('mentorship', 0) !!}
+                            {!! Form::checkbox('mentorship', 1, false, ['onchange' => 'mentorshipClick()']) !!}
+                            {!! Form::label('mentorship',  'One-to-One Mentorship', ['class' => 'checkbox control-label font-weight-bold']) !!}
+                        </div>
+
+                    </div>
+
             </div>
 
             <div class="row">
@@ -226,6 +235,16 @@
 
     </script>
     <script>
+
+        function mentorshipClick(){
+            var chk = document.getElementsByName('mentorship')[1];
+
+            if(chk.checked){
+                document.getElementsByName('course_image')[0].required = false;
+            }else{
+                document.getElementsByName('course_image')[0].required = true;
+            }
+        }
 
         $(document).ready(function () {
             $('#start_date').datepicker({

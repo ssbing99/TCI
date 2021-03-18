@@ -10,6 +10,7 @@ use App\Models\Bundle;
 use App\Models\Coupon;
 use App\Models\Course;
 use App\Models\Item;
+use App\Models\Mentorship;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Tax;
@@ -328,6 +329,82 @@ class CartController extends Controller
         return view( $view_path, compact('courses', 'taxData', 'gift'));
     }
 
+    public function singleCheckoutMentorship(Request $request)
+    {
+        $product = "";
+        $teachers = "";
+        $selected_teachers = "";
+        $type = "";
+        $bundle_ids = [];
+        $course_ids = [];
+        $gift = false;
+
+        if ($request->has('mentorship_id')) {
+            switch ($request->mentorship_id){
+                case 1: $m_type = 'One Month';break;
+                case 3: $m_type = 'Three Month';break;
+                case 6: $m_type = 'Six Month';break;
+                default: $m_type = 'One Month';break;
+            }
+
+            $product = Course::where('published', '=', 1)
+                ->where('title', 'LIKE', '%' . $m_type . '%')
+                ->where('mentorship', 1)
+                ->orderBy('created_at', 'asc')->first();
+            $teachers = $product->teachers->pluck('id', 'name');
+            $type = 'course';
+        }
+
+        if ($request->has('instructor_list')) {
+            $selected_teachers = $request->instructor_list;
+        }
+
+        //clear for only single
+        Cart::session(auth()->user()->id)->clear();
+
+        $cart_items = Cart::session(auth()->user()->id)->getContent()->keys()->toArray();
+        if (!in_array($product->id, $cart_items)) {
+
+            Cart::session(auth()->user()->id)
+                ->add($product->id, $product->title, $product->price, 1,
+                    [
+                        'user_id' => auth()->user()->id,
+                        'description' => $product->description,
+                        'image' => $product->course_image,
+                        'type' => $type,
+                        'teachers' => $teachers,
+                        'gift' => $gift
+                    ]);
+
+        }else{
+            Cart::session(auth()->user()->id)
+                ->update($this->getShoppingCartItemId($product->id, $type),[
+                    'gift' => $gift
+                ]);
+        }
+
+        foreach (Cart::session(auth()->user()->id)->getContent() as $item) {
+            if ($item->attributes->type == 'bundle') {
+                $bundle_ids[] = $item->id;
+            } else {
+                $course_ids[] = $item->id;
+            }
+        }
+        $course = Course::find($course_ids)->first();
+//        $bundle = Bundle::find($bundle_ids);
+//        $courses = $bundles->merge($courses);
+
+//        $total = $courses->sum('price');
+
+        //Apply Tax
+        $taxData = $this->applyTax('total');
+
+        $view_path = returnPathByTheme($this->path.'.mentorship.single-checkout', 5,'-');
+
+        // return view($this->path . '.cart.checkout', compact('courses', 'total', 'taxData'));
+        return view( $view_path, compact('course', 'taxData', 'gift', 'selected_teachers'));
+    }
+
     public function singleCheckoutSubmit(Request $request){
         $this->validate($request, [
             'paymentMethod' => 'required'
@@ -347,6 +424,9 @@ class CartController extends Controller
 
         $total = $withSkype ? $course->price_skype : $course->price;
 
+        $isMentorship = $request->has('isMentorship')? $request->isMentorship : false;
+        $mentor = $isMentorship? $request->selected_teachers : null;
+
         $subtotal = $total;
 
         Cart::session(auth()->user()->id)
@@ -357,9 +437,6 @@ class CartController extends Controller
         if($request->has('gift_course')){
             $rec_name = $request->giftName;
             $rec_email = $request->giftEmail;
-
-            \Log::info($rec_name);
-            \Log::info($rec_email);
 
             $user = User::query()
                 ->where('email', '=', $rec_email)->get();
@@ -468,14 +545,21 @@ class CartController extends Controller
                 $order->payment_type = 1;
                 $order->save();
                 (new EarningHelper)->insert($order);
-                foreach ($order->items as $orderItem) {
-                    //Bundle Entries
-                    if ($orderItem->item_type == Bundle::class) {
-                        foreach ($orderItem->item->courses as $course) {
-                            $course->students()->attach($order->user_id);
+                if(!$isMentorship) {
+                    foreach ($order->items as $orderItem) {
+                        //Bundle Entries
+                        if ($orderItem->item_type == Bundle::class) {
+                            foreach ($orderItem->item->courses as $course) {
+                                $course->students()->attach($order->user_id);
+                            }
                         }
+                        $orderItem->item->students()->attach($order->user_id);
                     }
-                    $orderItem->item->students()->attach($order->user_id);
+                }
+
+                if($isMentorship){
+                    $mentorship = $this->makeMentorship($order, $mentor);
+                    \Log::info(json_encode($mentorship));
                 }
 
                 //Generating Invoice
@@ -498,6 +582,7 @@ class CartController extends Controller
         }elseif($request->paymentMethod == 'paypal'){
 
             Cart::session(auth()->user()->id)->removeConditionsByType('skypePrice');
+            Cart::session(auth()->user()->id)->removeConditionsByType('mentorShip');
 
             $skypecondition = new \Darryldecode\Cart\CartCondition(array(
                 'name' => 'SkypePrice',
@@ -506,6 +591,14 @@ class CartController extends Controller
             ));
 
             Cart::session(auth()->user()->id)->condition($skypecondition);
+
+            $mentorcondition = new \Darryldecode\Cart\CartCondition(array(
+                'name' => 'Mentorship',
+                'type' => 'mentorShip',
+                'value' => ($isMentorship?  ('true@'.$mentor) : 'false'),
+            ));
+
+            Cart::session(auth()->user()->id)->condition($mentorcondition);
 
 
             \Log::info('paypalPayment 2');
@@ -560,6 +653,7 @@ class CartController extends Controller
             Cart::session(auth()->user()->id)->removeConditionsByType('tax');
             Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
             Cart::session(auth()->user()->id)->removeConditionsByType('skypePrice');
+            Cart::session(auth()->user()->id)->removeConditionsByType('mentorShip');
             Cart::session(auth()->user()->id)->clear();
         }
         if ($request->has('course')) {
@@ -756,9 +850,23 @@ class CartController extends Controller
                 Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
                 Cart::session(auth()->user()->id)->removeConditionsByType('tax');
                 Cart::session(auth()->user()->id)->removeConditionsByType('skypePrice');
+                Cart::session(auth()->user()->id)->removeConditionsByType('mentorShip');
 
                 return Redirect::route('status');
             }
+
+            $ment = Cart::session(auth()->user()->id)->getConditionsByType('mentorShip')->first();
+            $isMentorship = false;
+            $mentorship = null;
+            if ($ment != null) {
+                $mentVal = Cart::session(auth()->user()->id)->getConditionsByType('mentorShip')->first()->getValue();
+                \Log::info($mentVal);
+                if($mentVal !== 'false'){
+                    $isMentorship = true;
+                    $mentorship = explode('@', $mentVal)[1];
+                }
+            }
+
             $order = $this->makeOrder();
             $order->payment_type = 2;
             $order->transaction_id = request()->get('paymentId');
@@ -767,16 +875,23 @@ class CartController extends Controller
             $order->status = 1;
             $order->save();
             (new EarningHelper)->insert($order);
-            foreach ($order->items as $orderItem) {
-                if ($orderItem->item_type != Item::class) {
-                    //Bundle Entries
-                    if ($orderItem->item_type == Bundle::class) {
-                        foreach ($orderItem->item->courses as $course) {
-                            $course->students()->attach($order->user_id);
+            if(!$isMentorship) {
+                foreach ($order->items as $orderItem) {
+                    if ($orderItem->item_type != Item::class) {
+                        //Bundle Entries
+                        if ($orderItem->item_type == Bundle::class) {
+                            foreach ($orderItem->item->courses as $course) {
+                                $course->students()->attach($order->user_id);
+                            }
                         }
+                        $orderItem->item->students()->attach($order->user_id);
                     }
-                    $orderItem->item->students()->attach($order->user_id);
                 }
+            }
+
+            if($isMentorship){
+                $mentorship = $this->makeMentorship($order, $mentorship);
+                \Log::info(json_encode($mentorship));
             }
 
             //Generating Invoice
@@ -795,6 +910,7 @@ class CartController extends Controller
             Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
             Cart::session(auth()->user()->id)->removeConditionsByType('tax');
             Cart::session(auth()->user()->id)->removeConditionsByType('skypePrice');
+            Cart::session(auth()->user()->id)->removeConditionsByType('mentorShip');
             return Redirect::route('status');
         }
 
@@ -1065,6 +1181,18 @@ class CartController extends Controller
             'price' => $total
         ]);
         return $order;
+    }
+
+    private function makeMentorship($order, $mentor)
+    {
+
+        $mentorship = new Mentorship();
+        $mentorship->user_id = $order->user_id;
+        $mentorship->mentor_id = $mentor;
+        $mentorship->order_id = $order->id;
+        $mentorship->save();
+        //Getting and Adding items
+        return $mentorship;
     }
 
     private function checkDuplicate()

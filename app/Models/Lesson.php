@@ -119,6 +119,11 @@ class Lesson extends Model
         return $this->belongsToMany('App\Models\Auth\User', 'lesson_student')->withTimestamps();
     }
 
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
     public function media()
     {
         return $this->morphMany(Media::class, 'model');
@@ -197,4 +202,10 @@ class Lesson extends Model
     {
         return $this->morphMany('App\Models\Comment', 'reviewable');
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(LessonAttachment::class)->orderBy('position');
+    }
+
 }

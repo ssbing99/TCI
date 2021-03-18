@@ -109,7 +109,13 @@
                                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><img src="{{auth()->user()->picture}}" alt="" class="user-img" /> {{auth()->user()->full_name}}</a>
                                     <div class="dropdown-menu">
                                         @can('view backend')
-                                        <a class="dropdown-item" href="{{ route('admin.dashboard') }}">@lang('navs.frontend.dashboard')</a>
+                                            @if(auth()->check() && (auth()->user()->hasRole('student')))
+                                                <a class="dropdown-item" href="{{ route('admin.student.dashboard') }}">@lang('navs.frontend.dashboard')</a>
+                                            @elseif(auth()->check() && (auth()->user()->hasRole('teacher')))
+                                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">@lang('navs.frontend.dashboard')</a>
+                                            @else
+                                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">@lang('navs.frontend.dashboard')</a>
+                                            @endif
                                         @endcan
                                         <a class="dropdown-item" href="{{ route('frontend.auth.logout') }}">@lang('navs.general.logout')</a>
                                     </div>

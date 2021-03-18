@@ -13,10 +13,11 @@ use \App\Http\Controllers\Backend\Auth\User\UserPasswordController;
 //===== General Routes =====//
 Route::redirect('/', '/user/dashboard', 301);
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+Route::get('student/dashboard', [DashboardController::class, 'studentIndex'])->name('student.dashboard');
 
 Route::group(['middleware' => 'role:teacher|administrator'], function () {
     Route::resource('orders', 'Admin\OrderController');
+    Route::resource('mentorships', 'Admin\MentorshipController');
 });
 Route::group(['middleware' => 'role:administrator'], function () {
 
@@ -39,6 +40,12 @@ Route::group(['middleware' => 'role:administrator'], function () {
     Route::post('orders_mass_destroy', ['uses' => 'Admin\OrderController@massDestroy', 'as' => 'orders.mass_destroy']);
     Route::post('orders/complete', ['uses' => 'Admin\OrderController@complete', 'as' => 'orders.complete']);
     Route::delete('orders_perma_del/{id}', ['uses' => 'Admin\OrderController@perma_del', 'as' => 'orders.perma_del']);
+
+    //===== Mentorships Routes =====//
+    Route::get('get-mentorships-data', ['uses' => 'Admin\MentorshipController@getData', 'as' => 'mentorships.get_data']);
+//    Route::post('orders_mass_destroy', ['uses' => 'Admin\OrderController@massDestroy', 'as' => 'orders.mass_destroy']);
+//    Route::post('orders/complete', ['uses' => 'Admin\OrderController@complete', 'as' => 'orders.complete']);
+//    Route::delete('orders_perma_del/{id}', ['uses' => 'Admin\OrderController@perma_del', 'as' => 'orders.perma_del']);
 
 
     //===== Settings Routes =====//
@@ -222,6 +229,16 @@ Route::post('lessons_mass_destroy', ['uses' => 'Admin\LessonsController@massDest
 Route::post('lessons_restore/{id}', ['uses' => 'Admin\LessonsController@restore', 'as' => 'lessons.restore']);
 Route::delete('lessons_perma_del/{id}', ['uses' => 'Admin\LessonsController@perma_del', 'as' => 'lessons.perma_del']);
 
+Route::get('lessons/{lesson_id}/attachment', ['uses' => 'Admin\LessonsController@attachment', 'as' => 'lessons.attachment']);
+Route::post('lessons/{lesson_id}/attachment', ['uses' => 'Admin\LessonsController@storeAttachment', 'as' => 'lessons.attachment.create']);
+Route::get('lessons/{lesson_id}/attachment/edit/{id}', ['uses' => 'Admin\LessonsController@editAttachment', 'as' => 'lessons.attachment.edit']);
+Route::post('lessons/{lesson_id}/attachment/update/{id}', ['uses' => 'Admin\LessonsController@updateAttachment', 'as' => 'lessons.attachment.update']);
+Route::get('lessons/{lesson_id}/attachment/delete/{id}', ['uses' => 'Admin\LessonsController@deleteAttachment', 'as' => 'lessons.attachment.delete']);
+
+//sequence
+Route::get('lessons/{lesson_id}/attachment/sequence', ['uses' => 'Admin\LessonsController@attachmentSequence', 'as' => 'lessons.attachment.sequence']);
+Route::post('lessons/{lesson_id}/attachment/sequence/update', ['uses' => 'Admin\LessonsController@updateSequence', 'as' => 'lessons.attachment.sequence.update']);
+
 
 //===== Assignments Routes =====//
 Route::resource('assignments', 'Admin\AssignmentsController');
@@ -282,6 +299,7 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
     Route::get('account', [AccountController::class, 'index'])->name('account');
     Route::patch('account/{email?}', [UserPasswordController::class, 'update'])->name('account.post');
     Route::patch('profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('student/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.updateProfile');
 });
 
 
