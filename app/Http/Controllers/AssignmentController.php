@@ -77,6 +77,7 @@ class AssignmentController extends Controller
     {
         $completed_assignments = "";
         $assignment = Assignment::where('id', $id)->where('published', '=', 1)->first();
+        $otherSubmission = Submission::where('assignment_id', $id)->where('user_id','!=', auth()->user()->id)->orderBy('created_at')->get();
 
         $course = $assignment->lesson->course;
         $lesson = $assignment->lesson;
@@ -88,7 +89,7 @@ class AssignmentController extends Controller
 
         $view_path = returnPathByTheme($this->path.'.courses.assignment', 5,'-');
 
-        return view($view_path, compact('assignment', 'course','lesson', 'completed_assignments'));
+        return view($view_path, compact('assignment', 'course','lesson', 'completed_assignments','otherSubmission'));
     }
 
     /**
