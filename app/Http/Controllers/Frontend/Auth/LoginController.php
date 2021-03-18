@@ -80,6 +80,8 @@ class LoginController extends Controller
                 if(auth()->user()->active > 0){
                     if(auth()->user()->isAdmin()){
                         $redirect = 'dashboard';
+                    }elseif(auth()->user()->hasRole('student')){
+                        $redirect = 'student';
                     }else{
                         $redirect = 'back';
                     }

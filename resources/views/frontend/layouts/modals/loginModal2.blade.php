@@ -189,6 +189,8 @@
                                     }else {
                                         location.reload();
                                     }
+                                } else if(response.redirect == 'student'){
+                                    window.location.href = "{{route('admin.student.dashboard')}}"
                                 } else {
                                     window.location.href = "{{route('admin.dashboard')}}"
                                 }
