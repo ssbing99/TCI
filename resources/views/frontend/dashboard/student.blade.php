@@ -125,7 +125,7 @@
                                     <p class="head clearfix">{{$item->title}}</p>
                                     <ul class="profile-list clearfix">
                                     @foreach($item->publishedLessons as $key=> $lesson)
-                                            <li><i class="fa fa-file-pdf-o"></i> <a href="{{route('lessons.show',['course_id' => $item->id,'slug'=>$lesson->slug])}}">{{$lesson->title}}</a><span><a href="#" class="btn btn-primary btn-padding br-24">Download PDF</a></span></li>
+                                            <li><i class="fa fa-file-pdf-o"></i> <a href="{{route('lessons.show',['course_id' => $item->id,'slug'=>$lesson->slug])}}">{{$lesson->title}}</a><span><a href="#" onclick="generatePdf({{$lesson->id}})" class="btn btn-primary btn-padding br-24">Download PDF</a></span></li>
                                     @endforeach
                                     </ul>
                                 @endforeach
@@ -145,12 +145,12 @@
                                                     <p>
                                                         <a href="{{route('assignment.show',$assignment->id)}}">{{$assignment->title}}</a>
                                                         @if($assignment->submissionsById(auth()->user()->id)->count() > 0)
-                                                            <span>View your submission : <a href="submissions.html">{{$assignment->submissionsById(auth()->user()->id)->first()->title}}</a> (submitted for critique)</span>
+                                                            <span>View your submission : <a href="{{route('submission.show', $assignment->id)}}">{{$assignment->submissionsById(auth()->user()->id)->first()->title}}</a> (submitted for critique)</span>
                                                         @else
                                                             <span>Not yet submitted</span>
                                                         @endif
                                                     </p>
-                                                    <span class="float-right"><a href="#" class="btn btn-primary btn-padding br-24">Generate Pdf</a></span>
+                                                    <span class="float-right"><a href="#" onclick="generateAssignmentPdf({{$assignment->id}})" class="btn btn-primary btn-padding br-24">Generate Pdf</a></span>
                                                 </li>
                                             @endforeach
                                         @endforeach
@@ -190,12 +190,31 @@
 {{--    @include('frontend.layouts.partials.browse_courses2')--}}
     <!-- End of best course
             ============================================= -->
-
+    <form id="genPdfForm" name="genPdfForm" target="_blank" method="post" action="{{route('generate.pdf')}}" role="form">
+        @csrf
+        <input type="hidden" id="pdf_lesson_id" name="pdf_lesson_id" value=""/>
+        <input type="hidden" id="pdf_assignment_id" name="pdf_assignment_id" value=""/>
+    </form>
 
 @endsection
 
 @push('after-scripts')
     <script>
+
+        function generatePdf(id){
+            var thisform = document.forms.genPdfForm;
+            thisform.pdf_lesson_id.value = id;
+            thisform.pdf_assignment_id.value = '';
+            thisform.submit();
+        }
+
+        function generateAssignmentPdf(id){
+            var thisform = document.forms.genPdfForm;
+            thisform.pdf_lesson_id.value = '';
+            thisform.pdf_assignment_id.value = id;
+            thisform.submit();
+        }
+
         $(document).ready(function () {
         });
 

@@ -65,7 +65,7 @@
             <div class="row clearfix">
                 <div class="col-12">
                     <p class="assign-content clearfix">
-                        <span class="bold">{{$assignment->title}}<a href="#" class="btn btn-primary btn-padding br-24 float-right">Generate Pdf</a></span>
+                        <span class="bold">{{$assignment->title}}<a href="#" onclick="generateAssignmentPdf({{$assignment->id}})"  class="btn btn-primary btn-padding br-24 float-right">Generate Pdf</a></span>
                         <span>Assignment for lesson '<a href="{{route('lessons.show',['course_id' => $course->id,'slug'=>$lesson->slug])}}">{{$lesson->title}}</a>'</span>
                         {!! $assignment->full_text !!}
                     </p>
@@ -104,6 +104,12 @@
     </section>
     <!-- End of course details section
         ============================================= -->
+    <form id="genPdfForm" name="genPdfForm" target="_blank" method="post" action="{{route('generate.pdf')}}" role="form">
+        @csrf
+        <input type="hidden" id="pdf_lesson_id" name="pdf_lesson_id" value=""/>
+        <input type="hidden" id="pdf_assignment_id" name="pdf_assignment_id" value=""/>
+    </form>
+
 @endsection
 
 @push('after-scripts')
@@ -117,6 +123,13 @@
     <script src="{{asset('plugins/touchpdf-master/jquery.mousewheel.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script>
+
+        function generateAssignmentPdf(id){
+            var thisform = document.forms.genPdfForm;
+            thisform.pdf_lesson_id.value = '';
+            thisform.pdf_assignment_id.value = id;
+            thisform.submit();
+        }
 
         $(document).ready(function () {
         });
