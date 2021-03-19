@@ -207,6 +207,12 @@ Route::group(['middleware' => 'auth'], function () {
 //    Route::get('status', function () {
 //        return view('frontend.cart.status');
 //    })->name('status');
+
+    Route::get('pdf/raw', function () {
+        return view('pdf.index');
+    })->name('status');
+    Route::post('pdf', 'Frontend\HomeController@generatePdf')->name('generate.pdf');
+
     Route::post('cart/offline-payment', ['uses' => 'CartController@offlinePayment', 'as' => 'cart.offline.payment']);
     Route::post('cart/getnow',['uses'=>'CartController@getNow','as' =>'cart.getnow']);
 });

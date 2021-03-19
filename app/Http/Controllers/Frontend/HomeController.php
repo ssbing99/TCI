@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Assignment;
 use App\Models\Auth\User;
 use App\Models\Blog;
 use App\Models\Bundle;
@@ -20,6 +21,7 @@ use App\Models\System\Session;
 use App\Models\Tag;
 use App\Models\Testimonial;
 use Carbon\Carbon;
+use Carbon\Traits\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
@@ -799,6 +801,66 @@ class HomeController extends Controller
         }
 
         return $blogs;
+    }
+
+    /**
+     * Generate certificate for completed course
+     */
+    public function generatePdf(Request $request)
+    {
+
+        $lesson = null;
+        $assignment = null;
+        $isLesson = false;
+        $isAssignment = false;
+        $lesson_name = '';
+
+
+        if($request->input('pdf_lesson_id')){
+            $lesson = Lesson::findOrFail($request->pdf_lesson_id);
+
+            if($lesson != null) {
+                $isLesson = true;
+                $lesson->full_text = str_replace(env('APP_URL'), public_path(), $lesson->full_text);
+            }
+        }
+        if($request->input('pdf_assignment_id')){
+            $assignment = Assignment::findOrFail($request->pdf_assignment_id);
+
+            if($assignment != null) {
+                $isAssignment = true;
+                $assignment->summary = str_replace(env('APP_URL'), public_path(), $assignment->summary);
+                $assignment->full_text = str_replace(env('APP_URL'), public_path(), $assignment->full_text);
+
+                $lesson_name = 'Assignment for lesson ' . $assignment->lesson->title ;
+            }
+        }
+
+        if($isAssignment || $isLesson) {
+
+            $genpdf_name = 'PDF-' . ($isLesson? 'Lesson':'Assignment') . '-' . auth()->user()->id . '.pdf';
+
+            if($isLesson) {
+                $pdf = \PDF::loadView('pdf.index', compact('lesson'));
+            }
+
+            if($isAssignment) {
+                $pdf = \PDF::loadView('pdf.assignment', compact('assignment', 'lesson_name'));
+            }
+
+            if (!file_exists(public_path('storage/generatepdf'))) {
+                mkdir(public_path('storage/generatepdf'), 0777, true);
+            }
+
+            $pdf->save(public_path('storage/generatepdf/' . $genpdf_name));
+
+            return response()->file(public_path('storage/generatepdf/' . $genpdf_name));
+
+//            return response(['success' => true,'pdf_path' => public_path('storage/generatepdf/' . $genpdf_name)], \Illuminate\Http\Response::HTTP_OK);
+
+//            return back()->withFlashSuccess(trans('alerts.frontend.course.completed'));
+        }
+        return back();
     }
 }
 

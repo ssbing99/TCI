@@ -17,7 +17,7 @@
 <div style="display: block;clear: both">
     <div style="float: left; width:250pt;">
         <img class="img-rounded" height="50px"
-             src="{{ asset('storage/logos/'.config('logo_b_image')) }}">
+             src="{{ public_path('assets_new/images/tci-logo.jpg') }}">
     </div>
     <div style="float: right;width: 180pt;">
         <h5>Date: <b> {{ $invoice->date->formatLocalized('%A %d %B %Y') }}</b></h5>
