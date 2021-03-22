@@ -161,6 +161,23 @@ Route::group(['middleware' => 'auth'], function () {
     //sequence
     Route::get('submission/{assignment_id}/attachment/{submission_id}/sequence', ['uses' => 'AssignmentController@attachmentSequence', 'as' => 'submission.attachment.sequence']);
     Route::post('submission/{assignment_id}/attachment/{submission_id}/sequence/update', ['uses' => 'AssignmentController@updateSequence', 'as' => 'submission.attachment.sequence.update']);
+
+
+    //TEACHER
+    Route::get('student/{id}/assignment/', ['uses' => 'AssignmentController@showWithSubmission', 'as' => 'student.assignment.show']);
+    Route::get('student/{assignment_id}/{submission_id}/submission', ['uses' => 'AssignmentController@showStudentSubmission', 'as' => 'student.submission.show']);
+
+    Route::get('student/{assignment_id}/{submission_id}/update', ['uses' => 'AssignmentController@addAttachmentCritique', 'as' => 'student.submission.critique']);
+
+
+});
+
+// TEACHER
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('schedule-course/{id}', ['uses' => 'CoursesController@teacherShow', 'as' => 'courses.teacher.show']);
+    Route::get('student/{id}/course', ['uses' => 'CoursesController@userCourse', 'as' => 'courses.student.detail']);
+
 });
 
 Route::get('/search', [HomeController::class, 'searchAll'])->name('search');

@@ -130,6 +130,7 @@ class Attachment extends Model
 
     public function comments()
     {
+        //todo :: change to critue coz instructor will upload image  / this can upload image
         return $this->morphMany('App\Models\Comment', 'reviewable');
     }
 }

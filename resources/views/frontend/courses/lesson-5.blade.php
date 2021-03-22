@@ -249,7 +249,10 @@
                         <ul class="sidelinks clearfix">
                             @if($lesson->assignments->count() > 0)
                                 @foreach($lesson->assignments as $key=>$assignment)
-                                    <li><a href="{{route('assignment.show',$assignment->id)}}">{{$assignment->title}}</a></li>
+                                    @php
+                                        $assignemntRoute = auth()->user()->hasRole('teacher')? route('student.assignment.show',$assignment->id) : route('assignment.show',$assignment->id);
+                                    @endphp
+                                    <li><a href="{{$assignemntRoute}}">{{$assignment->title}}</a></li>
                                 @endforeach
                             @endif
                         </ul>

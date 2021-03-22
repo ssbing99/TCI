@@ -112,7 +112,7 @@
                                             @if(auth()->check() && (auth()->user()->hasRole('student')))
                                                 <a class="dropdown-item" href="{{ route('admin.student.dashboard') }}">@lang('navs.frontend.dashboard')</a>
                                             @elseif(auth()->check() && (auth()->user()->hasRole('teacher')))
-                                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">@lang('navs.frontend.dashboard')</a>
+                                                <a class="dropdown-item" href="{{ route('admin.teacher.dashboard') }}">@lang('navs.frontend.dashboard')</a>
                                             @else
                                                 <a class="dropdown-item" href="{{ route('admin.dashboard') }}">@lang('navs.frontend.dashboard')</a>
                                             @endif

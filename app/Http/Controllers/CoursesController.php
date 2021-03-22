@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Auth\User;
 use App\Models\Blog;
 use App\Models\Bundle;
 use App\Models\Category;
@@ -226,6 +227,27 @@ class CoursesController extends Controller
         $view_path = returnPathByTheme($this->path.'.courses.course', 5,'-');
 
         return view( $view_path, compact('course', 'purchased_course', 'recent_news', 'course_rating', 'completed_lessons','total_ratings','is_reviewed','lessons','continue_course', 'course_progress_perc'));
+    }
+
+    public function teacherShow($id)
+    {
+        $course = Course::withoutGlobalScope('filter')->withTrashed()->where('id', $id)->firstOrFail();
+
+        $view_path = returnPathByTheme($this->path.'.courses.course-view', 5,'-');
+
+        return view( $view_path, compact('course'));
+    }
+
+    public function userCourse($id)
+    {
+        $student = User::find($id);
+        $courses = Course::withoutGlobalScope('filter')->whereHas('students', function ($query) use ($id) {
+            $query->where('id', $id);
+        })->get();
+
+        $view_path = returnPathByTheme($this->path.'.student.course-detail', 5,'-');
+
+        return view( $view_path, compact('student','courses'));
     }
 
     public function reviewShow($course_slug)

@@ -148,6 +148,7 @@ class UserRepository extends BaseRepository
         $user->gender = isset($input['gender']) ? $input['gender'] : NULL;
         $user->address = isset($input['address']) ? $input['address'] : NULL;
         $user->city =  isset($input['city']) ? $input['city'] : NULL;
+        $user->postal = isset($input['postal']) ? $input['postal'] : NULL;
         $user->pincode = isset($input['pincode']) ? $input['pincode'] : NULL;
         $user->state = isset($input['state']) ? $input['state'] : NULL;
         $user->country = isset($input['country']) ? $input['country'] : NULL;
