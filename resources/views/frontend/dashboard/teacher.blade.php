@@ -157,21 +157,17 @@
 
                         <div class="tab-pane fade" id="recent-updates" role="tabpanel" aria-labelledby="v-pills-recent-updates">
                             <p class="head clearfix">Recent Updates</p>
-{{--                            <p class="assign-content clearfix"><span>Assignments<a class="btn btn-primary float-right"><i class="fa fa-times-circle"></i> Clear all</a></span></p>--}}
+                            @if(count($logs) > 0)
+                            <p class="assign-content clearfix"><span>Assignments<a href="{{route('log.clear', ['teacher_id'=>auth()->user()->id])}}" class="btn btn-primary float-right"><i class="fa fa-times-circle"></i> Clear all</a></span></p>
+                            @endif
                             <table cellspacing="0" cellpadding="0" class="table table-condensed table-bordered cf">
                                 <tbody>
-                                @if(count($all_courses) > 0)
-                                    @foreach($all_courses as $aCourse)
-                                        @foreach($aCourse->lessons as $aLesson)
-                                            @foreach($aLesson->assignments as $aAssignment)
-                                                @foreach($aAssignment->submissions as $aSubmission)
-                                                    <tr>
-                                                        <td>{{\Carbon\Carbon::parse($aSubmission->created_at)->format('d M Y | g:i A')}}</td>
-                                                        <td>{{ $aSubmission->user->full_name }} has submitted the assignment</td>
-                                                    </tr>
-                                                @endforeach
-                                            @endforeach
-                                        @endforeach
+                                @if(count($logs) > 0)
+                                    @foreach($logs as $log)
+                                        <tr>
+                                            <td>{{\Carbon\Carbon::parse($log->created_at)->format('d M Y | g:i A')}}</td>
+                                            <td>{{ $log->title }}</td>
+                                        </tr>
                                     @endforeach
                                 @else
                                         <tr>

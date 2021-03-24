@@ -50,7 +50,7 @@
                             @foreach($courses as $course)
                         <tr>
                             <td class="centred"><a href="{{route('courses.teacher.show',$course->id)}}">{{$course->title}}</a></td>
-                            <td class="centred">30 November 2020 @ 19:37</td>
+                            <td class="centred">{{date('d F Y @ H:i ',strtotime($course->created_at.(" +".(isset($course->duration)? $course->duration : '0')." days")))}}</td>
                         </tr>
                             @endforeach
                         @endif
@@ -99,7 +99,7 @@
                                     @foreach($aLesson->assignments as $aAssignment)
                                         @foreach($aAssignment->submissions as $aSubmission)
                                             <tr>
-                                                <td class="centred"><a href="assignment-submissions.html">{{$aSubmission->title}}</a></td>
+                                                <td class="centred"><a href="{{route('student.submission.show', ['assignment_id'=>$aAssignment->id, 'submission_id'=>$aSubmission->id])}}">{{$aSubmission->title}}</a></td>
                                             </tr>
                                         @endforeach
                                     @endforeach

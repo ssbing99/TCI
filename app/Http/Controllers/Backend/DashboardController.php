@@ -7,6 +7,7 @@ use App\Models\Auth\User;
 use App\Models\Bundle;
 use App\Models\Contact;
 use App\Models\Course;
+use App\Models\Log;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Review;
@@ -152,6 +153,7 @@ class DashboardController extends Controller
 
     public function instructorIndex()
     {
+        $logs = NULL;
         $purchased_courses = NULL;
         $purchased_items = NULL;
         $students_count = NULL;
@@ -166,6 +168,7 @@ class DashboardController extends Controller
         $all_courses = NULL;
         $enrollStudent = [];
         if (\Auth::check()) {
+            $logs = Log::where('teacher_id', auth()->user()->id)->where('unread', 1)->get();
 
             $purchased_courses = auth()->user()->purchasedCourses();
             $purchased_bundles = auth()->user()->purchasedBundles();
@@ -228,6 +231,6 @@ class DashboardController extends Controller
         }
 
         $user = auth()->user();
-        return view('frontend.dashboard.teacher',compact('purchased_courses','students_count','recent_reviews','threads','purchased_bundles','teachers_count','courses_count','recent_orders','recent_contacts','pending_orders','purchased_items', 'all_courses', 'all_with_trashed', 'user', 'enrollStudent'));
+        return view('frontend.dashboard.teacher',compact('logs','purchased_courses','students_count','recent_reviews','threads','purchased_bundles','teachers_count','courses_count','recent_orders','recent_contacts','pending_orders','purchased_items', 'all_courses', 'all_with_trashed', 'user', 'enrollStudent'));
     }
 }

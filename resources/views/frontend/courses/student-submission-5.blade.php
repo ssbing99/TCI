@@ -51,7 +51,6 @@
 
                     <form action="{{route('student.submission.critique',['assignment_id'=> $assignment->id, 'submission_id'=>$submission->id])}}" method="POST" enctype="multipart/form-data" role="form" id="edit-assignment">
                         {{ csrf_field() }}
-                        <input type="hidden" name="attachment_id" id="{{$attachment->id}}" />
                     @php
                         $sub_attachments = isset($submission) ? $submission->attachments : [];
                         $attch_cnt = 1;
@@ -85,12 +84,27 @@
                             <p class="head clearfix">Comments</p>
                             @if(count($attachment->comments) > 0)
 
-                                @foreach($attachment->critiques as $item)
+                                @foreach($attachment->comments as $item)
                                     <div class="flexbox clearfix">
                                         <img src="{{$item->user->picture}}" alt="" />
                                         <div class="flexcontent clearfix">
                                             <div class="student-name clearfix">Critique by {{$item->user->full_name}}<div class="bottom">September 14, 2020</div></div>
                                             <p class="assign-content clearfix">{!! nl2br($item->content) !!}</p>
+                                            @if(isset($item->media) && !$item->media->isEmpty())
+                                                @foreach($item->media as $_media)
+                                                    @if($_media->type == 'upload')
+                                                        <img src="{{asset('assets_new/images/play-button.png')}}" alt="" />
+                                                    @elseif(str_contains($_media->type,'image'))
+                                                        <img src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" />
+                                                    @elseif(str_contains($_media->type,'youtube'))
+                                                        <img src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" />
+
+                                                    @elseif(str_contains($_media->type,'vimeo'))
+                                                        <img src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" />
+
+                                                    @endif
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -117,7 +131,7 @@
 
                     @endforeach
 
-                    <input type="button" name="submitBtn" id="submitBtn" class="btn btn-primary br-24 btn-padding" value="Save Changes"  onclick="onSubmit(this.form)"/>
+                    <input type="button" name="submitBtn" id="submitBtn" class="btn btn-primary br-24 btn-padding" value="Save Changes"  onclick="this.form.submit()"/>
 
                     </form>
 {{--                    <p class="head clearfix">Attachment 1 of 11</p>--}}

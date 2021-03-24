@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="discuss-box clearfix">
                                     @if(auth()->user()->id == $item->user->id)
-                                    <div class="trash"><a href="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></div>
+                                    <div class="trash"><a href="{{route('assignment.comment.delete',['id'=> $item->id])}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a></div>
                                     @endif
                                     <p class="discuss-txt clearfix">
                                         {!! nl2br($item->content) !!}

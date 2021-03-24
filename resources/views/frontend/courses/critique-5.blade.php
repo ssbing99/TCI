@@ -38,14 +38,32 @@
             <div class="row clearfix">
                 <div class="col-12">
                     <p class="assign-content clearfix">
-                        @if(count($submission->critiques) > 0)
-                            @foreach($submission->critiquesById(auth()->user()->id)->get() as $item)
-                                <span>Critique by {{ $item->user->full_name }}</span>
-                                {!! nl2br($item->content) !!}<br /><br />
-                            @endforeach
-                        @endif
+                    @foreach($attachment->comments as $comm)
+                        <p class="assign-content clearfix">
+                            <span>Critique by {{ $comm->user->full_name }}</span>
+                            {!! nl2br($comm->content) !!}<br />
+
+                            @if(isset($comm->media) && !$comm->media->isEmpty())
+                                <br/>
+                                @foreach($comm->media as $_media)
+                                    @if($_media->type == 'upload')
+                                        <img width="100px" src="{{asset('assets_new/images/play-button.png')}}" alt="" />
+                                    @elseif(str_contains($_media->type,'image'))
+                                        <img width="100px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" />
+                                    @elseif(str_contains($_media->type,'youtube'))
+                                        <img width="100px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" />
+
+                                    @elseif(str_contains($_media->type,'vimeo'))
+                                        <img width="100px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" />
+
+                                    @endif
+                                @endforeach
+                            @endif
+                        </p>
+                        @endforeach
                     </p>
-                    <form class="mtb-30" action="{{route('submission.critique',['assignment_id'=> $assignment->id, 'submission_id'=>$submission->id])}}" method="POST" data-lead="Residential">
+
+                    <form class="mtb-30" action="{{route('submission.critique',['assignment_id'=> $assignment->id, 'submission_id'=>$submission->id, 'attachment_id' => $attachment->id])}}" method="POST" data-lead="Residential">
                         @csrf
                         <input type="hidden" name="rating" id="rating">
 
