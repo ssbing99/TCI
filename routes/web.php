@@ -173,6 +173,8 @@ Route::get('/faqs', 'Frontend\HomeController@getFaqs')->name('faqs');
 
 Route::get('/how-it-works', [HomeController::class, 'howItWork'])->name('howitwork');
 
+Route::get('/gallery', [HomeController::class, 'showGallery'])->name('gallery');
+
 Route::get('/mentorship', [HomeController::class, 'showMentorship'])->name('mentorship');
 Route::post('/mentorship-register', ['uses' => 'CartController@singleCheckoutMentorship', 'as' => 'mentorship.enroll']);
 

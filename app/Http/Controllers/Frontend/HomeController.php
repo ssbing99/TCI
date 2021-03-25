@@ -12,6 +12,7 @@ use App\Models\Config;
 use App\Models\Course;
 use App\Models\CourseTimeline;
 use App\Models\Faq;
+use App\Models\Gallery;
 use App\Models\Item;
 use App\Models\Lesson;
 use App\Models\Page;
@@ -206,6 +207,13 @@ class HomeController extends Controller
         $teachers = User::role('teacher')->paginate(12);
 
         return view($this->path . '.mentorship.index', compact('teachers', 'news', 'testimonials'));
+    }
+
+    public function showGallery()
+    {
+        $galleries = Gallery::all();
+
+        return view($this->path . '.gallery.index', compact('galleries'));
     }
 
     public function registerMentorship()

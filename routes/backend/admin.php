@@ -156,6 +156,10 @@ Route::group(['middleware' => 'role:administrator'], function () {
     Route::post('translations/locales/add', 'LangController@postAddLocale');
     Route::post('translations/locales/remove', 'LangController@postRemoveLocaleFolder')->name('delete-locale-folder');
 
+
+    Route::get('gallery', 'Admin\GalleryController@index')->name('gallery.index');
+    Route::post('gallery/create', 'Admin\GalleryController@store')->name('gallery.store');
+    Route::get('gallery/delete/{id}', 'Admin\GalleryController@destroy')->name('gallery.delete');
 });
 
 
