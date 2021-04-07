@@ -294,6 +294,14 @@ Route::delete('workshops_perma_del/{id}', ['uses' => 'Admin\WorkshopsController@
 Route::post('workshop-save-sequence', ['uses' => 'Admin\WorkshopsController@saveSequence', 'as' => 'workshops.saveSequence']);
 Route::get('workshop-publish/{id}', ['uses' => 'Admin\WorkshopsController@publish', 'as' => 'workshops.publish']);
 
+//===== Gift Routes =====//
+Route::resource('gifts', 'Admin\GiftsController');
+Route::get('get-gifts-data', ['uses' => 'Admin\GiftsController@getData', 'as' => 'gifts.get_data']);
+Route::post('gifts_mass_destroy', ['uses' => 'Admin\GiftsController@massDestroy', 'as' => 'gifts.mass_destroy']);
+Route::post('gifts_restore/{id}', ['uses' => 'Admin\GiftsController@restore', 'as' => 'gifts.restore']);
+Route::delete('gifts_perma_del/{id}', ['uses' => 'Admin\GiftsController@perma_del', 'as' => 'gifts.perma_del']);
+Route::get('gift-publish/{id}', ['uses' => 'Admin\GiftsController@publish', 'as' => 'gifts.publish']);
+
 //===== Media Routes =====//
 Route::post('media/remove', ['uses' => 'Admin\MediaController@destroy', 'as' => 'media.destroy']);
 

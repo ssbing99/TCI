@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Helpers\General\EarningHelper;
 use App\Mail\Frontend\AdminOrederMail;
+use App\Mail\Frontend\GiftNotifyMail;
 use App\Mail\OfflineOrderMail;
 use App\Models\Auth\User;
 use App\Models\Bundle;
 use App\Models\Coupon;
 use App\Models\Course;
+use App\Models\Email;
+use App\Models\Gift;
+use App\Models\GiftUser;
 use App\Models\Item;
 use App\Models\Mentorship;
 use App\Models\Order;
@@ -405,6 +409,52 @@ class CartController extends Controller
         return view( $view_path, compact('course', 'taxData', 'gift', 'selected_teachers'));
     }
 
+    public function singleCheckoutGifts(Request $request)
+    {
+        $gift = "";
+        $type = "";
+
+        \Log::info($request->all());
+        if ($request->has('gift_id')) {
+
+            $gift = Gift::findOrFail($request->get('gift_id'));
+            $type = 'gift';
+        }else{
+            return back()->withFlashDanger('Invalid Gift.');
+        }
+
+        //clear for only single
+        Cart::session(auth()->user()->id)->clear();
+
+        $cart_items = Cart::session(auth()->user()->id)->getContent()->keys()->toArray();
+        if (!in_array($gift->id, $cart_items)) {
+
+            Cart::session(auth()->user()->id)
+                ->add($gift->id, $gift->title, $gift->price, 1,
+                    [
+                        'user_id' => auth()->user()->id,
+                        'description' => $gift->description,
+//                        'image' => $product->course_image,
+                        'type' => $type,
+                    ]);
+
+        }else{
+            Cart::session(auth()->user()->id)
+                ->update($this->getShoppingCartItemId($gift->id, $type));
+        }
+
+
+//        $total = $courses->sum('price');
+
+        //Apply Tax
+        $taxData = $this->applyTax('total');
+
+        $view_path = returnPathByTheme($this->path.'.gifts.single-checkout', 5,'-');
+
+        // return view($this->path . '.cart.checkout', compact('courses', 'total', 'taxData'));
+        return view( $view_path, compact('gift', 'taxData'));
+    }
+
     public function singleCheckoutSubmit(Request $request){
         $this->validate($request, [
             'paymentMethod' => 'required'
@@ -412,6 +462,7 @@ class CartController extends Controller
 
         \Log::info($request->all());
 
+        $isGiftCoupon = false;
         $coupon = $request->coupon;
         $couponEnter = $request->coupon;
         $coupon = Coupon::where('code', '=', $coupon)
@@ -486,6 +537,35 @@ class CartController extends Controller
 
             }
 
+            //TODO: check is it GIFT coupon
+            if(str_starts_with($coupon->code, 'GFT')){
+                $giftUser = GiftUser::query()->where('code',trim($coupon->code))->get();
+
+                if($giftUser->count() > 0 ) {
+                    $giftUser = $giftUser->first();
+
+                    if ($giftUser->gift->lesson_amount != $course->lessons->count()) {
+                        return redirect()->route('cart.singleCheckout', ['course_id' => $course->id])->withdanger('Gift Coupon is applicable for ' . $giftUser->gift->lesson_amount . ' lessons course only.');
+                    }else{
+                        if(!$withSkype && $giftUser->gift->is_skype){
+                            $withSkype = true;
+
+                            $total = $course->price_skype;
+                            $subtotal = $total;
+                        }
+
+                        if($withSkype && !$giftUser->gift->is_skype){
+                            $withSkype = false;
+
+                            $total = $course->price;
+                            $subtotal = $total;
+                        }
+                    }
+                }
+                $isGiftCoupon = true;
+
+            }
+
             if ($isCouponValid == true) {
                 $type = null;
                 if ($coupon->type == 1) {
@@ -517,6 +597,47 @@ class CartController extends Controller
             return redirect()->route('cart.singleCheckout',['course_id' => $course->id])->withdanger('Invalid Coupon used !');
 
         }
+
+        /**
+         * START GIFT COUPON
+         */
+        //GIFT coupon straight make course order
+        if ($isGiftCoupon) {
+            if ($this->checkDuplicateWithProduct($course, 'course')) {
+                return $this->checkDuplicateWithProduct($course, 'course');
+            }
+
+            $order = $this->makeCourseOrder($course, $total,$subtotal, $coupon, $withSkype);
+
+            $order->status = 1;
+            $order->payment_type = 1;
+            $order->save();
+            (new EarningHelper)->insert($order);
+            foreach ($order->items as $orderItem) {
+                //Bundle Entries
+                if ($orderItem->item_type == Bundle::class) {
+                    foreach ($orderItem->item->courses as $course) {
+                        $course->students()->attach($order->user_id);
+                    }
+                }
+                $orderItem->item->students()->attach($order->user_id);
+            }
+
+            //Generating Invoice
+            generateInvoice($order);
+            $this->adminOrderMail($order);
+
+            $this->populatePaymentDisplayInfo();
+            Cart::session(auth()->user()->id)->clear();
+            Session::flash('success', trans('labels.frontend.cart.payment_done'));
+            return redirect()->route('status');
+
+        }
+        /**
+         * END GIFT COUPON
+         */
+
+
 
         if($request->paymentMethod == 'stripe'){
 
@@ -633,6 +754,144 @@ class CartController extends Controller
 
             \Session::put('failure', trans('labels.frontend.cart.unknown_error'));
             return Redirect::route('cart.paypal.status');
+
+        }
+    }
+
+    public function singleCheckoutGiftSubmit(Request $request){
+        $this->validate($request, [
+            'paymentMethod' => 'required',
+            'gift_Name' => 'required',
+            'gift_Email' => 'required',
+        ]);
+
+        \Log::info($request->all());
+
+        $gift = Gift::find($request->productId);
+
+        $total = $gift->price;
+
+        $isGifts = $request->has('isGifts')? $request->isGifts : false;
+
+        $subtotal = $total;
+
+        Cart::session(auth()->user()->id)
+            ->update($this->getShoppingCartItemId($gift->id, 'gift'),[
+                'price' => $total
+            ]);
+
+        //RECEIPIENT
+            $rec_name = $request->gift_Name;
+            $rec_email = $request->gift_Email;
+            $rec_date = $request->gift_Date;
+
+            if(!isset($rec_date)){
+                $rec_date = date("Y-m-d");
+            }
+
+        if($request->paymentMethod == 'stripe'){
+
+            //Making Order
+            $order = $this->makeGiftsOrder($gift, $rec_name,$rec_email, $subtotal);
+            $giftUser = $this->makeGiftUser($order, $gift, $rec_name,$rec_email, date($rec_date));
+
+            $gateway = Omnipay::create('Stripe');
+            $gateway->setApiKey(config('services.stripe.secret'));
+            $token = $request->reservation['stripe_token'];
+
+            $amount = $subtotal;
+            $currency = $this->currency['short_code'];
+            $response = $gateway->purchase([
+                'amount' => $amount,
+                'currency' => $currency,
+                'token' => $token,
+                'confirm' => true,
+                'description' => auth()->user()->name
+            ])->send();
+
+            if ($response->isSuccessful()) {
+                $order->status = 1;
+                $order->payment_type = 1;
+                $order->save();
+                (new EarningHelper)->insert($order);
+
+                if($isGifts){
+                    //TODO: email
+                    $c_email = $this->makeEmail($gift,$rec_name,$rec_email,date($rec_date));
+                    //TODO: GEN CODE
+                    $c_coupon = $this->makeCoupon($gift, $c_email, $rec_date);
+
+
+                    if($c_email != null && $c_coupon != null) {
+                        $giftUser->code = $c_coupon->code;
+                        $giftUser->save();
+
+                        if(date($rec_date) == date($rec_date)) {
+                            $this->notifyMail($gift, $c_email, $c_coupon);
+                        }
+                    }
+                }
+
+                //Generating Invoice
+                generateInvoice($order);
+                $this->adminOrderMail($order);
+
+                $this->populatePaymentDisplayInfo();
+                Cart::session(auth()->user()->id)->clear();
+                Session::flash('success', trans('labels.frontend.cart.payment_done'));
+                return redirect()->route('gifts.status');
+
+            } else {
+                $order->status = 2;
+                $order->save();
+                \Log::info($response->getMessage() . ' for id = ' . auth()->user()->id);
+                Session::flash('failure', trans('labels.frontend.cart.try_again'));
+                return redirect()->route('gifts.status');
+            }
+
+        }elseif($request->paymentMethod == 'paypal'){
+
+            Cart::session(auth()->user()->id)->removeConditionsByType('skypePrice');
+            Cart::session(auth()->user()->id)->removeConditionsByType('Gifts_purchase');
+
+            $giftscondition = new \Darryldecode\Cart\CartCondition(array(
+                'name' => 'Gifts_Purchase',
+                'type' => 'Gifts_purchase',
+                'value' => $gift->id,
+            ));
+
+            Cart::session(auth()->user()->id)->condition($giftscondition);
+
+
+            \Log::info('paypalPayment 3');
+
+            $gateway = Omnipay::create('PayPal_Rest');
+            $gateway->setClientId(config('paypal.client_id'));
+            $gateway->setSecret(config('paypal.secret'));
+            $mode = config('paypal.settings.mode') == 'sandbox' ? true : false;
+            $gateway->setTestMode($mode);
+
+            $currency = $this->currency['short_code'];
+            try {
+                $response = $gateway->purchase([
+                    'amount' => $subtotal,
+                    'currency' => $currency,
+                    'description' => auth()->user()->name,
+                    'cancelUrl' => route('cart.gifts.paypal.status', ['status' => 0, 'name' => $rec_name, 'email' => $rec_email, 'date' => $rec_date]),
+                    'returnUrl' => route('cart.gifts.paypal.status', ['status' => 1, 'name' => $rec_name, 'email' => $rec_email, 'date' => $rec_date]),
+
+                ])->send();
+
+                if ($response->isRedirect()) {
+                    return Redirect::away($response->getRedirectUrl());
+                }
+            } catch (\Exception $e) {
+                \Session::put('failure', trans('labels.frontend.cart.unknown_error'));
+                return Redirect::route('gifts.status');
+            }
+
+            \Session::put('failure', trans('labels.frontend.cart.unknown_error'));
+            return Redirect::route('gifts.status');
 
         }
     }
@@ -916,6 +1175,88 @@ class CartController extends Controller
 
     }
 
+
+    public function getGiftsPaymentStatus()
+    {
+        \Log::info('getPaymentStatus Gifts');
+        \Log::info(request()->all());
+        \Session::forget('failure');
+        if (request()->get('status')) {
+            if (empty(request()->get('PayerID')) || empty(request()->get('token'))) {
+                \Session::put('failure', trans('labels.frontend.cart.payment_failed'));
+
+                Cart::session(auth()->user()->id)->clear();
+                Cart::session(auth()->user()->id)->clearCartConditions();
+                Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
+                Cart::session(auth()->user()->id)->removeConditionsByType('tax');
+                Cart::session(auth()->user()->id)->removeConditionsByType('Gifts_purchase');
+
+                return Redirect::route('gifts.status');
+            }
+
+            $_gift = Cart::session(auth()->user()->id)->getConditionsByType('Gifts_purchase')->first();
+            $isGifts = false;
+            $gift = null;
+            $rec_name = request()->get('name');
+            $rec_email = request()->get('email');
+            $rec_date = request()->get('date');
+
+            if ($_gift != null) {
+                $gift_id = Cart::session(auth()->user()->id)->getConditionsByType('Gifts_purchase')->first()->getValue();
+                \Log::info($gift_id);
+                $isGifts = true;
+                $gift = Gift::findOrFail($gift_id);;
+            }
+
+            $order = $this->makeGiftsOrder($gift, $rec_name,$rec_email, $gift->price);
+            $giftUser = $this->makeGiftUser($order, $gift, $rec_name,$rec_email, date($rec_date));
+
+            $order->payment_type = 2;
+            $order->transaction_id = request()->get('paymentId');
+            $order->save();
+            \Session::flash('success', trans('labels.frontend.cart.payment_done'));
+            $order->status = 1;
+            $order->save();
+            (new EarningHelper)->insert($order);
+
+            if($isGifts){
+                //TODO: email
+                $c_email = $this->makeEmail($gift,$rec_name,$rec_email,date($rec_date));
+                //TODO: GEN CODE
+                $c_coupon = $this->makeCoupon($gift, $c_email, $rec_date);
+
+
+                if($c_email != null && $c_coupon != null) {
+                    $giftUser->code = $c_coupon->code;
+                    $giftUser->save();
+
+                    if(date($rec_date) == date($rec_date)) {
+                        $this->notifyMail($gift, $c_email, $c_coupon);
+                    }
+                }
+            }
+
+            //Generating Invoice
+            generateInvoice($order);
+            $this->adminOrderMail($order);
+            $this->populatePaymentDisplayInfo();
+            Cart::session(auth()->user()->id)->clear();
+            Session::flash('success', trans('labels.frontend.cart.payment_done'));
+            return Redirect::route('gifts.status');
+        }
+        else {
+            \Session::flash('failure', trans('labels.frontend.cart.payment_failed'));
+            $this->populatePaymentDisplayInfo();
+            Cart::session(auth()->user()->id)->clear();
+            Cart::session(auth()->user()->id)->clearCartConditions();
+            Cart::session(auth()->user()->id)->removeConditionsByType('coupon');
+            Cart::session(auth()->user()->id)->removeConditionsByType('tax');
+            Cart::session(auth()->user()->id)->removeConditionsByType('Gifts_purchase');
+            return Redirect::route('gifts.status');
+        }
+
+    }
+
     public function getNow(Request $request)
     {
         $order = new Order();
@@ -1183,6 +1524,71 @@ class CartController extends Controller
         return $order;
     }
 
+    private function makeGiftsOrder($gift, $name, $email, $subtotal)
+    {
+
+        $order = new Order();
+        $order->user_id = auth()->user()->id;
+        $order->payer_id = auth()->user()->id;
+        $order->reference_no = str_random(8);
+        $order->amount = $subtotal;
+        $order->is_skype = 0;
+        $order->status = 1;
+        $order->coupon_id = 0;
+        $order->payment_type = 3;
+        $order->save();
+
+        return $order;
+    }
+
+
+    private function makeGiftUser($order, $gift, $name, $email, $notify_date)
+    {
+
+        $giftuser = new GiftUser();
+        $giftuser->user_id = $order->user_id;
+        $giftuser->order_id = $order->id;
+        $giftuser->gift_id = $gift->id;
+        $giftuser->receiver_name = $name;
+        $giftuser->receiver_email = $email;
+        $giftuser->notify_at = $notify_date;
+        $giftuser->save();
+        //Getting and Adding items
+        return $giftuser;
+    }
+
+
+    private function makeEmail($gift, $name, $email, $notify_date)
+    {
+
+        $createemail = new Email();
+        $createemail->title = 'Gift from '.auth()->user()->full_name;
+        $createemail->description = $gift->title;
+        $createemail->receiver_name = $name;
+        $createemail->receiver_email = $email;
+        $createemail->status = 0;
+        $createemail->notify_at = $notify_date;
+        $createemail->save();
+        return $createemail;
+    }
+
+    private function makeCoupon($gift, $email, $notify_date)
+    {
+
+        $coupon = new Coupon();
+        $coupon->name = 'Gift';
+        $coupon->description = 'Gift for '.$email->receiver_name;
+        $coupon->code = 'GFT'.strtoupper(str_random(5));
+        $coupon->type = 1;
+        $coupon->amount = 100;
+//        $coupon->expires_at = date('Y-m-d', strtotime($notify_date.'+ 30 days'));
+        $coupon->min_price = 10;
+        $coupon->per_user_limit = 1;
+        $coupon->status = 1;
+        $coupon->save();
+        return $coupon;
+    }
+
     private function makeMentorship($order, $mentor)
     {
 
@@ -1301,6 +1707,17 @@ class CartController extends Controller
                 \Mail::to($admin->email)->send(new AdminOrederMail($content, $admin));
             }
         }
+    }
+
+    private function notifyMail($gift, $email, $coupon)
+    {
+        $content['receiver_name'] = $email->receiver_name;
+        $content['code'] = $coupon->code;
+
+        \Mail::to($email->receiver_email)->send(new GiftNotifyMail($content, auth()->user(), $gift));
+
+        $email->status = 1;
+        $email->save();
     }
 
     private function populatePaymentDisplayInfo() {

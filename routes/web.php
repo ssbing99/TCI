@@ -115,6 +115,10 @@ Route::get('workshops/{id}/enroll', ['uses' => 'WorkshopsController@paypalPaymen
 Route::get('workshops/paypal-payment/status', ['uses' => 'WorkshopsController@getPaymentStatus'])->name('workshops.paypal.status');
 Route::get('workshops/enroll/status', ['uses' => 'WorkshopsController@status'])->name('workshops.status');
 
+//============Gifts Routes=================//
+Route::get('gifts', ['uses' => 'GiftsController@all', 'as' => 'gifts.all']);
+Route::post('gift-purchase', ['uses' => 'CartController@singleCheckoutGifts', 'as' => 'gifts.purchase']);
+Route::get('gifts/purchase/status', ['uses' => 'GiftsController@status'])->name('gifts.status');
 
 //============Bundle Routes=================//
 Route::get('bundles', ['uses' => 'BundlesController@all', 'as' => 'bundles.all']);
@@ -192,6 +196,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('cart/course-checkout', ['uses' => 'CartController@singleCheckout', 'as' => 'cart.singleCheckout']);
     Route::get('cart/course-checkout', ['uses' => 'CartController@singleCheckout', 'as' => 'cart.singleCheckout']);
     Route::post('cart/course-checkout/submit', ['uses' => 'CartController@singleCheckoutSubmit', 'as' => 'cart.singleCheckoutSubmit']);
+    //gifts
+    Route::post('cart/gift-checkout/submit', ['uses' => 'CartController@singleCheckoutGiftSubmit', 'as' => 'cart.singleCheckoutSubmitGift']);
+
     Route::post('cart/cart-checkout', ['uses' => 'CartController@index', 'as' => 'cart.cartCheckOut']);
     Route::get('cart/cart-checkout', ['uses' => 'CartController@index', 'as' => 'cart.cartCheckOut']);
     Route::post('cart/add', ['uses' => 'CartController@addToCart', 'as' => 'cart.addToCart']);
@@ -203,6 +210,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('cart/stripe-payment', ['uses' => 'CartController@stripePayment', 'as' => 'cart.stripe.payment']);
     Route::post('cart/paypal-payment', ['uses' => 'CartController@paypalPayment', 'as' => 'cart.paypal.payment']);
     Route::get('cart/paypal-payment/status', ['uses' => 'CartController@getPaymentStatus'])->name('cart.paypal.status');
+
+    //gifts
+    Route::get('cart/gift-paypal-payment/status', ['uses' => 'CartController@getGiftsPaymentStatus'])->name('cart.gifts.paypal.status');
 
     Route::get('status', ['uses' => 'CartController@status'])->name('status');
 

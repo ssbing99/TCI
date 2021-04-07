@@ -33,6 +33,15 @@
                     </a>
                 </li>
             @endif
+            @can('gift_access')
+                <li class="nav-item ">
+                    <a class="nav-link {{ $request->segment(1) == 'gifts' ? 'active' : '' }}"
+                       href="{{ route('admin.gifts.index') }}">
+                        <i class="nav-icon icon-bag"></i>
+                        <span class="title">Gifts</span>
+                    </a>
+                </li>
+            @endcan
             @if ($logged_in_user->isAdmin())
                 <li class="nav-item ">
                     <a class="nav-link {{ $request->segment(2) == 'teachers' ? 'active' : '' }}"
