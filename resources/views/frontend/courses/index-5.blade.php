@@ -94,6 +94,9 @@
                                 <input type="number" min="0" name="filterDuration" id="filterDuration" class="form-control" placeholder="Filter by Duration" />
                             </div>
                             <div class="form-group">
+                                <input type="number" min="0" name="filterLessonAmt" id="filterLessonAmt" class="form-control" placeholder="Filter by Lesson Amount" />
+                            </div>
+                            <div class="form-group">
                                 <label class="label">Course Price</label>
                                 <div class="demo__body">
                                     <input id="demo_0" type="text" name="coursePrice" value="" />
@@ -187,6 +190,7 @@
             var courseSearch = '';
             var filterSkill = '';
             var filterDuration = '';
+            var filterLessonAmt = '';
             var filterPrice = 500;
 
             function refreshFilter(){
@@ -195,6 +199,7 @@
                 courseSearch = $('#courseSearch').val();
                 filterSkill = $('#filterSkill').val();
                 filterDuration = $('#filterDuration').val();
+                filterLessonAmt = $('#filterLessonAmt').val();
 
                 // console.log('courseSearch',courseSearch);
                 // console.log('filterSkill',filterSkill);
@@ -221,6 +226,11 @@
 
                         if(remain && filterDuration != ''){
                             if(value1.duration != filterDuration)
+                                remain = false;
+                        }
+
+                        if(remain && filterLessonAmt != ''){
+                            if(value1.lesson_amt != filterLessonAmt)
                                 remain = false;
                         }
 
@@ -262,6 +272,10 @@
                 refreshFilter();
             });
             $(document).on('keyup','#filterDuration',function () {
+                var $this = $(this);
+                refreshFilter();
+            });
+            $(document).on('keyup','#filterLessonAmt',function () {
                 var $this = $(this);
                 refreshFilter();
             });

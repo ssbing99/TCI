@@ -544,7 +544,54 @@ class CartController extends Controller
                 if($giftUser->count() > 0 ) {
                     $giftUser = $giftUser->first();
 
-                    if ($giftUser->gift->lesson_amount != $course->lessons->count()) {
+                    if($isMentorship && $giftUser->gift->mentorship == 0){
+                        $ment_type = 1;
+                        if(str_contains(strtolower($course->title), 'one')){
+                            $ment_type = 1;
+                        }elseif(str_contains(strtolower($course->title), 'three')){
+                            $ment_type = 3;
+                        }else{
+                            $ment_type = 6;
+                        }
+
+                        return redirect()->route('mentorship.enroll', ['mentorship_id' => $ment_type, 'instructor_list'=> $mentor])->withdanger('Gift Coupon is applicable for normal course only.');
+                    }
+
+                    if($giftUser->gift->mentorship == 1 && $giftUser->gift->mentorship != $course->mentorship){
+                        return redirect()->route('cart.singleCheckout', ['course_id' => $course->id])->withdanger('Gift Coupon is applicable for mentorship  only.');
+                    }elseif($giftUser->gift->portfolio_review == 1 && $giftUser->gift->portfolio_review != $course->portfolio_review){
+                        return redirect()->route('cart.singleCheckout', ['course_id' => $course->id])->withdanger('Gift Coupon is applicable for portfolio review only.');
+                    }
+
+                    if($giftUser->gift->mentorship == 1 && $isMentorship){
+                        $ment_type = 1;
+                        if(str_contains(strtolower($course->title), 'one')){
+                            $ment_type = 1;
+                        }elseif(str_contains(strtolower($course->title), 'three')){
+                            $ment_type = 3;
+                        }else{
+                            $ment_type = 6;
+                        }
+                        if(str_contains(strtolower($giftUser->gift->title), '1') || str_contains(strtolower($giftUser->gift->title), 'one')){
+                            if(!str_contains(strtolower($course->title), 'one')){
+                                return redirect()->route('mentorship.enroll', ['mentorship_id' => $ment_type, 'instructor_list'=> $mentor])->withdanger('Gift Coupon is applicable for 1 Month mentorship only.');
+                            }
+                        }
+                        if(str_contains(strtolower($giftUser->gift->title), '3') || str_contains(strtolower($giftUser->gift->title), 'three')){
+                            if(!str_contains(strtolower($course->title), 'three')){
+                                return redirect()->route('mentorship.enroll', ['mentorship_id' => $ment_type, 'instructor_list'=> $mentor])->withdanger('Gift Coupon is applicable for 3 Month mentorship only.');
+                            }
+                        }
+                        if(str_contains(strtolower($giftUser->gift->title), '6') || str_contains(strtolower($giftUser->gift->title), 'six')){
+                            if(!str_contains(strtolower($course->title), 'six')){
+                                return redirect()->route('mentorship.enroll', ['mentorship_id' => $ment_type, 'instructor_list'=> $mentor])->withdanger('Gift Coupon is applicable for 6 Month mentorship only.');
+                            }
+                        }
+
+                    }
+
+                    if (($giftUser->gift->mentorship == 0 && $giftUser->gift->portfolio_review == 0) &&
+                        $giftUser->gift->lesson_amount != $course->lessons->count()) {
                         return redirect()->route('cart.singleCheckout', ['course_id' => $course->id])->withdanger('Gift Coupon is applicable for ' . $giftUser->gift->lesson_amount . ' lessons course only.');
                     }else{
                         if(!$withSkype && $giftUser->gift->is_skype){
@@ -563,7 +610,6 @@ class CartController extends Controller
                     }
                 }
                 $isGiftCoupon = true;
-
             }
 
             if ($isCouponValid == true) {
@@ -587,7 +633,11 @@ class CartController extends Controller
                 Cart::session(auth()->user()->id)->condition($condition);
 
             }else{
-                return redirect()->route('cart.singleCheckout',['course_id' => $course->id])->withdanger('Invalid Coupon used !');
+                if($isMentorship){
+                    return redirect()->route('mentorship.enroll', ['mentorship_id' => $ment_type, 'instructor_list'=> $mentor])->withdanger('Invalid Coupon used !');
+                }else {
+                    return redirect()->route('cart.singleCheckout', ['course_id' => $course->id])->withdanger('Invalid Coupon used !');
+                }
             }
 
         }
@@ -613,14 +663,21 @@ class CartController extends Controller
             $order->payment_type = 1;
             $order->save();
             (new EarningHelper)->insert($order);
-            foreach ($order->items as $orderItem) {
-                //Bundle Entries
-                if ($orderItem->item_type == Bundle::class) {
-                    foreach ($orderItem->item->courses as $course) {
-                        $course->students()->attach($order->user_id);
+            if(!$isMentorship) {
+                foreach ($order->items as $orderItem) {
+                    //Bundle Entries
+                    if ($orderItem->item_type == Bundle::class) {
+                        foreach ($orderItem->item->courses as $course) {
+                            $course->students()->attach($order->user_id);
+                        }
                     }
+                    $orderItem->item->students()->attach($order->user_id);
                 }
-                $orderItem->item->students()->attach($order->user_id);
+            }
+
+            if($isMentorship){
+                $mentorship = $this->makeMentorship($order, $mentor);
+                \Log::info(json_encode($mentorship));
             }
 
             //Generating Invoice

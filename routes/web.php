@@ -180,6 +180,7 @@ Route::get('/how-it-works', [HomeController::class, 'howItWork'])->name('howitwo
 Route::get('/gallery', [HomeController::class, 'showGallery'])->name('gallery');
 
 Route::get('/mentorship', [HomeController::class, 'showMentorship'])->name('mentorship');
+Route::get('/mentorship-register', ['uses' => 'CartController@singleCheckoutMentorship', 'as' => 'mentorship.enroll.get']);
 Route::post('/mentorship-register', ['uses' => 'CartController@singleCheckoutMentorship', 'as' => 'mentorship.enroll']);
 
 /*=============== Theme blades routes ends ===================*/
