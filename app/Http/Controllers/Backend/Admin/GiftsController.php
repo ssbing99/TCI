@@ -124,11 +124,9 @@ class GiftsController extends Controller
         //
         $categories = array('0' => 'Course', '1' => 'Review', '2' => 'One-to-One Mentorship');
 
-        $coursesPr = Course::where('published', '=', 1)
-            ->where('portfolio_review', '=', 1)->pluck('title', 'id')->toArray();
+        $courses = Course::where('published', '=', 1)
+            ->where('portfolio_review', '=', 1)->pluck('title', 'id')->prepend('none','0')->toArray();
 
-        $def = array('0'=>'none');
-        $courses = array_merge($def,$coursesPr);
 
         return view('backend.gifts.create', compact('courses','categories'));
     }
@@ -199,11 +197,8 @@ class GiftsController extends Controller
 
         $categories = array('0' => 'Course', '1' => 'Review', '2' => 'One-to-One Mentorship');
 
-        $coursesPr = Course::where('published', '=', 1)
-            ->where('portfolio_review', '=', 1)->pluck('title', 'id')->toArray();
-
-        $def = array('0'=>'none');
-        $courses = array_merge($def,$coursesPr);
+        $courses = Course::where('published', '=', 1)
+            ->where('portfolio_review', '=', 1)->pluck('title', 'id')->prepend('none','0')->toArray();
 
         $gift = Gift::findOrFail($id);
 

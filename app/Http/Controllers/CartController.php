@@ -544,7 +544,7 @@ class CartController extends Controller
                 if($giftUser->count() > 0 ) {
                     $giftUser = $giftUser->first();
 
-                    if($isMentorship && $giftUser->gift->mentorship == 0){
+                    if($isMentorship && $giftUser->gift->mentorship == 0 && $giftUser->gift->portfolio_review == 0){
                         $ment_type = 1;
                         if(str_contains(strtolower($course->title), 'one')){
                             $ment_type = 1;
@@ -588,6 +588,12 @@ class CartController extends Controller
                             }
                         }
 
+                    }
+
+                    if($giftUser->gift->portfolio_review == 1 ){
+                        if($giftUser->gift->course_id != $course->id) {
+                            return redirect()->route('cart.singleCheckout', ['course_id' => $course->id])->withdanger('Gift Coupon is applicable for '.$giftUser->gift->course->title.' only.');
+                        }
                     }
 
                     if (($giftUser->gift->mentorship == 0 && $giftUser->gift->portfolio_review == 0) &&
