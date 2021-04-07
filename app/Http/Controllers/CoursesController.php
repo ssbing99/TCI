@@ -40,7 +40,7 @@ class CoursesController extends Controller
     {
         $paginateCnt = 100; // so far not yet have paginate , original 9
         if (request('type') == 'popularity') {
-                $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('mentorship', 0)
+                $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('mentorship', 0)->where('portfolio_review', 0)
 //                    ->where('popular', '=', 1)
 //                    ->where(function ($query) use ($request) {
 //                        $isPast = request('filter') == 'past';
@@ -57,7 +57,7 @@ class CoursesController extends Controller
                     ->paginate($paginateCnt);
 
         } else if (request('type') == 'price') {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('mentorship', 0)
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('mentorship', 0)->where('portfolio_review', 0)
 //                ->where('trending', '=', 1)
 //                ->where(function ($query) use ($request) {
 //                    $isPast = request('filter') == 'past';
@@ -71,7 +71,7 @@ class CoursesController extends Controller
                 ->orderBy('price', 'asc')->paginate($paginateCnt);
 
         } else if (request('type') == 'duration') {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('mentorship', 0)
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('mentorship', 0)->where('portfolio_review', 0)
 //                ->where('featured', '=', 1)
 //                ->where(function ($query) use ($request) {
 //                    $isPast = request('filter') == 'past';
@@ -85,7 +85,7 @@ class CoursesController extends Controller
                 ->orderBy('duration', 'asc')->paginate($paginateCnt);
 
         } else {
-            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('mentorship', 0)
+            $courses = Course::withoutGlobalScope('filter')->where('published', 1)->where('mentorship', 0)->where('portfolio_review', 0)
 //                ->where(function ($query) use ($request) {
 //                    $isPast = request('filter') == 'past';
 //                    $isUpcoming = request('filter') == 'upcoming';
@@ -182,6 +182,7 @@ class CoursesController extends Controller
 
     public function show($course_slug)
     {
+        Cart::session(auth()->user()->id)->clear();
         $continue_course=NULL;
         $recent_news = Blog::orderBy('created_at', 'desc')->take(2)->get();
         $course = Course::withoutGlobalScope('filter')->where('slug', $course_slug)->with('publishedLessons')->firstOrFail();
