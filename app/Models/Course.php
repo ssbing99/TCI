@@ -30,7 +30,7 @@ class Course extends Model
 
     protected $fillable = ['category_id', 'title', 'slug', 'description', 'price', 'price_skype', 'course_image','course_video', 'start_date', 'duration', 'skill_level', 'published', 'free', 'beginner', 'intermediate', 'advance','featured', 'trending', 'popular', 'portfolio_review', 'mentorship', 'meta_title', 'meta_description', 'meta_keywords'];
 
-    protected $appends = ['image', 'teacher_json'];
+    protected $appends = ['image', 'teacher_json', 'lesson_amt'];
 
 
     protected static function boot()
@@ -142,6 +142,11 @@ class Course extends Model
         }
 
         return $teacherJson;
+    }
+
+    public function getLessonAmtAttribute()
+    {
+        return $this->hasMany(Lesson::class)->count();
     }
 
     public function teachers()

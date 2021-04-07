@@ -151,6 +151,11 @@ class GiftsController extends Controller
         if($request->input('category_id')){
             if($request->get('category_id') == '1'){
                 $gift->course_id = $request->get('course_id');
+                $gift->portfolio_review = 1;
+                $gift->save();
+            }
+            if($request->get('category_id') == '2'){
+                $gift->mentorship = 1;
                 $gift->save();
             }
         }
@@ -225,9 +230,18 @@ class GiftsController extends Controller
         if($request->input('category_id')){
             if($request->get('category_id') == '1'){
                 $gift->course_id = $request->get('course_id');
+                $gift->portfolio_review = 1;
                 $gift->save();
             }else{
                 $gift->course_id = NULL;
+                $gift->portfolio_review = 0;
+                $gift->save();
+            }
+            if($request->get('category_id') == '2'){
+                $gift->mentorship = 1;
+                $gift->save();
+            }else{
+                $gift->mentorship = 0;
                 $gift->save();
             }
         }
