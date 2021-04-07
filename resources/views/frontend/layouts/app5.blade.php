@@ -133,10 +133,11 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="courses.html" id="navbardrop" data-toggle="dropdown"><i class="fa fa-bars"></i></a>
                                 <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{route('gifts.all')}}">Gifts</a>
                                     <a class="dropdown-item" href="{{route('howitwork')}}">How it Works</a>
                                     <a class="dropdown-item" href="{{route('courses.reviews.all')}}">Review</a>
-                                    <a class="dropdown-item" href="#">Student Gallery</a>
-                                    <a class="dropdown-item" href="#">Blog</a>
+                                    <a class="dropdown-item" href="{{route('gallery')}}">Student Gallery</a>
+                                    <a class="dropdown-item" href="{{route('blogs.index')}}">Blog</a>
 {{--                                    {{route('blogs.index')}}--}}
                                 </div>
                             </li>

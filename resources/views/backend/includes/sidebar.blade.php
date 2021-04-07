@@ -33,6 +33,15 @@
                     </a>
                 </li>
             @endif
+            @can('gift_access')
+                <li class="nav-item ">
+                    <a class="nav-link {{ $request->segment(1) == 'gifts' ? 'active' : '' }}"
+                       href="{{ route('admin.gifts.index') }}">
+                        <i class="nav-icon icon-bag"></i>
+                        <span class="title">Gifts</span>
+                    </a>
+                </li>
+            @endcan
             @if ($logged_in_user->isAdmin())
                 <li class="nav-item ">
                     <a class="nav-link {{ $request->segment(2) == 'teachers' ? 'active' : '' }}"
@@ -133,6 +142,15 @@
 {{--                    </li>--}}
 {{--                @endcan--}}
 
+                @if($logged_in_user->isAdmin())
+                    <li class="nav-item ">
+                        <a class="nav-link {{ $request->segment(2) == 'gallery' ? 'active' : '' }}"
+                           href="{{ route('admin.gallery.index') }}">
+                            <i class="nav-icon icon-layers"></i>
+                            <span class="title">Gallery</span>
+                        </a>
+                    </li>
+                @endif
                 @can('workshop_access')
                     <li class="nav-item ">
                         <a class="nav-link {{ $request->segment(2) == 'workshops' ? 'active' : '' }}"

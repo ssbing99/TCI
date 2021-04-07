@@ -44,70 +44,90 @@
 @section('content')
 
     <!-- Start of breadcrumb section
-    ============================================= -->
-    <div class="banner custom-banner-bg">
+        ============================================= -->
+    <header>
         <div class="container">
-            <div class="page-heading">
-                @if(isset($category)){{$category->name}} @elseif(isset($tag)) {{$tag->name}} @endif  <span>@lang('labels.frontend.blog.title')</span>
+            <div class="row clearfix">
+                <div class="col-12">
+                    <h1>@if(isset($category)){{$category->name}} @elseif(isset($tag)) {{$tag->name}} @endif  <span>@lang('labels.frontend.blog.title')</span></h1>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
     <!-- End of breadcrumb section
         ============================================= -->
 
-    <!-- Start of blog content
+
+    <!-- Start of course section
         ============================================= -->
     <section>
         <div class="container">
             <div class="row clearfix">
                 <div class="col-12">
-                    <div class="row clearfix">
-                        <!-- row -->
-                        @if(count($blogs) > 0)
-                            @foreach($blogs as $item)
-                                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                    <div class="blog clearfix">
-                                        <div class="blog-img clearfix">
-                                            <a href="{{route('blogs.index',['slug'=> $item->slug.'-'.$item->id])}}"><img src="@if($item->image != "") {{asset('storage/uploads/'.$item->image)}} @else {{asset('assets_new/images/blog-img-1.jpg')}} @endif"  alt="" /></a>
-                                            <div class="blogdate">{{$item->created_at->format('d M Y')}}</div>
-                                        </div>
-                                        <div class="blogcontent clearfix">
-                                            <div class="blogtitle"><a href="{{route('blogs.index',['slug'=> $item->slug.'-'.$item->id])}}">{{$item->title}}</a></div>
-                                            <p>{!!  strip_tags(mb_substr($item->content,0,100).'...')  !!}</p>
-                                            <a href="{{route('blogs.index',['slug'=> $item->slug.'-'.$item->id])}}" class="link">@lang('labels.general.read_more') <i class="fa fa-chevron-circle-right"></i></a>
-                                        </div>
+                    <div class="row blogpost clearfix">
+
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="blogdetails">
+                                <a href="#">
+                                    <img class="img-fluid" alt="Give a Kick start to your photography career with The Compelling Image" src="{{asset("assets_new/images/blog-1.jpg")}}">
+                                </a>
+                                <div class="blogcontent">
+                                    <div class="left">
+                                        <div class="date">27<span>Mar</span></div>
+                                    </div>
+                                    <div class="right">
+                                        <p>
+                                            <a href="#">Give a Kick start to your photography career with The Compelling Image</a>
+                                            <span>Give a Kick start to your photography career with TheCompellingImage "A picture speaks a thousand words" this is a universal truth about Photograph. Photography has now</span>
+                                        </p>
                                     </div>
                                 </div>
-                            @endforeach
-                        @else
-                            <h3>@lang('labels.general.no_data_available')</h3>
-                        @endif
+                            </div>
+                        </div>
 
-                        <!-- end row -->
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="blogdetails">
+                                <a href="#">
+                                    <img class="img-fluid" alt="How to Become a Professional food Photographer" src="{{asset("assets_new/images/blog-2.jpg")}}">
+                                </a>
+                                <div class="blogcontent">
+                                    <div class="left">
+                                        <div class="date">27<span>Mar</span></div>
+                                    </div>
+                                    <div class="right">
+                                        <p>
+                                            <a href="#">How to Become a Professional food Photographer</a>
+                                            <span>Have you discovered your calling for specialization in photography? Just like all other profession in the world, photography also required that you have a specialization in</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="blogdetails">
+                                <a href="#">
+                                    <img class="img-fluid" alt="Ask Yourself These 10 Questions Before Starting A Career In Photography" src="{{asset("assets_new/images/blog-3.jpg")}}">
+                                </a>
+                                <div class="blogcontent">
+                                    <div class="left">
+                                        <div class="date">06<span>Jul</span></div>
+                                    </div>
+                                    <div class="right">
+                                        <p>
+                                            <a href="#">Ask Yourself These 10 Questions Before Starting A Career In Photography</a>
+                                            <span>If you want to become a professional photographer, you can simply join one of the online interactive photography classes&nbsp;and sharpen your skills to be able to</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    <nav aria-label="Page navigation example">
-                        {{ $blogs->links() }}
-                    </nav>
                 </div>
-
-                <!-- Start of sidebar section
-                    ============================================= -->
-
-{{--            @include('frontend.blogs.partials.sidebar-5')--}}
-
-            <!-- End of sidebar section
-                    ============================================= -->
-
             </div>
         </div>
     </section>
     <!-- End of blog content
         ============================================= -->
-
-    <!-- Start of best course
-   =============================================  -->
-    @include('frontend.layouts.partials.browse_courses2')
-    <!-- End of best course
-            ============================================= -->
 
 @endsection

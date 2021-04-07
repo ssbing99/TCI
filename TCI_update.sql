@@ -135,3 +135,98 @@ CREATE TABLE `mentorships` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- END NEW
+
+-- GALLERY
+
+CREATE TABLE `galleries` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `gallery_deleted_at_index` (`deleted_at`),
+  CONSTRAINT `gallery_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- END GALLERY
+
+-- GIFT
+
+CREATE TABLE `gifts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` int(10) unsigned DEFAULT NULL,
+  `course_id` int(10) unsigned DEFAULT NULL,
+  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `lesson_amount` int(11) DEFAULT '0',
+  `price` decimal(15,2) DEFAULT NULL,
+  `is_skype` int(11) DEFAULT '0',
+  `portfolio_review` int(11) DEFAULT '0',
+  `mentorship` int(11) DEFAULT '0',
+  `published` tinyint(4) DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `gifts_course_id_index` (`course_id`),
+  KEY `gifts_deleted_at_index` (`deleted_at`),
+  CONSTRAINT `gifts_course_id_index` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE `gift_users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `order_id` int(10) unsigned NOT NULL,
+  `gift_id` int(10) unsigned NOT NULL,
+  `code` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `receiver_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `receiver_email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notify_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `gift_order_key` (`order_id`),
+  CONSTRAINT `gift_order_key` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `gift_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `gift_gift_key` FOREIGN KEY (`gift_id`) REFERENCES `gifts` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- for scheduled send email
+CREATE TABLE `emails` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `receiver_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `receiver_email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `status` int(11) DEFAULT '0',
+  `notify_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+insert into permissions (name, guard_name, created_at, updated_at)
+VALUES ("gift_access", "web", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+insert into permissions (name, guard_name, created_at, updated_at)
+VALUES ("gift_create", "web", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+insert into permissions (name, guard_name, created_at, updated_at)
+VALUES ("gift_edit", "web", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+insert into permissions (name, guard_name, created_at, updated_at)
+VALUES ("gift_view", "web", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+insert into permissions (name, guard_name, created_at, updated_at)
+VALUES ("gift_delete", "web", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+
+INSERT INTO `role_has_permissions`(`permission_id`, `role_id`) VALUES (78, 1);
+INSERT INTO `role_has_permissions`(`permission_id`, `role_id`) VALUES (79, 1);
+INSERT INTO `role_has_permissions`(`permission_id`, `role_id`) VALUES (80, 1);
+INSERT INTO `role_has_permissions`(`permission_id`, `role_id`) VALUES (81, 1);
+INSERT INTO `role_has_permissions`(`permission_id`, `role_id`) VALUES (82, 1);
+
+-- END GIFT
+

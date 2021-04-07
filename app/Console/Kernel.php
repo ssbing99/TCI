@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\Backup;
 use App\Console\Commands\GenerateSitemap;
 use App\Console\Commands\LessonTestChaterStudentsFix;
+use App\Console\Commands\SendNotifyGiftEmail;
 use App\Console\Commands\TeacherProfileFix;
 use App\Models\TeacherProfile;
 use Illuminate\Console\Scheduling\Schedule;
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
         GenerateSitemap::class,
         TeacherProfileFix::class,
         LessonTestChaterStudentsFix::class,
+        SendNotifyGiftEmail::class,
     ];
 
     /**
@@ -35,7 +37,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-
+\Log::info('scheduled Run');
         if (config('backup_schedule') == 1) {
             $schedule->command(Backup::class)->daily();
         } elseif (config('backup_schedule') == 2) {
@@ -59,6 +61,7 @@ class Kernel extends ConsoleKernel
             $schedule->command(GenerateSitemap::class)->monthly();
 
         }
+        $schedule->command('notification:gift')->daily();
     }
 
     /**
