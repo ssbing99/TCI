@@ -6,7 +6,7 @@
             <div class="row clearfix">
                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <label>@lang('validation.attributes.frontend.email')<span>*</span></label>
-                    <input type="email" name="email" id="email" class="form-control custom-input" placeholder="toner.ingrid@gmail.com" disabled />
+                    <input type="email" name="email" id="email" class="form-control custom-input" placeholder="" value="{{$user->email}}" disabled />
                 </div>
             </div>
         </li>
