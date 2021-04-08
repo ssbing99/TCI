@@ -82,6 +82,8 @@ class LoginController extends Controller
                         $redirect = 'dashboard';
                     }elseif(auth()->user()->hasRole('student')){
                         $redirect = 'student';
+                    }elseif(auth()->user()->hasRole('teacher')){
+                        $redirect = 'teacher';
                     }else{
                         $redirect = 'back';
                     }
