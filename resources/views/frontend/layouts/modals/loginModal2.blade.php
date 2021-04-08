@@ -191,6 +191,8 @@
                                     }
                                 } else if(response.redirect == 'student'){
                                     window.location.href = "{{route('admin.student.dashboard')}}"
+                                } else if(response.redirect == 'teacher'){
+                                    window.location.href = "{{route('admin.teacher.dashboard')}}"
                                 } else {
                                     window.location.href = "{{route('admin.dashboard')}}"
                                 }

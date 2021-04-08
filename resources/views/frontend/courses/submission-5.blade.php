@@ -56,28 +56,73 @@
 
                     @if(isset($submission))
                     <div class="border-box clearfix">
-                        <ul class="vertical-list clearfix">
-                            <li>
-                                <p class="assign-content clearfix">
+                        <p class="assign-content clearfix">
                                 <span>
                                     {{ $submission->title }}<br/>
                                 {!! nl2br($submission->description) !!}
                                 </span>
-                                </p>
+                        </p>
+                        @php
+                            $sub_attachments = isset($submission) ? $submission->attachments : [];
+                        @endphp
+                        <ul class="vertical-list clearfix">
 
-                                <!-- Critique -->
-                                @if(count($submission->critiques) > 0)
+                            @foreach($sub_attachments as $sAttachment)
 
-                                    @foreach($submission->critiquesById(auth()->user()->id)->get() as $item)
+                                @if(count($sAttachment->comments) > 0)
+                                    <li>
                                         <p class="assign-content clearfix">
-                                        Critique by {{ $item->user->full_name }}<br /><br />
-                                        {!! nl2br($item->content) !!}
-                                        </p>
-                                        <a href="{{route('submission.all.critique',['assignment_id' => $assignment->id, 'submission_id' => $submission->id])}}" class="btn btn-primary btn-padding btn-sm mb-15">Respond to this Critique</a>
-                                    @endforeach
+                                            <span>
+                                                {{ $sAttachment->title }}<br/>
+                                            {!! nl2br($sAttachment->full_text) !!}
+                                            </span>
 
+                                            @if(isset($sAttachment->media) && !$sAttachment->media->isEmpty())
+                                                @foreach($sAttachment->media as $_media)
+                                                    @if($_media->type == 'upload')
+                                                        <img width="200px" src="{{asset('assets_new/images/play-button.png')}}" alt="" />
+                                                    @elseif(str_contains($_media->type,'image'))
+                                                        <img width="200px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" />
+                                                    @elseif(str_contains($_media->type,'youtube'))
+                                                        <img width="200px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" />
+
+                                                    @elseif(str_contains($_media->type,'vimeo'))
+                                                        <img width="200px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" />
+
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </p>
+                                        <!-- Comment -->
+                                    @foreach($sAttachment->comments as $comm)
+                                        <p class="assign-content clearfix">
+                                            Critique by {{ $comm->user->full_name }}<br /><br />
+                                            {!! nl2br($comm->content) !!}
+
+                                            @if(isset($comm->media) && !$comm->media->isEmpty())
+                                                <br/>
+                                                @foreach($comm->media as $_media)
+                                                    @if($_media->type == 'upload')
+                                                        <img width="100px" src="{{asset('assets_new/images/play-button.png')}}" alt="" />
+                                                    @elseif(str_contains($_media->type,'image'))
+                                                        <img width="100px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" />
+                                                    @elseif(str_contains($_media->type,'youtube'))
+                                                        <img width="100px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" />
+
+                                                    @elseif(str_contains($_media->type,'vimeo'))
+                                                        <img width="100px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" />
+
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </p>
+                                        <a href="{{route('submission.all.critique',['assignment_id' => $assignment->id, 'submission_id' => $submission->id, 'attachment_id' => $sAttachment->id])}}" class="btn btn-primary btn-padding btn-sm mb-15">Respond to this Critique</a>
+                                    @endforeach
+                                    </li>
                                 @endif
-                            </li>
+
+                            @endforeach
+
                         </ul>
                     </div>
                     @endif

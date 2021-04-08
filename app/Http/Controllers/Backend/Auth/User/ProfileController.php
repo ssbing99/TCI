@@ -85,6 +85,7 @@ class ProfileController extends Controller
                 $fieldsList[] =  ''.$field->name;
             }
         }
+        \Log::info($request->all());
         $output = $this->userRepository->update(
             $request->user()->id,
             $request->only('first_name', 'last_name','dob', 'phone', 'gender', 'address', 'city', 'postal', 'pincode', 'state', 'country', 'avatar_type', 'avatar_location'),
@@ -115,6 +116,9 @@ class ProfileController extends Controller
             return redirect()->route('frontend.auth.login')->withFlashInfo(__('strings.frontend.user.email_changed_notice'));
         }
 
-        return redirect()->route('admin.student.dashboard')->withFlashSuccess(__('strings.frontend.user.profile_updated'));
+        if(auth()->user()->hasRole('teacher'))
+            return redirect()->route('admin.teacher.dashboard')->withFlashSuccess(__('strings.frontend.user.profile_updated'));
+        else
+            return redirect()->route('admin.student.dashboard')->withFlashSuccess(__('strings.frontend.user.profile_updated'));
     }
 }
