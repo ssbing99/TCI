@@ -19,4 +19,9 @@ class Comment extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function media()
+    {
+        return $this->morphMany(Media::class, 'model');
+    }
 }

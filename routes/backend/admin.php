@@ -14,6 +14,7 @@ use \App\Http\Controllers\Backend\Auth\User\UserPasswordController;
 Route::redirect('/', '/user/dashboard', 301);
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('student/dashboard', [DashboardController::class, 'studentIndex'])->name('student.dashboard');
+Route::get('instructor/dashboard', [DashboardController::class, 'instructorIndex'])->name('teacher.dashboard');
 
 Route::group(['middleware' => 'role:teacher|administrator'], function () {
     Route::resource('orders', 'Admin\OrderController');

@@ -145,6 +145,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::get('assignment/{id}/student/', ['uses' => 'AssignmentController@show', 'as' => 'assignment.show']);
     Route::post('assignment/{id}/comment', ['uses' => 'AssignmentController@addComment', 'as' => 'assignment.comment']);
+    Route::get('assignment/{id}/comment/delete', ['uses' => 'AssignmentController@deleteComment', 'as' => 'assignment.comment.delete']);
     Route::get('submission/{id}/student', ['uses' => 'AssignmentController@showSubmission', 'as' => 'submission.show']);
     Route::get('submission/{id}/create', ['uses' => 'AssignmentController@createSubmission', 'as' => 'submission.create']);
 
@@ -152,8 +153,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('submission/{assignment_id}/{submission_id}/edit', ['uses' => 'AssignmentController@editSubmission', 'as' => 'submission.edit']);
     Route::post('submission/{assignment_id}/{submission_id}/update', ['uses' => 'AssignmentController@updateSubmission', 'as' => 'submission.update']);
     Route::post('submission/{assignment_id}/create', ['uses' => 'AssignmentController@storeSubmission', 'as' => 'submission.store']);
-    Route::get('submission/{assignment_id}/{submission_id}/critique', ['uses' => 'AssignmentController@showCritiques', 'as' => 'submission.all.critique']);
-    Route::post('submission/{assignment_id}/add/{submission_id}/critique', ['uses' => 'AssignmentController@addCritique', 'as' => 'submission.critique']);
+    Route::get('submission/{assignment_id}/{submission_id}/critique/{attachment_id}', ['uses' => 'AssignmentController@showCritiques', 'as' => 'submission.all.critique']);
+    Route::post('submission/{assignment_id}/add/{submission_id}/critique/{attachment_id}', ['uses' => 'AssignmentController@addCritique', 'as' => 'submission.critique']);
 
     //attachment
     Route::get('submission/{assignment_id}/attachment/{submission_id}', ['uses' => 'AssignmentController@createAttachment', 'as' => 'submission.attachment.create']);
@@ -165,6 +166,24 @@ Route::group(['middleware' => 'auth'], function () {
     //sequence
     Route::get('submission/{assignment_id}/attachment/{submission_id}/sequence', ['uses' => 'AssignmentController@attachmentSequence', 'as' => 'submission.attachment.sequence']);
     Route::post('submission/{assignment_id}/attachment/{submission_id}/sequence/update', ['uses' => 'AssignmentController@updateSequence', 'as' => 'submission.attachment.sequence.update']);
+
+
+    //TEACHER
+    Route::get('student/{id}/assignment/', ['uses' => 'AssignmentController@showWithSubmission', 'as' => 'student.assignment.show']);
+    Route::get('student/{assignment_id}/{submission_id}/submission', ['uses' => 'AssignmentController@showStudentSubmission', 'as' => 'student.submission.show']);
+
+    Route::post('student/{assignment_id}/{submission_id}/update', ['uses' => 'AssignmentController@addAttachmentCritique', 'as' => 'student.submission.critique']);
+
+    Route::get('log/{teacher_id}/clear', ['uses' => 'AssignmentController@readAllLog', 'as' => 'log.clear']);
+
+});
+
+// TEACHER
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('schedule-course/{id}', ['uses' => 'CoursesController@teacherShow', 'as' => 'courses.teacher.show']);
+    Route::get('student/{id}/course', ['uses' => 'CoursesController@userCourse', 'as' => 'courses.student.detail']);
+
 });
 
 Route::get('/search', [HomeController::class, 'searchAll'])->name('search');

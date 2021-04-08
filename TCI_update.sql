@@ -230,3 +230,21 @@ INSERT INTO `role_has_permissions`(`permission_id`, `role_id`) VALUES (82, 1);
 
 -- END GIFT
 
+-- TEACHER NEW
+
+--
+drop table critiques ;
+
+CREATE TABLE `logs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `teacher_id` int(10) unsigned NOT NULL,
+  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `unread` int(11) unsigned DEFAULT 0,
+  KEY `critiques_deleted_at_index` (`deleted_at`),
+  CONSTRAINT `log_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `log_teacher_id_foreign` FOREIGN KEY (`teacher_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- END TEACHER NEW

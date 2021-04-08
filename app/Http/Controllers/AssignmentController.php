@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreSubmissionsRequest;
 use App\Models\Assignment;
 use App\Models\Attachment;
 use App\Models\Comment;
+use App\Models\Log;
 use App\Models\Media;
 use App\Models\Submission;
 use Illuminate\Support\Collection;
@@ -34,6 +35,31 @@ class AssignmentController extends Controller
             $path = 'frontend-rtl';
         }
         $this->path = $path;
+    }
+
+
+    public function readAllLog($teacher_id)
+    {
+        $logs = Log::where('teacher_id', $teacher_id)->where('unread', 1)->get();
+        if(count($logs) > 0){
+            foreach($logs as $log){
+                $log->unread = 0;
+                $log->update();
+            }
+        }
+
+        return back();
+    }
+
+    public function createLog($title, $desc, $user_id, $teacher_id)
+    {
+        $log = new Log();
+        $log->user_id = $user_id;
+        $log->teacher_id = $teacher_id;
+        $log->title = $title;
+        $log->description = $desc;
+        $log->unread = 1;
+        $log->save();
     }
 
     /**
@@ -92,6 +118,18 @@ class AssignmentController extends Controller
         return view($view_path, compact('assignment', 'course','lesson', 'completed_assignments','otherSubmission'));
     }
 
+    public function showWithSubmission($id)
+    {
+        $assignment = Assignment::where('id', $id)->where('published', '=', 1)->first();
+
+        $course = $assignment->lesson->course;
+        $lesson = $assignment->lesson;
+
+        $view_path = returnPathByTheme($this->path.'.courses.student-assignment', 5,'-');
+
+        return view($view_path, compact('assignment', 'course','lesson'));
+    }
+
     /**
      * Display the attachment
      *
@@ -114,6 +152,22 @@ class AssignmentController extends Controller
         return view($view_path, compact('assignment', 'course','lesson', 'submission'));
     }
 
+    public function showStudentSubmission($assignment_id, $submission_id)
+    {
+        $assignment = Assignment::where('id', $assignment_id)->where('published', '=', 1)->first();
+//
+//        $course = $assignment->lesson->course;
+//        $lesson = $assignment->lesson;
+
+        $submission = Submission::withoutGlobalScope('filter')
+            ->where('id', $submission_id)->first();
+
+
+        $view_path = returnPathByTheme($this->path.'.courses.student-submission', 5,'-');
+
+        return view($view_path, compact( 'submission','assignment'));
+    }
+
     /**
      * Display the submission
      *
@@ -133,6 +187,7 @@ class AssignmentController extends Controller
     {
         $request->all();
         \Log::info($request->all());
+        $assignment = Assignment::find($assignment_id);
 
         $submission = new Submission();
         $submission->user_id = auth()->user()->id;
@@ -141,6 +196,8 @@ class AssignmentController extends Controller
         $submission->description = $request->description;
 //\Log::info(json_encode($submission));
         $submission->save();
+
+        $this->createLog(auth()->user()->full_name.' has submitted the assignment',NULL, auth()->user()->id, $assignment->lesson->course->teachers()->first()->id);
 
         //TODO: attachment
 
@@ -887,11 +944,12 @@ class AssignmentController extends Controller
         return back();
     }
 
-    public function showCritiques($assignment_id, $submission_id)
+    public function showCritiques($assignment_id, $submission_id, $attachment_id)
     {
         \Log::info($assignment_id);
         \Log::info($submission_id);
         $assignment = Assignment::where('id', $assignment_id)->where('published', '=', 1)->first();
+        $attachment = Attachment::findOrFail($attachment_id);
 
         $course = $assignment->lesson->course;
         $lesson = $assignment->lesson;
@@ -906,7 +964,7 @@ class AssignmentController extends Controller
 
         $view_path = returnPathByTheme($this->path.'.courses.critique', 5,'-');
 
-        return view($view_path, compact('assignment', 'course','lesson', 'submission'));
+        return view($view_path, compact('assignment', 'attachment', 'course','lesson', 'submission'));
     }
 
     /**
@@ -967,7 +1025,7 @@ class AssignmentController extends Controller
         $this->validate($request, [
             'comment' => 'required'
         ]);
-        $lesson = Assignment::findORFail($request->id);
+        $lesson = Assignment::findOrFail($request->id);
         $review = new Comment();
         $review->user_id = auth()->user()->id;
         $review->reviewable_id = $lesson->id;
@@ -979,21 +1037,107 @@ class AssignmentController extends Controller
         return back();
     }
 
+    public function deleteComment($id){
+        $comment = Comment::findOrFail($id);
+        if(auth()->user()->id == $comment->user_id){
+            $comment->delete();
+            return back();
+        }
+        return abort(419);
+    }
+
     public function addCritique(Request $request)
     {
         $this->validate($request, [
             'critique' => 'required'
         ]);
-//        $lesson = Assignment::findORFail($request->assignment_id);
-        $submission = Submission::findORFail($request->submission_id);
+
+        // create comment data first
         $review = new Comment();
         $review->user_id = auth()->user()->id;
-        $review->reviewable_id = $submission->id;
-        $review->reviewable_type = Submission::class;
+        $review->reviewable_id = $request->attachment_id;
+        $review->reviewable_type = Attachment::class;
         $review->rating = $request->rating;
         $review->content = $request->critique;
         $review->save();
 
         return back();
     }
+
+    public function addAttachmentCritique(Request $request, $assignment_id, $submission_id)
+    {
+
+        $assignment = Assignment::find($assignment_id);
+        $submission = Submission::find($submission_id);
+
+        \Log::info($request->all());
+        foreach($submission->attachments as $attachment){
+            \Log::info('critique_'.$attachment->id.' : '.$request->input('critique_'.$attachment->id));
+            \Log::info('file_'.$attachment->id.' : '.$request->hasFile('file_'.$attachment->id));
+
+
+            if($request->input('critique_'.$attachment->id) || $request->hasFile('file_'.$attachment->id)) {
+                $comment = $request->input('critique_'.$attachment->id)? $request->get('critique_'.$attachment->id) : null;
+
+                // create comment data first
+                $review = new Comment();
+                $review->user_id = auth()->user()->id;
+                $review->reviewable_id = $attachment->id;
+                $review->reviewable_type = Attachment::class;
+                $review->rating = NULL;
+                $review->content = $comment;
+                $review->save();
+
+                // then insert media
+
+                // media
+//                if($request->hasFile('file_'.$attachment->id)){
+//                    $model_type = Comment::class;
+//                    $model_id = $review->id;
+//                    $name = $attachment->title . ' - video';
+//
+//                    $file = \Illuminate\Support\Facades\Request::file('video_file');
+//                    $filename = time() . '-' . $file->getClientOriginalName();
+//                    $size = $file->getSize() / 1024;
+//                    $path = public_path() . '/storage/uploads/';
+//                    $file->move($path, $filename);
+//
+//                    $video_id = $filename;
+//                    $url = asset('storage/uploads/' . $filename);
+//
+//                    $media = new Media();
+//                    $media->model_type = $model_type;
+//                    $media->model_id = $model_id;
+//                    $media->name = $name;
+//                    $media->url = $url;
+//                    $media->type = 'upload';
+//                    $media->file_name = $video_id;
+//                    $media->size = 0;
+//                    $media->save();
+//
+//                }
+
+                $this->saveSingleFiles($request, 'file_'.$attachment->id, Comment::class, $review, false);
+
+            }
+
+        }
+
+
+//        $this->validate($request, [
+//            'critique' => 'required'
+//        ]);
+//        $lesson = Assignment::findORFail($request->assignment_id);
+//        $submission = Submission::findORFail($request->submission_id);
+//        $review = new Comment();
+//        $review->user_id = auth()->user()->id;
+//        $review->reviewable_id = $submission->id;
+//        $review->reviewable_type = Submission::class;
+//        $review->rating = $request->rating;
+//        $review->content = $request->critique;
+//        $review->save();
+
+        return back();
+    }
+
 }
