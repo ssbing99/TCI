@@ -65,11 +65,11 @@
                 <div class="row clearfix">
                     <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <label>@lang('labels.teacher.facebook_link')</label>
-                        <input type="text" name="facebook_link" id="facebook_link" class="form-control custom-input" placeholder="Ingrid" required value="{{$teacherProfile->facebook_link}}"/>
+                        <input type="text" name="facebook_link" id="facebook_link" class="form-control custom-input" placeholder="" value="{{$teacherProfile->facebook_link}}"/>
                     </div>
                     <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <label>@lang('labels.teacher.twitter_link')</label>
-                        <input type="text" name="twitter_link" id="twitter_link" class="form-control custom-input" placeholder="Toner" required value="{{$teacherProfile->twitter_link}}"/>
+                        <input type="text" name="twitter_link" id="twitter_link" class="form-control custom-input" placeholder="" value="{{$teacherProfile->twitter_link}}"/>
                     </div>
                 </div>
             </li>
@@ -77,7 +77,7 @@
                 <div class="row clearfix">
                     <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                         <label>@lang('labels.teacher.linkedin_link')</label>
-                        <input type="text" name="linkedin_link" id="linkedin_link" class="form-control custom-input" placeholder="Ingrid" required value="{{$teacherProfile->linkedin_link}}"/>
+                        <input type="text" name="linkedin_link" id="linkedin_link" class="form-control custom-input" placeholder="" value="{{$teacherProfile->linkedin_link}}"/>
                     </div>
                 </div>
             </li>
