@@ -63,12 +63,17 @@ class SendNotifyGiftEmail extends Command
 
     private function notifyMail($gift, $email, $giftUser)
     {
-        $content['receiver_name'] = $email->receiver_name;
-        $content['code'] = $giftUser->code;
+        try {
+            $content['receiver_name'] = $email->receiver_name;
+            $content['code'] = $giftUser->code;
 
-        \Mail::to($email->receiver_email)->send(new GiftNotifyMail($content, $giftUser->user, $gift));
+            \Mail::to($email->receiver_email)->send(new GiftNotifyMail($content, $giftUser->user, $gift));
 
-        $email->status = 1;
-        $email->save();
+            $email->status = 1;
+            $email->save();
+        }catch (\Exception $e){
+            \Log::info('SendNotifyEmail FAILED');
+            \Log::info($e);
+        }
     }
 }

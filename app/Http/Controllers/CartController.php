@@ -1774,13 +1774,17 @@ class CartController extends Controller
 
     private function notifyMail($gift, $email, $coupon)
     {
-        $content['receiver_name'] = $email->receiver_name;
-        $content['code'] = $coupon->code;
+        try {
+            $content['receiver_name'] = $email->receiver_name;
+            $content['code'] = $coupon->code;
 
-        \Mail::to($email->receiver_email)->send(new GiftNotifyMail($content, auth()->user(), $gift));
+            \Mail::to($email->receiver_email)->send(new GiftNotifyMail($content, auth()->user(), $gift));
 
-        $email->status = 1;
-        $email->save();
+            $email->status = 1;
+            $email->save();
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
     }
 
     private function populatePaymentDisplayInfo() {
