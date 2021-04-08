@@ -558,9 +558,37 @@ class CartController extends Controller
                     }
 
                     if($giftUser->gift->mentorship == 1 && $giftUser->gift->mentorship != $course->mentorship){
-                        return redirect()->route('cart.singleCheckout', ['course_id' => $course->id])->withdanger('Gift Coupon is applicable for mentorship  only.');
+                        if($isMentorship){
+
+                            $ment_type = 1;
+                            if(str_contains(strtolower($course->title), 'one')){
+                                $ment_type = 1;
+                            }elseif(str_contains(strtolower($course->title), 'three')){
+                                $ment_type = 3;
+                            }else{
+                                $ment_type = 6;
+                            }
+
+                            return redirect()->route('mentorship.enroll', ['mentorship_id' => $ment_type, 'instructor_list'=> $mentor])->withdanger('Gift Coupon is applicable for 1 Month mentorship only.');
+                        }else {
+                            return redirect()->route('cart.singleCheckout', ['course_id' => $course->id])->withdanger('Gift Coupon is applicable for mentorship  only.');
+                        }
                     }elseif($giftUser->gift->portfolio_review == 1 && $giftUser->gift->portfolio_review != $course->portfolio_review){
-                        return redirect()->route('cart.singleCheckout', ['course_id' => $course->id])->withdanger('Gift Coupon is applicable for portfolio review only.');
+                        if($isMentorship){
+
+                            $ment_type = 1;
+                            if(str_contains(strtolower($course->title), 'one')){
+                                $ment_type = 1;
+                            }elseif(str_contains(strtolower($course->title), 'three')){
+                                $ment_type = 3;
+                            }else{
+                                $ment_type = 6;
+                            }
+
+                            return redirect()->route('mentorship.enroll', ['mentorship_id' => $ment_type, 'instructor_list'=> $mentor])->withdanger('Gift Coupon is applicable for 1 Month mentorship only.');
+                        }else {
+                            return redirect()->route('cart.singleCheckout', ['course_id' => $course->id])->withdanger('Gift Coupon is applicable for portfolio review only.');
+                        }
                     }
 
                     if($giftUser->gift->mentorship == 1 && $isMentorship){
