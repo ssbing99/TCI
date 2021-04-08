@@ -117,7 +117,13 @@
                                     </select>
                                     <input type="text" name="price" id="price" placeholder="$69.00" disabled />
                                     <div class="input-group-append">
+                                        @if(!auth()->check())
+                                            <a id="openLoginModal"
+                                               class="btn btn-primary"
+                                               data-target="#myModal" href="#">SIGN UP</a>
+                                        @elseif(auth()->check() && (auth()->user()->hasRole('student')))
                                         <button class="btn btn-primary" type="submit">BUY</button>
+                                        @endif
                                     </div>
                                 </div>
                                 @endif
