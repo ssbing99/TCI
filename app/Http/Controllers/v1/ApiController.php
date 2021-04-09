@@ -4,7 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Helpers\General\EarningHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\FileUploadTrait;
+//use App\Http\Controllers\Traits\FileUploadTrait;
 use App\Http\Requests\Frontend\User\UpdatePasswordRequest;
 use App\Http\Requests\Frontend\User\UpdateProfileRequest;
 use App\Mail\Frontend\Contact\SendContact;
@@ -68,7 +68,7 @@ use Newsletter;
 
 class ApiController extends Controller
 {
-    use FileUploadTrait;
+//    use FileUploadTrait;
     use SendsPasswordResetEmails;
 
 

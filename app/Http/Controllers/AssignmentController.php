@@ -12,7 +12,7 @@ use App\Models\Media;
 use App\Models\Submission;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Traits\FileUploadTrait;
+use App\Http\Traits\FileUploadTrait;
 use Illuminate\Support\Facades\Validator;
 
 class AssignmentController extends Controller
