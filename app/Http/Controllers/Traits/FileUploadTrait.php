@@ -6,7 +6,7 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 
-trait FileUploadTrait
+trait FileUploadTrait2
 {
 
     /**

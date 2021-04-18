@@ -14,6 +14,11 @@
                        class="btn btn-success">Enroll Student</a>
 
                 </div>
+                <div class="float-right mr-2">
+                    <a href="{{ route('admin.course-user-zoom.create', ['course'=> $course->id]) }}"
+                       class="btn btn-success">Schedule Zoom</a>
+
+                </div>
             @endif
         </div>
         <div class="card-body">

@@ -392,3 +392,12 @@ Route::group(['prefix'=> 'live-lesson-slots'], function () {
     Route::delete('permanent/{id}', ['uses' => 'LiveLessonSlotController@permanent', 'as' => 'live-lesson-slots.perma_del']);
 });
 Route::resource('live-lesson-slots', 'LiveLessonSlotController');
+
+Route::group(['prefix'=> 'course-user-zoom'], function () {
+    Route::get('zoom/course', ['uses' => 'CourseStudentZoomController@precreate', 'as' => 'course-user-zoom.pre.create']);
+    Route::post('create', ['uses' => 'CourseStudentZoomController@create', 'as' => 'course-user-zoom.create.post']);
+    Route::get('data', ['uses' => 'CourseStudentZoomController@getData', 'as' => 'course-user-zoom.get_data']);
+    Route::post('restore/{id}', ['uses' => 'CourseStudentZoomController@restore', 'as' => 'course-user-zoom.restore']);
+    Route::delete('permanent/{id}', ['uses' => 'CourseStudentZoomController@permanent', 'as' => 'course-user-zoom.perma_del']);
+});
+Route::resource('course-user-zoom', 'CourseStudentZoomController');

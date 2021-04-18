@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreLessonsRequest;
 use App\Http\Requests\Admin\UpdateLessonsRequest;
-use App\Http\Controllers\Traits\FileUploadTrait;
+use App\Http\Traits\FileUploadTrait;
 use Yajra\DataTables\Facades\DataTables;
 
 class LessonsController extends Controller

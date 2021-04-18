@@ -111,6 +111,12 @@
 {{--                            </li>--}}
 {{--                        @endcan--}}
 
+                            <li class="nav-item ">
+                                <a class="nav-link {{ $request->segment(2) == 'course-user-zoom' ? 'active' : '' }}"
+                                   href="{{ route('admin.course-user-zoom.index') }}">
+                                    <span class="title">Zoom Schedule</span>
+                                </a>
+                            </li>
 
 {{--                        @can('live_lesson_access')--}}
 {{--                            <li class="nav-item ">--}}

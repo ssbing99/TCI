@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Backend\Admin;
 
-use App\Http\Controllers\Traits\FileUploadTrait;
+use App\Http\Traits\FileUploadTrait;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

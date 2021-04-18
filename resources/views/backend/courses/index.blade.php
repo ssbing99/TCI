@@ -14,6 +14,11 @@
                        class="btn btn-success">@lang('strings.backend.general.app_add_new')</a>
 
                 </div>
+                <div class="float-right mr-2">
+                    <a href="{{ route('admin.course-user-zoom.pre.create') }}@if(request('lesson_id')){{'?lesson_id='.request('lesson_id')}}@endif"
+                       class="btn btn-success">Schedule Zoom</a>
+
+                </div>
             @endcan
         </div>
         <div class="card-body">

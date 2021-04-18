@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Backend\Admin;
 
 use App\Exceptions\GeneralException;
-use App\Http\Controllers\Traits\FileUploadTrait;
+use App\Http\Traits\FileUploadTrait;
 use App\Http\Requests\Admin\StoreTeachersRequest;
 use App\Http\Requests\Admin\UpdateTeachersRequest;
 use App\Models\Auth\User;

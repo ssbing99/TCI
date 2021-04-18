@@ -14,7 +14,7 @@ use App\Models\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
-use App\Http\Controllers\Traits\FileUploadTrait;
+use App\Http\Traits\FileUploadTrait;
 use Yajra\DataTables\Facades\DataTables;
 
 class AssignmentsController extends Controller

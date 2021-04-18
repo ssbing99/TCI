@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Backend\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\FileUploadTrait;
+use App\Http\Traits\FileUploadTrait;
 use App\Http\Requests\Admin\StoreReasonsRequest;
 use App\Http\Requests\Admin\UpdateReasonsRequest;
 use App\Models\Reason;

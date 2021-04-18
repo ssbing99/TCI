@@ -248,3 +248,43 @@ CREATE TABLE `logs` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- END TEACHER NEW
+
+
+-- ZOOM for COURSE
+CREATE TABLE `course_student_zooms` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `course_id` int(10) unsigned DEFAULT NULL,
+  `meeting_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `topic` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'agenda',
+  `start_at` datetime NOT NULL,
+  `duration` int(11) NOT NULL COMMENT 'minutes',
+  `password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'meeting password',
+  `student_limit` int(11) DEFAULT NULL,
+  `start_url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `join_url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `course_student_zooms_course_id_foreign` (`course_id`),
+  CONSTRAINT `course_student_zooms_course_id_foreign` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `course_student_zoom_bookings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `course_student_zoom_id` int(10) unsigned DEFAULT NULL,
+  `course_id` int(10) unsigned DEFAULT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `course_student_zoom_bookings_id_foreign` (`course_student_zoom_id`),
+  KEY `course_student_zoom_bookings_course_id_foreign` (`course_id`),
+  KEY `course_student_zoom_bookings_user_id_foreign` (`user_id`),
+  CONSTRAINT `course_student_zoom_bookings_course_id_foreign` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `course_student_zoom_bookings_id_foreign` FOREIGN KEY (`course_student_zoom_id`) REFERENCES `course_student_zooms` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `course_student_zoom_bookings_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- END ZOOM for COURSE
