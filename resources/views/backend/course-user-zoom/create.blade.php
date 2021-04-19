@@ -9,10 +9,6 @@
     <div class="card">
         <div class="card-header">
             <h3 class="page-title float-left mb-0">Create Zoom Schedule</h3>
-            <div class="float-right">
-                <a href="{{ route('admin.live-lesson-slots.index') }}"
-                   class="btn btn-success">@lang('labels.backend.live_lesson_slots.view')</a>
-            </div>
         </div>
         <div class="card-body">
             @if (Auth::user()->isAdmin())
