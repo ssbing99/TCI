@@ -65,13 +65,13 @@
                         <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 form-group">
                             <label>Upload a Video
                                 <input type="file" name="video_file" id="video_file" class="form-control" accept="video/avi,video/mpeg,video/quicktime,video/mp4"/>
-                                <small class="text-muted">File to Upload</small>
+                                <small class="text-muted">*Video must not more than 5 MB. Only accept MP4, MPEG, AVI type.</small>
                             </label>
                         </div>
                         <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 form-group">
-                            <label>Upload a File
-                                <input type="file" name="attachment_file" id="attachment_file" class="form-control" accept="image/*,.pdf" />
-                                <small class="text-muted">*Photos must be more than 500 px. on both horizontal and vertical dimensions</small>
+                            <label>Upload a Photo File
+                                <input type="file" name="attachment_file[]" id="attachment_file" class="form-control" accept="image/jpeg" multiple/>
+                                <small class="text-muted">*Photos must be more than 500 px. on both horizontal and vertical dimensions. Only JPEG photo type.</small>
                             </label>
                         </div>
                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">

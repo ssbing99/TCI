@@ -166,7 +166,11 @@
                                     @foreach($logs as $log)
                                         <tr>
                                             <td>{{\Carbon\Carbon::parse($log->created_at)->format('d M Y | g:i A')}}</td>
-                                            <td>{{ $log->title }}</td>
+                                            @if($log->submission_id != null)
+                                                <td><a href="{{route('student.submission.show', ['assignment_id'=>$log->submission->assignment->id, 'submission_id'=>$log->submission->id])}}">{{ $log->title }}</a></td>
+                                            @else
+                                                <td>{{ $log->title }}</td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 @else

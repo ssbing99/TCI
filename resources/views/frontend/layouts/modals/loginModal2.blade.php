@@ -28,7 +28,7 @@
                         <input type="password" name="password" placeholder="Password">
                     </div>
                     <span id="login-password-error" class="text-danger"></span>
-                    <a class="forgot" href="#">Forgot password?</a>
+                    <a class="forgot" href="{{ route('frontend.auth.password.reset') }}">Forgot password?</a>
                     <input type="hidden" name="enrollId" id="enrollId" value="">
                     <input type="hidden" name="isGift" id="isGift" value="">
                     <input type="hidden" name="workshopId" id="workshopId" value="">

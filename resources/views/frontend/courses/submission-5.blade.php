@@ -80,14 +80,14 @@
                                             @if(isset($sAttachment->media) && !$sAttachment->media->isEmpty())
                                                 @foreach($sAttachment->media as $_media)
                                                     @if($_media->type == 'upload')
-                                                        <img width="200px" src="{{asset('assets_new/images/play-button.png')}}" alt="" />
+                                                        <a href="{{$_media->url}}" target="_blank"><img width="200px" src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a>
                                                     @elseif(str_contains($_media->type,'image'))
-                                                        <img width="200px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" />
+                                                        <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img width="200px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a>
                                                     @elseif(str_contains($_media->type,'youtube'))
-                                                        <img width="200px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" />
+                                                        <a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img width="200px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a>
 
                                                     @elseif(str_contains($_media->type,'vimeo'))
-                                                        <img width="200px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" />
+                                                        <a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img width="200px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a>
 
                                                     @endif
                                                 @endforeach
@@ -103,14 +103,14 @@
                                                 <br/>
                                                 @foreach($comm->media as $_media)
                                                     @if($_media->type == 'upload')
-                                                        <img width="100px" src="{{asset('assets_new/images/play-button.png')}}" alt="" />
+                                                        <a href="{{$_media->url}}" target="_blank"><img width="100px" src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a>
                                                     @elseif(str_contains($_media->type,'image'))
-                                                        <img width="100px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" />
+                                                        <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img width="100px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a>
                                                     @elseif(str_contains($_media->type,'youtube'))
-                                                        <img width="100px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" />
+                                                        <a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img width="100px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a>
 
                                                     @elseif(str_contains($_media->type,'vimeo'))
-                                                        <img width="100px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" />
+                                                        <a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img width="100px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a>
 
                                                     @endif
                                                 @endforeach

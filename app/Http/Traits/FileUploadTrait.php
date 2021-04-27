@@ -311,6 +311,31 @@ trait FileUploadTrait
         return $finalRequest;
     }
 
+    public function saveOneMedia($item, $model_type = null, $model = null)
+    {
+        ini_set('memory_limit', '-1');
+        if (!file_exists(public_path('storage/uploads'))) {
+            mkdir(public_path('storage/uploads'), 0777);
+            mkdir(public_path('storage/upload/thumb'), 0777);
+        }
+
+        $extension = array_last(explode('.', $item->getClientOriginalName()));
+        $name = array_first(explode('.', $item->getClientOriginalName()));
+        $filename = time() . '-' . str_slug($name) . '.' . $extension;
+        $size = $item->getSize() / 1024;
+        $item->move(public_path('storage/uploads'), $filename);
+        $media = Media::create([
+            'model_type' => $model_type,
+            'model_id' => $model->id,
+            'name' => $filename,
+            'type' => $item->getClientMimeType(),
+            'file_name' => $filename,
+            'size' => $size,
+        ]);
+
+        return $media;
+    }
+
     public function saveLogos(Request $request){
         if (!file_exists(public_path('storage/logos'))) {
             mkdir(public_path('storage/logos'), 0777);

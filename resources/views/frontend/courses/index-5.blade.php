@@ -135,7 +135,7 @@
                                 <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 course-filter {{'course-id-'.$course->id}}">
                                     <div class="course clearfix">
                                         <div class="course-img clearfix">
-                                            <a href="{{ route('courses.show', [$course->slug]) }}"><img src="@if($course->course_image != "") {{asset('storage/uploads/'.$course->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif" alt="" /></a>
+                                            <a href="{{ route('courses.show', [$course->slug]) }}"><img src="@if($course->course_image != "") {{asset('storage/uploads/'.$course->course_image)}} @else {{asset('assets_new/images/empty-img.jpeg')}} @endif" onerror="{{asset('assets_new/images/empty-img.jpeg')}}" alt="" /></a>
                                             <div class="over">
                                                 <div class="price">
                                                     @if($course->free == 1)

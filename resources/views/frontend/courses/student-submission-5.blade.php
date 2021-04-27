@@ -61,20 +61,21 @@
                             @if(isset($attachment->media) && !$attachment->media->isEmpty())
                                 @foreach($attachment->media as $_media)
                                     @if($_media->type == 'upload')
-                                        <img src="{{asset('assets_new/images/play-button.png')}}" alt="" />
+                                        <a href="{{$_media->url}}" target="_blank"><img src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a>
                                     @elseif(str_contains($_media->type,'image'))
-                                        <img src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" />
+                                        <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a>
                                     @elseif(str_contains($_media->type,'youtube'))
-                                        <img src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" />
+                                        <a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a>
 
                                     @elseif(str_contains($_media->type,'vimeo'))
-                                        <img src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" />
+                                        <a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a>
 
                                     @endif
                                 @endforeach
                                     <div class="border-dashed">
                                         <p class="head clearfix">Description by {{$submission->user->full_name}}: {{$attachment->title}} <br/>{!! nl2br($attachment->full_text) !!}</p>
                                     </div>
+
 
                             @endif
                         </div>
@@ -93,14 +94,14 @@
                                             @if(isset($item->media) && !$item->media->isEmpty())
                                                 @foreach($item->media as $_media)
                                                     @if($_media->type == 'upload')
-                                                        <img src="{{asset('assets_new/images/play-button.png')}}" alt="" />
+                                                        <a href="{{$_media->url}}" target="_blank"><img src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a>
                                                     @elseif(str_contains($_media->type,'image'))
-                                                        <img src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" />
+                                                        <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a>
                                                     @elseif(str_contains($_media->type,'youtube'))
-                                                        <img src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" />
+                                                        <a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a>
 
                                                     @elseif(str_contains($_media->type,'vimeo'))
-                                                        <img src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" />
+                                                        <a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a>
 
                                                     @endif
                                                 @endforeach
@@ -134,86 +135,26 @@
                     <input type="button" name="submitBtn" id="submitBtn" class="btn btn-primary br-24 btn-padding" value="Save Changes"  onclick="this.form.submit()"/>
 
                     </form>
-{{--                    <p class="head clearfix">Attachment 1 of 11</p>--}}
-{{--                    <div class="attachment clearfix">--}}
-{{--                        <img src="images/assignment-pic.png" alt="" />--}}
-{{--                        <div class="border-dashed">--}}
-{{--                            <p class="head clearfix">Description by Thomas Mangione: Photo 7</p>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="box-ededed clearfix">--}}
-{{--                        <p class="head clearfix">Comments</p>--}}
-{{--                        <div class="flexbox clearfix">--}}
-{{--                            <img src="images/student.png" alt="" />--}}
-{{--                            <div class="flexcontent clearfix">--}}
-{{--                                <div class="student-name clearfix">Critique by David Bathgate<div class="bottom">September 14, 2020</div></div>--}}
-{{--                                <p class="assign-content clearfix">This photo is a little confusing in terms of what's going on. Perhaps the next minutes would have revealed more to the viewer, as the women pulled items from the car.</p>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="line clearfix"></div>--}}
-{{--                        <div class="student-name clearfix">--}}
-{{--                            Critique--}}
-{{--                            <div class="bottom">Upload an image :</div>--}}
-{{--                        </div>--}}
-{{--                        <input type="file" name="file" id="file" />--}}
-{{--                        <p class="assign-content clearfix">Content</p>--}}
-{{--                        <textarea name="text" id="text" placeholder="Enter Content" class="form-control" rows="5"></textarea>--}}
-{{--                    </div>--}}
-{{--                    <p class="head clearfix">Attachment 2 of 11</p>--}}
-{{--                    <div class="attachment clearfix">--}}
-{{--                        <img src="images/assignment-pic.png" alt="" />--}}
-{{--                        <div class="border-dashed">--}}
-{{--                            <p class="head clearfix">Description by Thomas Mangione: Photo 7</p>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="box-ededed clearfix">--}}
-{{--                        <p class="head clearfix">Comments</p>--}}
-{{--                        <div class="flexbox clearfix">--}}
-{{--                            <img src="images/student.png" alt="" />--}}
-{{--                            <div class="flexcontent clearfix">--}}
-{{--                                <div class="student-name clearfix">Critique by David Bathgate<div class="bottom">September 14, 2020</div></div>--}}
-{{--                                <p class="assign-content clearfix">This photo is a little confusing in terms of what's going on. Perhaps the next minutes would have revealed more to the viewer, as the women pulled items from the car.</p>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="line clearfix"></div>--}}
-{{--                        <div class="student-name clearfix">--}}
-{{--                            Critique--}}
-{{--                            <div class="bottom">Upload an image :</div>--}}
-{{--                        </div>--}}
-{{--                        <input type="file" name="file" id="file" />--}}
-{{--                        <p class="assign-content clearfix">Content</p>--}}
-{{--                        <textarea name="text" id="text" placeholder="Enter Content" class="form-control" rows="5"></textarea>--}}
-{{--                    </div>--}}
-{{--                    <p class="head clearfix">Attachment 3 of 11</p>--}}
-{{--                    <div class="attachment clearfix">--}}
-{{--                        <img src="images/assignment-pic.png" alt="" />--}}
-{{--                        <div class="border-dashed">--}}
-{{--                            <p class="head clearfix">Description by Thomas Mangione: Photo 7</p>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="box-ededed clearfix">--}}
-{{--                        <p class="head clearfix">Comments</p>--}}
-{{--                        <div class="flexbox clearfix">--}}
-{{--                            <img src="images/student.png" alt="" />--}}
-{{--                            <div class="flexcontent clearfix">--}}
-{{--                                <div class="student-name clearfix">Critique by David Bathgate<div class="bottom">September 14, 2020</div></div>--}}
-{{--                                <p class="assign-content clearfix">This photo is a little confusing in terms of what's going on. Perhaps the next minutes would have revealed more to the viewer, as the women pulled items from the car.</p>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="line clearfix"></div>--}}
-{{--                        <div class="student-name clearfix">--}}
-{{--                            Critique--}}
-{{--                            <div class="bottom">Upload an image :</div>--}}
-{{--                        </div>--}}
-{{--                        <input type="file" name="file" id="file" />--}}
-{{--                        <p class="assign-content clearfix">Content</p>--}}
-{{--                        <textarea name="text" id="text" placeholder="Enter Content" class="form-control" rows="5"></textarea>--}}
-{{--                    </div>--}}
-{{--                    <a href="#" class="btn btn-primary btn-padding br-24">Save Changes</a>--}}
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Modal -->
+    <div class="modal fade" id="Photos" tabindex="-1" role="dialog" aria-labelledby="photos" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+                </div>
+                <div class="modal-body">
+                    <img id="big-photo" src="images/pic-full-1.jpg" class="img-full" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- End of course details section
         ============================================= -->
 @endsection
