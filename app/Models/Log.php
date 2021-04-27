@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App
  * @property string $user_id
+ * @property string $submission_id
  * @property string $teacher_id
  * @property text $title
  * @property text $description
@@ -17,12 +18,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Log extends Model
 {
-    protected $fillable = ['user_id', 'teacher_id', 'title', 'description', 'unread'];
+    protected $fillable = ['user_id', 'submission_id', 'teacher_id', 'title', 'description', 'unread'];
 
     protected $guarded = [];
 
     public function user(){
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function submission()
+    {
+        return $this->belongsTo(Submission::class);
     }
 
     public function teacher(){

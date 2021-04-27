@@ -47,14 +47,14 @@
                                 <br/>
                                 @foreach($comm->media as $_media)
                                     @if($_media->type == 'upload')
-                                        <img width="100px" src="{{asset('assets_new/images/play-button.png')}}" alt="" />
+                                        <a href="{{$_media->url}}" target="_blank"><img width="100px" src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a>
                                     @elseif(str_contains($_media->type,'image'))
-                                        <img width="100px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" />
+                                        <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img width="100px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a>
                                     @elseif(str_contains($_media->type,'youtube'))
-                                        <img width="100px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" />
+                                        <a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img width="100px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a>
 
                                     @elseif(str_contains($_media->type,'vimeo'))
-                                        <img width="100px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" />
+                                        <a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img width="100px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a>
 
                                     @endif
                                 @endforeach
@@ -79,6 +79,21 @@
         </div>
     </section>
 
+    <!-- Modal -->
+    <div class="modal fade" id="Photos" tabindex="-1" role="dialog" aria-labelledby="photos" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+                </div>
+                <div class="modal-body">
+                    <img id="big-photo" src="images/pic-full-1.jpg" class="img-full" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- End of course section
         ============================================= -->
 
@@ -87,6 +102,14 @@
 @push('after-scripts')
     <script>
         $(document).ready(function () {
+            $(document).on('click', '#gridPhotoImg', function () {
+                var imgSrc = $(this).children('img')[0].src;
+
+                if(imgSrc){
+                    $('#big-photo').attr('src',imgSrc);
+                    $('Photos').modal('show');
+                }
+            });
         });
 
     </script>

@@ -51,10 +51,11 @@ class AssignmentController extends Controller
         return back();
     }
 
-    public function createLog($title, $desc, $user_id, $teacher_id)
+    public function createLog($title, $desc, $user_id, $teacher_id, $submission_id)
     {
         $log = new Log();
         $log->user_id = $user_id;
+        $log->submission_id = $submission_id;
         $log->teacher_id = $teacher_id;
         $log->title = $title;
         $log->description = $desc;
@@ -185,6 +186,7 @@ class AssignmentController extends Controller
 
     public function storeSubmission(StoreSubmissionsRequest $request, $assignment_id)
     {
+        ini_set('memory_limit', '-1');
         $request->all();
         \Log::info($request->all());
         $assignment = Assignment::find($assignment_id);
@@ -197,7 +199,7 @@ class AssignmentController extends Controller
 //\Log::info(json_encode($submission));
         $submission->save();
 
-        $this->createLog(auth()->user()->full_name.' has submitted the assignment',NULL, auth()->user()->id, $assignment->lesson->course->teachers()->first()->id);
+        $this->createLog(auth()->user()->full_name.' has submitted the assignment',NULL, auth()->user()->id, $assignment->lesson->course->teachers()->first()->id, $submission->id);
 
         //TODO: attachment
 
@@ -278,7 +280,25 @@ class AssignmentController extends Controller
 
             }
 
-            $request = $this->saveAllFiles($request, 'attachment_file', Attachment::class, $attachment, true);
+            $cntFile = 0;
+            $position = 2;
+
+            foreach ($request->file('attachment_file') as $item) {
+                \Log::info('attachment_file>>>>'. $item);
+                $new_attach = '';
+                if($cntFile > 0) {
+                    $new_attach = $this->createAttachmentClass($request->title_attach, $request->description_attach, $request->metaData, $submission->id);
+                    $new_attach->position = $position++;
+                    $new_attach->save();
+                }
+
+                $media = $this->saveOneMedia($item, Attachment::class, ($cntFile == 0? $attachment : $new_attach));
+
+                $cntFile++;
+
+            }
+
+//            $request = $this->saveAllFiles($request, 'attachment_file', Attachment::class, $attachment, true);
 
         }
 
@@ -436,12 +456,13 @@ class AssignmentController extends Controller
 
     public function storeAttachment(StoreAttachmentsRequest $request, $assignment_id, $submission_id)
     {
+        ini_set('memory_limit', '-1');
         $request->all();
 
         $submission = Submission::where('id', $submission_id)->first();
         $position = Attachment::where('submission_id', $submission_id)->max('position') + 1;
 
-        \Log::info($position);
+        \Log::info($request->all());
 
         //TODO: Need to separate as attachment
 
@@ -484,9 +505,10 @@ class AssignmentController extends Controller
          */
 
         if($hasAttacment){
+
             $attachment->submission_id = $submission->id;
             $attachment->user_id = auth()->user()->id;
-            $attachment->position = $position;
+            $attachment->position = $position++;
             $attachment->save();
 
 
@@ -558,7 +580,24 @@ class AssignmentController extends Controller
 
             }
 
-            $request = $this->saveAllFiles($request, 'attachment_file', Attachment::class, $attachment, true);
+            $cntFile = 0;
+
+            foreach ($request->file('attachment_file') as $item) {
+                \Log::info('attachment_file>>>>'. $item);
+                $new_attach = '';
+                if($cntFile > 0) {
+                    $new_attach = $this->createAttachmentClass($request->title_attach, $request->description_attach, $request->metaData, $submission->id);
+                    $new_attach->position = $position++;
+                    $new_attach->save();
+                }
+
+                $media = $this->saveOneMedia($item, Attachment::class, ($cntFile == 0? $attachment : $new_attach));
+
+                $cntFile++;
+
+            }
+
+//            $request = $this->saveAllFiles($request, 'attachment_file', Attachment::class, $attachment);
 
         }
 
@@ -1025,6 +1064,7 @@ class AssignmentController extends Controller
         $this->validate($request, [
             'comment' => 'required'
         ]);
+        \Log::info($request->all());
         $lesson = Assignment::findOrFail($request->id);
         $review = new Comment();
         $review->user_id = auth()->user()->id;
@@ -1033,6 +1073,55 @@ class AssignmentController extends Controller
         $review->rating = $request->rating;
         $review->content = $request->comment;
         $review->save();
+
+        $hasAttacment = false;
+
+        if($request->hasFile('video_file') || $request->hasFile('attachment_file')){
+            $hasAttacment = true;
+        }
+
+        \Log::info('$hasAttacment: '.$hasAttacment);
+
+        if($hasAttacment){
+
+            //Saving  videos
+            if($request->hasFile('video_file')){
+                $model_type = Comment::class;
+                $model_id = $review->id;
+                $name = ' - video';
+
+                $file = \Illuminate\Support\Facades\Request::file('video_file');
+                $filename = time() . '-' . $file->getClientOriginalName();
+                $size = $file->getSize() / 1024;
+                $path = public_path() . '/storage/uploads/';
+                $file->move($path, $filename);
+
+                $video_id = $filename;
+                $url = asset('storage/uploads/' . $filename);
+
+                $media = Media::where('url', $video_id)
+                    ->where('type', '=', 'upload')
+                    ->where('model_type', '=', 'App\Models\Comment')
+                    ->where('model_id', '=', $review->id)
+                    ->first();
+
+                if ($media == null) {
+                    $media = new Media();
+                }
+                $media->model_type = $model_type;
+                $media->model_id = $model_id;
+                $media->name = $name;
+                $media->url = $url;
+                $media->type = 'upload';
+                $media->file_name = $video_id;
+                $media->size = 0;
+                $media->save();
+
+            }
+
+            $request = $this->saveAllFiles($request, 'attachment_file', Comment::class, $review, true);
+
+        }
 
         return back();
     }

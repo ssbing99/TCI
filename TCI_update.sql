@@ -289,3 +289,11 @@ CREATE TABLE `course_student_zoom_bookings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- END ZOOM for COURSE
+
+-- FIX
+alter table logs
+add column `submission_id` int(10) unsigned NULL after user_id,
+ADD CONSTRAINT log_submission_id_foreign
+FOREIGN KEY (`submission_id`) REFERENCES `submissions` (`id`);
+
+-- END FIX

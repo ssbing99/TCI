@@ -109,6 +109,7 @@
                          'id' => 'video_file',
                         'accept' => "video/avi,video/mpeg,video/quicktime,video/mp4"
                         ]) !!}
+                    <small class="text-muted">*Video must not more than 5 MB. Only accept MP4, MPEG, AVI type.</small>
                 </div>
             </div>
             <div class="row">
@@ -117,9 +118,9 @@
                     {!! Form::file('attachment_file', [
                         'class' => 'form-control file-upload',
                          'id' => 'attachment_file',
-                        'accept' => "image/*,.pdf"
+                        'accept' => "image/jpeg"
                         ]) !!}
-                    <small class="text-muted">*Photos must be more than 500 px. on both horizontal and vertical dimensions</small>
+                    <small class="text-muted">*Photos must be more than 500 px. on both horizontal and vertical dimensions. Only JPEG photo type</small>
                 </div>
             </div>
 

@@ -3,27 +3,17 @@
 @section('title', app_name() . ' | ' . __('labels.frontend.passwords.reset_password_box_title'))
 
 @section('content')
-    @if(config('theme_layout') == 5)
-    <div class="banner custom-banner-bg">
+    <header>
         <div class="container">
-            <div class="page-heading">
-                {{__('labels.frontend.passwords.reset_password_box_title')}}
-            </div>
-        </div>
-    </div>
-    @else
-    <section id="breadcrumb" class="breadcrumb-section relative-position backgroud-style">
-        <div class="blakish-overlay"></div>
-        <div class="container">
-            <div class="page-breadcrumb-content text-center">
-                <div class="page-breadcrumb-title">
-                    <h2 class="breadcrumb-head black bold">{{__('labels.frontend.passwords.reset_password_box_title')}}</h2>
+            <div class="row clearfix">
+                <div class="col-12">
+                    <h1>{{__('labels.frontend.passwords.reset_password_box_title')}}</h1>
                 </div>
             </div>
         </div>
-    </section>
-    @endif
-    <section id="about-page" class="about-page-section pb-0">
+    </header>
+    <section>
+        <div class="container">
         <div class="row justify-content-center align-items-center">
             <div class="col col-md-4 align-self-center">
                 <div class="card border-0">
@@ -74,5 +64,6 @@
                 </div><!-- card -->
             </div><!-- col-6 -->
         </div><!-- row -->
+        </div>
     </section>
 @endsection

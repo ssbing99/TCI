@@ -71,7 +71,7 @@
                             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                 <div class="course clearfix">
                                     <div class="course-img clearfix">
-                                        <a href="{{ route('courses.show', [$item->slug]) }}"><img src="@if($item->course_image != "") {{asset('storage/uploads/'.$item->course_image)}} @else {{asset('assets_new/images/course-img.jpg')}} @endif" alt="" /></a>
+                                        <a href="{{ route('courses.show', [$item->slug]) }}"><img src="@if($item->course_image != "") {{asset('storage/uploads/'.$item->course_image)}} @else {{asset('assets_new/images/empty-img.jpeg')}} @endif" onerror="{{asset('assets_new/images/empty-img.jpeg')}}" alt="" /></a>
                                         <div class="over">
                                             <div class="price">
                                                 @if($item->free == 1)
