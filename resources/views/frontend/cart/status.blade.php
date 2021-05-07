@@ -29,7 +29,7 @@
 
                 @if(Session::has('success'))
                     <div class="alert alert-success" role="alert">
-                        Your payment is success.
+                        You have successfully enrolled for your course. Please check your mail.
                     </div>
                     <h4><a href="{{route('courses.all')}}" class="btn btn-primary">Back</a></h4>
                 @endif

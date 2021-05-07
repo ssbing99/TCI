@@ -1268,6 +1268,7 @@ return array (
       'price' => 'السعر',
       'sub_total' => 'المجموع الفرعي',
       'total_payable' => 'مجموع المستحق',
+      'success_enroll' => 'You have successfully enrolled for your course. Please check your mail',
     ),
     'contact' => 
     array (
@@ -1284,6 +1285,8 @@ return array (
       'your_email' => 'بريدك الالكتروني',
       'your_name' => 'اسمك',
         'name' => 'Nom',
+        'firstname' => 'First Nom',
+        'lastname' => 'Last Nom',
         'email' => 'Email',
         'address' => 'Adresse',
         'phone' => 'Phone',

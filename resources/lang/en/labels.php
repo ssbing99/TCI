@@ -1425,6 +1425,7 @@ return array (
       'amount' => 'Amount',
       'total_payable' => 'Total Payable',
       'price' => 'Price',
+      'success_enroll' => 'You have successfully enrolled for your course. Please check your mail',
     ),
     'contact' =>
     array (
@@ -1441,6 +1442,8 @@ return array (
       'send_message_now' => 'Send Message Now',
       'send' => 'Send',
         'name' => 'Name',
+        'firstname' => 'First Name',
+        'lastname' => 'Last Name',
         'email' => 'Email',
         'address' => 'Address',
         'phone' => 'Phone',

@@ -1180,6 +1180,8 @@ return array (
       'your_email' => 'Votre email',
       'your_name' => 'votre nom',
       'name' => 'Nom',
+      'firstname' => 'First Nom',
+      'lastname' => 'Last Nom',
       'email' => 'Email',
       'address' => 'Adresse',
         'phone' => 'Phone',
@@ -1330,6 +1332,7 @@ return array (
       'price' => 'Prix',
       'sub_total' => 'Total partiel',
       'total_payable' => 'Total à payer',
+      'success_enroll' => 'You have successfully enrolled for your course. Please check your mail',
     ),
     'course' => 
     array (
