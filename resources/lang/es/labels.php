@@ -1179,6 +1179,8 @@ return array (
       'your_email' => 'Tu correo electrónico',
       'your_name' => 'Tu nombre',
         'name' => 'Nombre',
+        'firstname' => 'First Nombre',
+        'lastname' => 'Last Nombre',
         'email' => 'Correo electrónico',
         'address' => 'Adresse',
         'phone' => 'Phone',
@@ -1329,6 +1331,7 @@ return array (
       'price' => 'Precio',
       'sub_total' => 'Subtotal',
       'total_payable' => 'Total a pagar',
+      'success_enroll' => 'You have successfully enrolled for your course. Please check your mail',
     ),
     'course' => 
     array (

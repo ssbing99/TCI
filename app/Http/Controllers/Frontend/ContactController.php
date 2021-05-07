@@ -55,7 +55,8 @@ class ContactController extends Controller
     public function send(Request $request)
     {
         $this->validate($request,[
-            'name' => 'required',
+            'firstName' => 'required',
+            'lastName' => 'required',
             'email' => 'required|email',
             'message' => 'required',
             'g-recaptcha-response' => (config('access.captcha.registration') ? ['required',new CaptchaRule] : ''),
@@ -64,7 +65,7 @@ class ContactController extends Controller
         ]);
 
         $contact = new Contact();
-        $contact->name = $request->name;
+        $contact->name = $request->firstName.' '.$request->lastName;
         $contact->number = $request->phone;
         $contact->email = $request->email;
         $contact->message = $request->message;

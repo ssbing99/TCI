@@ -96,6 +96,68 @@
             background: white
         }
 
+        /* imagelistId styling */
+        #imageListId {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        #imageListId .listitemClass {
+            display: inline-block;
+        }
+        /* Output order styling */
+        #outputvalues {
+            margin: 2px;
+            padding: 0.4em;
+            padding-left: 1.5em;
+            width: 250px;
+            border: 2px solid dark-green;
+            background: gray;
+        }
+        .listitemClass {
+            border: 1px solid #c1c1c1;
+            width: 15.3%;
+            padding: 10px;
+            background-color: #fff;
+            margin: 8px 0.5%;
+        }
+        .listitemClass img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        .listitemClass h6 {
+            font-family: "Montserrat-Medium", Arial;
+            font-size: 16px;
+            color: #7c7c7c;
+            text-align: left;
+            display: block;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .listitemClass p {
+            font-family: "Montserrat-Regular", Arial;
+            font-size: 14px;
+            color: #7c7c7c;
+            text-align: left;
+            display: block;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .listitemClass .item-date {
+            margin-bottom: 10px;
+        }
+        @media (max-width: 991px) {
+            .listitemClass {
+                width: 49%;
+            }
+        }
+        @media (max-width: 767px) {
+            .listitemClass {
+                width: 99%;
+            }
+        }
+
 
     </style>
 @endpush
@@ -139,58 +201,101 @@
 {{--            @endif--}}
 
             @if($lesson->attachments->count() > 0)
-            <div class="list list-row card" id="sortable" data-sortable-id="0" aria-dropeffect="move">
+                <div id="imageListId">
+                    @foreach($lesson->attachments as $item)
+                        @if(isset($item->media) && !$item->media->isEmpty())
 
-                @foreach($lesson->attachments as $item)
-                    @if(isset($item->media) && !$item->media->isEmpty())
-                        <div class="list-item" data-id="{{$item->position}}" data-attach="{{$item->id}}" id="{{$item->id}}" data-item-sortable-id="0" draggable="true" role="option" aria-grabbed="false" style="">
-                            @php $_media = $item->media->first(); @endphp
-                            {{--                                @foreach($item->media as $_media)--}}
-                            @if($_media->type == 'upload')
-                                <div><a href="{{$_media->url}}" target="_blank"><img src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a></div>
-                            @elseif(str_contains($_media->type,'image'))
-                                <div><a href="{{ asset('storage/uploads/'.$_media->name) }}" target="_blank"><img src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a></div>
+                            <div data-id="{{$item->position}}" data-attach="{{$item->id}}" id="{{$item->id}}" class="listitemClass">
+                                @php $_media = $item->media->first(); @endphp
+                                {{--                                @foreach($item->media as $_media)--}}
+                                @if($_media->type == 'upload')
+                                    <div><a href="{{$_media->url}}" target="_blank"><img src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a></div>
+                                @elseif(str_contains($_media->type,'image'))
+                                    <div><a href="{{ asset('storage/uploads/'.$_media->name) }}" target="_blank"><img src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a></div>
 
-                            @elseif(str_contains($_media->type,'youtube'))
-                                <div><a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a></div>
-                            @elseif(str_contains($_media->type,'vimeo'))
-                                <div><a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a></div>
-                            @endif
-                            {{--                                @endforeach--}}
-                            <div class="flex">
-                                <a href="#" class="item-author text-color" data-abc="true">{{ $item->title }}</a>
-                                <div class="item-except text-muted text-sm h-1x">{{substr(strip_tags($item->description),0, 100).(empty($item->description)?'':'...')}}</div>
-                            </div>
-                            <div class="no-wrap">
+                                @elseif(str_contains($_media->type,'youtube'))
+                                    <div><a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a></div>
+                                @elseif(str_contains($_media->type,'vimeo'))
+                                    <div><a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a></div>
+                                @endif
+                                <h6>{{ $item->title }}</h6>
+                                <p>{{substr(strip_tags($item->description),0, 100).(empty($item->description)?'':'...')}}</p>
                                 <div class="item-date text-muted text-sm d-none d-md-block">{{$item->created_at->diffforhumans()}}</div>
-                            </div>
-                            <div>
                                 <div class="btn-group btn-group-sm" role="group" aria-label="First group">
-
                                     @php $_media = $item->media->first(); @endphp
                                     {{--                                        @foreach($item->media as $_media)--}}
                                     @if($_media->type == 'upload')
-                                        <button type="button" class="btn btn-outline-secondary" onclick="winOpen('{{$_media->url}}')"><i class="fa fa-search"></i></button>
+                                        <button type="button" class="btn btn-info" onclick="winOpen('{{$_media->url}}')"><i class="fa fa-search"></i></button>
                                     @elseif(str_contains($_media->type,'image'))
-                                        <button type="button" class="btn btn-outline-secondary" onclick="winOpen('{{ asset('storage/uploads/'.$_media->name) }}')"><i class="fa fa-search"></i></button>
+                                        <button type="button" class="btn btn-info" onclick="winOpen('{{ asset('storage/uploads/'.$_media->name) }}')"><i class="fa fa-search"></i></button>
                                     @elseif(str_contains($_media->type,'youtube'))
-                                        <button type="button" class="btn btn-outline-secondary" onclick="winOpen('https://www.youtube.com/embed/{{$_media->url}}')"><i class="fa fa-search"></i></button>
+                                        <button type="button" class="btn btn-info" onclick="winOpen('https://www.youtube.com/embed/{{$_media->url}}')"><i class="fa fa-search"></i></button>
                                     @elseif(str_contains($_media->type,'vimeo'))
-                                        <button type="button" class="btn btn-outline-secondary" onclick="winOpen('https://player.vimeo.com/video/{{$_media->url}}')"><i class="fa fa-search"></i></button>
+                                        <button type="button" class="btn btn-info" onclick="winOpen('https://player.vimeo.com/video/{{$_media->url}}')"><i class="fa fa-search"></i></button>
                                     @endif
-                                    {{--                                        @endforeach--}}
+                                    <button type="button" class="btn btn-warning" onclick="winGo('{{route('admin.lessons.attachment.edit',['lesson_id'=> $lesson->id, 'id'=> $item->id])}}')"><i class="fa fa-pencil"></i></button>
+                                    <button type="button" class="btn btn-danger" onclick="winGo('{{route('admin.lessons.attachment.delete',['lesson_id'=> $lesson->id, 'id'=> $item->id])}}')"><i class="fa fa-trash"></i></button>
 
-                                    <button type="button" class="btn btn-outline-secondary" onclick="winGo('{{route('admin.lessons.attachment.edit',['lesson_id'=> $lesson->id, 'id'=> $item->id])}}')"><i class="fa fa-pencil"></i></button>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="winGo('{{route('admin.lessons.attachment.delete',['lesson_id'=> $lesson->id, 'id'=> $item->id])}}')"><i class="fa fa-trash"></i></button>
                                 </div>
                             </div>
-                        </div>
 
-                    @endif
+                        @endif
 
-                @endforeach
+                    @endforeach
+                </div>
 
-            </div>
+{{--            <div class="list list-row card" id="sortable" data-sortable-id="0" aria-dropeffect="move">--}}
+
+{{--                @foreach($lesson->attachments as $item)--}}
+{{--                    @if(isset($item->media) && !$item->media->isEmpty())--}}
+{{--                        <div class="list-item" data-id="{{$item->position}}" data-attach="{{$item->id}}" id="{{$item->id}}" data-item-sortable-id="0" draggable="true" role="option" aria-grabbed="false" style="">--}}
+{{--                            @php $_media = $item->media->first(); @endphp--}}
+{{--                            --}}{{--                                @foreach($item->media as $_media)--}}
+{{--                            @if($_media->type == 'upload')--}}
+{{--                                <div><a href="{{$_media->url}}" target="_blank"><img src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a></div>--}}
+{{--                            @elseif(str_contains($_media->type,'image'))--}}
+{{--                                <div><a href="{{ asset('storage/uploads/'.$_media->name) }}" target="_blank"><img src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a></div>--}}
+
+{{--                            @elseif(str_contains($_media->type,'youtube'))--}}
+{{--                                <div><a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a></div>--}}
+{{--                            @elseif(str_contains($_media->type,'vimeo'))--}}
+{{--                                <div><a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a></div>--}}
+{{--                            @endif--}}
+{{--                            --}}{{--                                @endforeach--}}
+{{--                            <div class="flex">--}}
+{{--                                <a href="#" class="item-author text-color" data-abc="true">{{ $item->title }}</a>--}}
+{{--                                <div class="item-except text-muted text-sm h-1x">{{substr(strip_tags($item->description),0, 100).(empty($item->description)?'':'...')}}</div>--}}
+{{--                            </div>--}}
+{{--                            <div class="no-wrap">--}}
+{{--                                <div class="item-date text-muted text-sm d-none d-md-block">{{$item->created_at->diffforhumans()}}</div>--}}
+{{--                            </div>--}}
+{{--                            <div>--}}
+{{--                                <div class="btn-group btn-group-sm" role="group" aria-label="First group">--}}
+
+{{--                                    @php $_media = $item->media->first(); @endphp--}}
+{{--                                    --}}{{--                                        @foreach($item->media as $_media)--}}
+{{--                                    @if($_media->type == 'upload')--}}
+{{--                                        <button type="button" class="btn btn-outline-secondary" onclick="winOpen('{{$_media->url}}')"><i class="fa fa-search"></i></button>--}}
+{{--                                    @elseif(str_contains($_media->type,'image'))--}}
+{{--                                        <button type="button" class="btn btn-outline-secondary" onclick="winOpen('{{ asset('storage/uploads/'.$_media->name) }}')"><i class="fa fa-search"></i></button>--}}
+{{--                                    @elseif(str_contains($_media->type,'youtube'))--}}
+{{--                                        <button type="button" class="btn btn-outline-secondary" onclick="winOpen('https://www.youtube.com/embed/{{$_media->url}}')"><i class="fa fa-search"></i></button>--}}
+{{--                                    @elseif(str_contains($_media->type,'vimeo'))--}}
+{{--                                        <button type="button" class="btn btn-outline-secondary" onclick="winOpen('https://player.vimeo.com/video/{{$_media->url}}')"><i class="fa fa-search"></i></button>--}}
+{{--                                    @endif--}}
+{{--                                    --}}{{--                                        @endforeach--}}
+
+{{--                                    <button type="button" class="btn btn-outline-secondary" onclick="winGo('{{route('admin.lessons.attachment.edit',['lesson_id'=> $lesson->id, 'id'=> $item->id])}}')"><i class="fa fa-pencil"></i></button>--}}
+{{--                                    <button type="button" class="btn btn-outline-secondary" onclick="winGo('{{route('admin.lessons.attachment.delete',['lesson_id'=> $lesson->id, 'id'=> $item->id])}}')"><i class="fa fa-trash"></i></button>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+
+{{--                    @endif--}}
+
+{{--                @endforeach--}}
+
+{{--            </div>--}}
             <form id="seqForm" name="seqForm" method="post" action="{{route('admin.lessons.attachment.sequence.update', ['lesson_id' => $lesson->id])}}">
                 @csrf
                 <input type="hidden" name="changeSeq" id="changeSeq" value="">
@@ -220,11 +325,7 @@
         }
 
         $(function() {
-            $("#sortable").sortable({
-                start: function(e, ui) {
-                    // creates a temporary attribute on the element with the old index
-                    $(this).attr('data-previndex', ui.item.index()+1);
-                },
+            $("#imageListId").sortable({
                 update: function(event, ui) {
                     var newIndex = ui.item.index() + 1;
                     var oldIndex = $(this).attr('data-previndex');
@@ -234,7 +335,6 @@
                     $(this).removeAttr('data-previndex');
 
                     var productOrder = $(this).sortable('toArray').toString();
-
 
                     var ii = 1;
                     for(var ord of productOrder.split(',')){
@@ -249,8 +349,40 @@
                     document.getElementById('changeSeq').value = JSON.stringify(object);
                 },
             });
-            $("#sortable").disableSelection();
         });
+
+        // $(function() {
+        //     $("#sortable").sortable({
+        //         start: function(e, ui) {
+        //             // creates a temporary attribute on the element with the old index
+        //             $(this).attr('data-previndex', ui.item.index()+1);
+        //         },
+        //         update: function(event, ui) {
+        //             var newIndex = ui.item.index() + 1;
+        //             var oldIndex = $(this).attr('data-previndex');
+        //             var element_id = ui.item.attr('data-id');
+        //             var attach_id = ui.item.attr('data-attach');
+        //             // console.log('id of Item'+attach_id+' moved = '+element_id+' old position = '+oldIndex+' new position = '+newIndex);
+        //             $(this).removeAttr('data-previndex');
+        //
+        //             var productOrder = $(this).sortable('toArray').toString();
+        //
+        //
+        //             var ii = 1;
+        //             for(var ord of productOrder.split(',')){
+        //                 attach_map.set(ord, ii++);
+        //             }
+        //             attach_map.forEach((value, key) => {
+        //                 var keys = key.split('.'),
+        //                     last = keys.pop();
+        //                 keys.reduce((r, a) => r[a] = r[a] || {}, object)[last] = value;
+        //             });
+        //
+        //             document.getElementById('changeSeq').value = JSON.stringify(object);
+        //         },
+        //     });
+        //     $("#sortable").disableSelection();
+        // });
 
         {{--$(function () {--}}
         {{--    $('ul.sorter').amigoSorter({--}}

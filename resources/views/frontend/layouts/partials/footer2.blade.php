@@ -54,8 +54,8 @@
                         <li><a href="{{route('teachers.index')}}">INSTRUCTORS</a></li>
                         <li><a href="{{route('courses.reviews.all')}}">REVIEW</a></li>
                         <li><a href="{{route('workshops.all')}}">WORKSHOPS</a></li>
-                        <li><a href="#">BLOG</a></li>
-                        <li><a href="#">STUDENT GALLERY</a></li>
+                        <li><a href="{{route('blogs.index')}}">BLOG</a></li>
+                        <li><a href="{{route('gallery')}}">STUDENT GALLERY</a></li>
                     </ul>
                 </div>
 {{--                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">--}}
@@ -82,7 +82,7 @@
 {{--                    </ul>--}}
 {{--                </div>--}}
                 <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <div class="ft-title">Contact Us</div>
+                    <div class="ft-title"><a href="{{route('contact')}}" style="color: white">Contact Us</a></div>
                     <div class="ft-text"><span class="fa fa-envelope"></span> support@thecompellingimage.com</div>
                 </div>
                 @if(($footer_data->social_links->status == 1) && (count($footer_data->social_links->links) > 0))
