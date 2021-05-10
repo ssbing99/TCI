@@ -778,6 +778,13 @@ class CartController extends Controller
                 generateInvoice($order);
                 $this->adminOrderMail($order);
 
+                $content['title'] = $course->title;
+                $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+
+                $content2['receiver_name'] = $mentor->name;
+                $content2['title'] = $course->title;
+                $this->flexiMail($mentor->email, $content2, 'instructorCourseSignUpMail', 'Student Course Sign Up');
+                
                 $this->populatePaymentDisplayInfo();
                 Cart::session(auth()->user()->id)->clear();
                 Session::flash('success', trans('labels.frontend.cart.payment_done'));
@@ -1247,6 +1254,14 @@ class CartController extends Controller
             //Generating Invoice
             generateInvoice($order);
             $this->adminOrderMail($order);
+
+            $content['title'] = $course->title;
+            $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+
+            $content2['receiver_name'] = $mentor->name;
+            $content2['title'] = $course->title;
+            $this->flexiMail($mentorship->teacher()->email, $content2, 'instructorCourseSignUpMail', 'Student Course Sign Up');
+
             $this->populatePaymentDisplayInfo();
             Cart::session(auth()->user()->id)->clear();
             Session::flash('success', trans('labels.frontend.cart.payment_done'));
@@ -1807,6 +1822,18 @@ class CartController extends Controller
             $content['code'] = $coupon->code;
 
             \Mail::to($email->receiver_email)->send(new GiftNotifyMail($content, auth()->user(), $gift));
+
+            $email->status = 1;
+            $email->save();
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
+    private function flexiMail($email, $content, $template, $subject)
+    {
+        try {
+            \Mail::to($email->receiver_email)->send(new FlexiMail($content, $template, $subject));
 
             $email->status = 1;
             $email->save();
