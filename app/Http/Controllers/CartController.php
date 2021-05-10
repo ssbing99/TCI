@@ -6,6 +6,7 @@ use App\Helpers\General\EarningHelper;
 use App\Mail\Frontend\AdminOrederMail;
 use App\Mail\Frontend\GiftNotifyMail;
 use App\Mail\OfflineOrderMail;
+use App\Mail\Frontend\FlexiMail;
 use App\Models\Auth\User;
 use App\Models\Bundle;
 use App\Models\Coupon;
