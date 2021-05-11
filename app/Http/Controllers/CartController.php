@@ -781,10 +781,9 @@ class CartController extends Controller
 
                 $content['title'] = $course->title;
                 $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
-
-                $content2['receiver_name'] = $mentor->name;
+                
                 $content2['title'] = $course->title;
-                $this->flexiMail($mentor->email, $content2, 'instructorCourseSignUpMail', 'Student Course Sign Up');
+                $this->instructorCourseSignUpMail($course->teachers(), $content2);
                 
                 $this->populatePaymentDisplayInfo();
                 Cart::session(auth()->user()->id)->clear();
@@ -1259,9 +1258,8 @@ class CartController extends Controller
             $content['title'] = $course->title;
             $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
 
-            $content2['receiver_name'] = $mentor->name;
             $content2['title'] = $course->title;
-            $this->flexiMail($mentorship->teacher()->email, $content2, 'instructorCourseSignUpMail', 'Student Course Sign Up');
+            $this->instructorCourseSignUpMail($course->teachers(), $content2);
 
             $this->populatePaymentDisplayInfo();
             Cart::session(auth()->user()->id)->clear();
@@ -1835,6 +1833,18 @@ class CartController extends Controller
     {
         try {
             \Mail::to($email)->send(new FlexiMail($content, $template, $subject));
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
+    private function instructorCourseSignUpMail($teachers, $content)
+    {
+        try {
+            foreach ($teachers as $teacher) {
+                $content['receiver_name'] = $teacher->name;
+                \Mail::to($teacher->email)->send(new FlexiMail($content, 'instructorCourseSignUpMail', 'Student Course Sign Up'));
+            }
         }catch (\Exception $e){
             \Log::info($e);
         }

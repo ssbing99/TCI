@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Admin\StoreAttachmentsRequest;
 use App\Http\Requests\Admin\StoreSubmissionsRequest;
+use App\Mail\Frontend\FlexiMail;
 use App\Models\Assignment;
 use App\Models\Attachment;
 use App\Models\Comment;
@@ -190,6 +191,18 @@ class AssignmentController extends Controller
         }
     }
 
+    private function instructorPostedInCourseMultiMail($students, $content)
+    {
+        try {
+            foreach ($students as $student) {
+                $content['receiver_name'] = $student->name;
+                \Mail::to($student->email)->send(new FlexiMail($content, 'instructorPostedInCourseMail', 'Instructor Posted In Course'));
+            }
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
     /**
      * Display the submission
      *
@@ -323,7 +336,7 @@ class AssignmentController extends Controller
 
         }
 
-        $content['student_name'] = auth()->user()->id;
+        $content['student_name'] = auth()->user()->name;
         $content['title'] = $assignment->lesson()->course()->title;
         $this->studentPostedInCourseMail($assignment->lesson()->course()->teachers(), $content);
 
@@ -1106,6 +1119,14 @@ class AssignmentController extends Controller
         }
 
         \Log::info('$hasAttacment: '.$hasAttacment);
+
+        if(auth()->user()->hasRole('student')){
+            $content['student_name'] = auth()->user()->name;
+            $content['title'] = $lesson->lesson()->course()->title;
+            $this->studentPostedInCourseMail($lesson->lesson()->course()->teachers(), $content);
+        }else{
+            $this->instructorPostedInCourseMultiMail($lesson->lesson()->course()->students(), $content);
+        }
 
         if($hasAttacment){
 
