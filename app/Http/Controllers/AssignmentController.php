@@ -169,6 +169,27 @@ class AssignmentController extends Controller
         return view($view_path, compact( 'submission','assignment'));
     }
 
+    private function studentPostedInCourseMail($teachers, $content)
+    {
+        try {
+            foreach ($teachers as $teacher) {
+                $content['receiver_name'] = $teacher->name;
+                \Mail::to($teacher->email)->send(new FlexiMail($content, 'studentPostedInCourseMail', 'Student Posted In Course'));
+            }
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
+    private function instructorPostedInCourseMail($email, $content)
+    {
+        try {
+            \Mail::to($email)->send(new FlexiMail($content, 'instructorPostedInCourseMail', 'Instructor Posted In Course'));
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
     /**
      * Display the submission
      *
@@ -301,6 +322,10 @@ class AssignmentController extends Controller
 //            $request = $this->saveAllFiles($request, 'attachment_file', Attachment::class, $attachment, true);
 
         }
+
+        $content['student_name'] = auth()->user()->id;
+        $content['title'] = $assignment->lesson()->course()->title;
+        $this->studentPostedInCourseMail($assignment->lesson()->course()->teachers(), $content);
 
 //        if($hasAttacment){
 //            /**
@@ -438,8 +463,8 @@ class AssignmentController extends Controller
 //             *
 //             * END NEW FLOW
 //             */
-//        }
-
+//        }        
+        
         return redirect()->route('submission.show', ['id' => $assignment_id])->withFlashSuccess('Submission created!');
     }
 
@@ -1150,6 +1175,11 @@ class AssignmentController extends Controller
         $review->content = $request->critique;
         $review->save();
 
+        $attachment = Attachment::find($attachment_id);
+
+        $content['receiver_name'] = $attachment->user()->name;
+        $this->instructorPostedInCourseMail($attachment->user()->email, $content);
+
         return back();
     }
 
@@ -1226,6 +1256,9 @@ class AssignmentController extends Controller
 //        $review->content = $request->critique;
 //        $review->save();
 
+        $content['receiver_name'] = $submission->user()->name;
+        $this->instructorPostedInCourseMail($submission->user()->email, $content);
+        
         return back();
     }
 

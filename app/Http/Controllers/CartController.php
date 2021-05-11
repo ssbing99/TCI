@@ -1834,10 +1834,7 @@ class CartController extends Controller
     private function flexiMail($email, $content, $template, $subject)
     {
         try {
-            \Mail::to($email->receiver_email)->send(new FlexiMail($content, $template, $subject));
-
-            $email->status = 1;
-            $email->save();
+            \Mail::to($email)->send(new FlexiMail($content, $template, $subject));
         }catch (\Exception $e){
             \Log::info($e);
         }
