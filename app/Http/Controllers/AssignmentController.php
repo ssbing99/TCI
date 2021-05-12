@@ -336,9 +336,11 @@ class AssignmentController extends Controller
 
         }
 
-        $content['student_name'] = auth()->user()->name;
-        $content['title'] = $assignment->lesson->course->title;
-        $this->studentPostedInCourseMail($assignment->lesson->course->teachers, $content);
+        dispatch(function () use ($assignment) {
+            $content['student_name'] = auth()->user()->name;
+            $content['title'] = $assignment->lesson->course->title;
+            $this->studentPostedInCourseMail($assignment->lesson->course->teachers, $content);
+        })->afterResponse();
 
 //        if($hasAttacment){
 //            /**
@@ -1120,13 +1122,16 @@ class AssignmentController extends Controller
 
         \Log::info('$hasAttacment: '.$hasAttacment);
 
-        if(auth()->user()->hasRole('student')){
-            $content['student_name'] = auth()->user()->name;
-            $content['title'] = $lesson->lesson->course->title;
-            $this->studentPostedInCourseMail($lesson->lesson->course->teachers, $content);
-        }else{            
-            $this->instructorPostedInCourseMultiMail($lesson->lesson->course->students);
-        }
+        dispatch(function () use ($lesson) {
+            if (auth()->user()->hasRole('student')) {
+                $content['student_name'] = auth()->user()->name;
+                $content['title'] = $lesson->lesson->course->title;
+                $this->studentPostedInCourseMail($lesson->lesson->course->teachers, $content);
+
+            } else {
+                $this->instructorPostedInCourseMultiMail($lesson->lesson->course->students);
+            }
+        })->afterResponse();
 
         if($hasAttacment){
 
@@ -1196,10 +1201,12 @@ class AssignmentController extends Controller
         $review->content = $request->critique;
         $review->save();
 
-        $attachment = Attachment::find($request->$attachment_id);
+        $attachment = Attachment::find($request->attachment_id);
 
-        $content['receiver_name'] = $attachment->user->name;
-        $this->instructorPostedInCourseMail($attachment->user->email, $content);
+        dispatch(function () use ($attachment) {
+            $content['receiver_name'] = $attachment->user->name;
+            $this->instructorPostedInCourseMail($attachment->user->email, $content);
+        })->afterResponse();
 
         return back();
     }
@@ -1277,8 +1284,10 @@ class AssignmentController extends Controller
 //        $review->content = $request->critique;
 //        $review->save();
 
-        $content['receiver_name'] = $submission->user->full_name;
-        $this->instructorPostedInCourseMail($submission->user->email, $content);
+        dispatch(function () use ($submission) {
+            $content['receiver_name'] = $submission->user->full_name;
+            $this->instructorPostedInCourseMail($submission->user->email, $content);
+        })->afterResponse();
         
         return back();
     }
