@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Admin\StoreAttachmentsRequest;
 use App\Http\Requests\Admin\StoreSubmissionsRequest;
+use App\Mail\Frontend\FlexiMail;
 use App\Models\Assignment;
 use App\Models\Attachment;
 use App\Models\Comment;
@@ -169,6 +170,39 @@ class AssignmentController extends Controller
         return view($view_path, compact( 'submission','assignment'));
     }
 
+    private function studentPostedInCourseMail($teachers, $content)
+    {
+        try {
+            foreach ($teachers as $teacher) {
+                $content['receiver_name'] = $teacher->name;
+                \Mail::to($teacher->email)->send(new FlexiMail($content, 'studentPostedInCourseMail', 'Student Posted In Course'));
+            }
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
+    private function instructorPostedInCourseMail($email, $content)
+    {
+        try {
+            \Mail::to($email)->send(new FlexiMail($content, 'instructorPostedInCourseMail', 'Instructor Posted In Course'));
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
+    private function instructorPostedInCourseMultiMail($students)
+    {
+        try {
+            foreach ($students as $student) {
+                $content['receiver_name'] = $student->name;
+                \Mail::to($student->email)->send(new FlexiMail($content, 'instructorPostedInCourseMail', 'Instructor Posted In Course'));
+            }
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
     /**
      * Display the submission
      *
@@ -301,6 +335,12 @@ class AssignmentController extends Controller
 //            $request = $this->saveAllFiles($request, 'attachment_file', Attachment::class, $attachment, true);
 
         }
+
+        dispatch(function () use ($assignment) {
+            $content['student_name'] = auth()->user()->name;
+            $content['title'] = $assignment->lesson->course->title;
+            $this->studentPostedInCourseMail($assignment->lesson->course->teachers, $content);
+        })->afterResponse();
 
 //        if($hasAttacment){
 //            /**
@@ -438,8 +478,8 @@ class AssignmentController extends Controller
 //             *
 //             * END NEW FLOW
 //             */
-//        }
-
+//        }        
+        
         return redirect()->route('submission.show', ['id' => $assignment_id])->withFlashSuccess('Submission created!');
     }
 
@@ -1082,6 +1122,17 @@ class AssignmentController extends Controller
 
         \Log::info('$hasAttacment: '.$hasAttacment);
 
+        dispatch(function () use ($lesson) {
+            if (auth()->user()->hasRole('student')) {
+                $content['student_name'] = auth()->user()->name;
+                $content['title'] = $lesson->lesson->course->title;
+                $this->studentPostedInCourseMail($lesson->lesson->course->teachers, $content);
+
+            } else {
+                $this->instructorPostedInCourseMultiMail($lesson->lesson->course->students);
+            }
+        })->afterResponse();
+
         if($hasAttacment){
 
             //Saving  videos
@@ -1149,6 +1200,14 @@ class AssignmentController extends Controller
         $review->rating = $request->rating;
         $review->content = $request->critique;
         $review->save();
+
+        $attachment = Attachment::find($request->attachment_id);
+
+        dispatch(function () use ($attachment) {            
+            $content['student_name'] = auth()->user()->name;
+            $content['title'] = $attachment->submission->assignment->lesson->course->title;
+            $this->studentPostedInCourseMail($attachment->submission->assignment->lesson->course->teachers, $content);
+        })->afterResponse();
 
         return back();
     }
@@ -1226,6 +1285,11 @@ class AssignmentController extends Controller
 //        $review->content = $request->critique;
 //        $review->save();
 
+        dispatch(function () use ($submission) {
+            $content['receiver_name'] = $submission->user->full_name;
+            $this->instructorPostedInCourseMail($submission->user->email, $content);
+        })->afterResponse();
+        
         return back();
     }
 
