@@ -3,6 +3,6 @@
 
 Your instructor has just posted an assignment critique, or answered a question on your course.
 
-Regards,
+Regards,<br/><br/>
 {{ config('app.name') }}
 @endcomponent
