@@ -6,6 +6,7 @@ use App\Helpers\General\EarningHelper;
 use App\Mail\Frontend\AdminOrederMail;
 use App\Mail\Frontend\GiftNotifyMail;
 use App\Mail\OfflineOrderMail;
+use App\Mail\Frontend\FlexiMail;
 use App\Models\Auth\User;
 use App\Models\Bundle;
 use App\Models\Coupon;
@@ -718,6 +719,18 @@ class CartController extends Controller
             generateInvoice($order);
             $this->adminOrderMail($order);
 
+            if(!$isMentorship) {
+                foreach ($order->items as $orderItem) {
+                    if ($orderItem->item_type != Item::class && $orderItem->item_type != Bundle::class) {
+                        $content['title'] = $orderItem->item->title;
+                        $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+
+                        $content2['title'] = $orderItem->item->title;
+                        $this->instructorCourseSignUpMail($orderItem->item->teachers, $content2);
+                    }
+                }
+            }
+
             $this->populatePaymentDisplayInfo();
             Cart::session(auth()->user()->id)->clear();
             Session::flash('success', trans('labels.frontend.cart.payment_done'));
@@ -778,6 +791,19 @@ class CartController extends Controller
                 generateInvoice($order);
                 $this->adminOrderMail($order);
 
+                if(!$isMentorship) {
+                    foreach ($order->items as $orderItem) {
+                        if ($orderItem->item_type != Item::class && $orderItem->item_type != Bundle::class) {
+                            $content['title'] = $orderItem->item->title;
+                            $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+
+                            $content2['title'] = $orderItem->item->title;
+                            $this->instructorCourseSignUpMail($orderItem->item->teachers, $content2);
+
+                        }
+                    }
+                }
+                
                 $this->populatePaymentDisplayInfo();
                 Cart::session(auth()->user()->id)->clear();
                 Session::flash('success', trans('labels.frontend.cart.payment_done'));
@@ -1247,6 +1273,21 @@ class CartController extends Controller
             //Generating Invoice
             generateInvoice($order);
             $this->adminOrderMail($order);
+
+
+            if(!$isMentorship) {
+                foreach ($order->items as $orderItem) {
+                    if ($orderItem->item_type != Item::class && $orderItem->item_type != Bundle::class) {
+                        $content['title'] = $orderItem->item->title;
+                        $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+
+                        $content2['title'] = $orderItem->item->title;
+                        $this->instructorCourseSignUpMail($orderItem->item->teachers, $content2);
+
+                    }
+                }
+            }
+
             $this->populatePaymentDisplayInfo();
             Cart::session(auth()->user()->id)->clear();
             Session::flash('success', trans('labels.frontend.cart.payment_done'));
@@ -1810,6 +1851,27 @@ class CartController extends Controller
 
             $email->status = 1;
             $email->save();
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
+    private function flexiMail($email, $content, $template, $subject)
+    {
+        try {
+            \Mail::to($email)->send(new FlexiMail($content, $template, $subject));
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
+    private function instructorCourseSignUpMail($teachers, $content)
+    {
+        try {
+            foreach ($teachers as $teacher) {
+                $content['receiver_name'] = $teacher->name;
+                \Mail::to($teacher->email)->send(new FlexiMail($content, 'instructorCourseSignUpMail', 'Student Course Sign Up'));
+            }
         }catch (\Exception $e){
             \Log::info($e);
         }

@@ -230,7 +230,6 @@ INSERT INTO `role_has_permissions`(`permission_id`, `role_id`) VALUES (82, 1);
 
 -- END GIFT
 
-
 -- TEACHER NEW
 
 --
