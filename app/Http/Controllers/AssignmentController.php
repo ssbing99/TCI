@@ -1203,9 +1203,10 @@ class AssignmentController extends Controller
 
         $attachment = Attachment::find($request->attachment_id);
 
-        dispatch(function () use ($attachment) {
-            $content['receiver_name'] = $attachment->user->name;
-            $this->instructorPostedInCourseMail($attachment->user->email, $content);
+        dispatch(function () use ($attachment) {            
+            $content['student_name'] = auth()->user()->name;
+            $content['title'] = $attachment->submission->assignment->lesson->course->title;
+            $this->studentPostedInCourseMail($attachment->submission->assignment->lesson->course->teachers, $content);
         })->afterResponse();
 
         return back();
