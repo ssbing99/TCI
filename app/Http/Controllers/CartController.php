@@ -269,7 +269,7 @@ class CartController extends Controller
         $course_ids = [];
         $gift = false;
 
-        if($request->has('gift_course') && $request->get('gift_course') == '1'){
+        if($request->has('gift_course') && ($request->get('gift_course') == '1' || $request->get('gift_course') == 'true')){
             $gift = true;
         }
 
