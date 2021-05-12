@@ -719,6 +719,18 @@ class CartController extends Controller
             generateInvoice($order);
             $this->adminOrderMail($order);
 
+            if(!$isMentorship) {
+                foreach ($order->items as $orderItem) {
+                    if ($orderItem->item_type != Item::class && $orderItem->item_type != Bundle::class) {
+                        $content['title'] = $orderItem->item->title;
+                        $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+
+                        $content2['title'] = $orderItem->item->title;
+                        $this->instructorCourseSignUpMail($orderItem->item->teachers, $content2);
+                    }
+                }
+            }
+
             $this->populatePaymentDisplayInfo();
             Cart::session(auth()->user()->id)->clear();
             Session::flash('success', trans('labels.frontend.cart.payment_done'));
@@ -779,11 +791,18 @@ class CartController extends Controller
                 generateInvoice($order);
                 $this->adminOrderMail($order);
 
-                $content['title'] = $course->title;
-                $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
-                
-                $content2['title'] = $course->title;
-                $this->instructorCourseSignUpMail($course->teachers(), $content2);
+                if(!$isMentorship) {
+                    foreach ($order->items as $orderItem) {
+                        if ($orderItem->item_type != Item::class && $orderItem->item_type != Bundle::class) {
+                            $content['title'] = $orderItem->item->title;
+                            $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+
+                            $content2['title'] = $orderItem->item->title;
+                            $this->instructorCourseSignUpMail($orderItem->item->teachers, $content2);
+
+                        }
+                    }
+                }
                 
                 $this->populatePaymentDisplayInfo();
                 Cart::session(auth()->user()->id)->clear();
@@ -1255,11 +1274,19 @@ class CartController extends Controller
             generateInvoice($order);
             $this->adminOrderMail($order);
 
-            $content['title'] = $course->title;
-            $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
 
-            $content2['title'] = $course->title;
-            $this->instructorCourseSignUpMail($course->teachers(), $content2);
+            if(!$isMentorship) {
+                foreach ($order->items as $orderItem) {
+                    if ($orderItem->item_type != Item::class && $orderItem->item_type != Bundle::class) {
+                        $content['title'] = $orderItem->item->title;
+                        $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+
+                        $content2['title'] = $orderItem->item->title;
+                        $this->instructorCourseSignUpMail($orderItem->item->teachers, $content2);
+
+                    }
+                }
+            }
 
             $this->populatePaymentDisplayInfo();
             Cart::session(auth()->user()->id)->clear();
