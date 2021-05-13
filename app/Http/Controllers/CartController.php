@@ -723,7 +723,7 @@ class CartController extends Controller
                 foreach ($order->items as $orderItem) {
                     if ($orderItem->item_type != Item::class && $orderItem->item_type != Bundle::class) {
                         $content['title'] = $orderItem->item->title;
-                        $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+                        $this->flexiMail(auth()->user()->email, $content, 'courseStudentMail', 'Student Course Sign Up');
 
                         $content2['title'] = $orderItem->item->title;
                         $this->instructorCourseSignUpMail($orderItem->item->teachers, $content2);
@@ -795,7 +795,7 @@ class CartController extends Controller
                     foreach ($order->items as $orderItem) {
                         if ($orderItem->item_type != Item::class && $orderItem->item_type != Bundle::class) {
                             $content['title'] = $orderItem->item->title;
-                            $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+                            $this->flexiMail(auth()->user()->email, $content, 'courseStudentMail', 'Student Course Sign Up');
 
                             $content2['title'] = $orderItem->item->title;
                             $this->instructorCourseSignUpMail($orderItem->item->teachers, $content2);
@@ -1279,7 +1279,7 @@ class CartController extends Controller
                 foreach ($order->items as $orderItem) {
                     if ($orderItem->item_type != Item::class && $orderItem->item_type != Bundle::class) {
                         $content['title'] = $orderItem->item->title;
-                        $this->flexiMail(auth()->user()->email, $content, 'studentCourseSignUpMail', 'Student Course Sign Up');
+                        $this->flexiMail(auth()->user()->email, $content, 'courseStudentMail', 'Student Course Sign Up');
 
                         $content2['title'] = $orderItem->item->title;
                         $this->instructorCourseSignUpMail($orderItem->item->teachers, $content2);
