@@ -1870,7 +1870,7 @@ class CartController extends Controller
         try {
             foreach ($teachers as $teacher) {
                 $content['receiver_name'] = $teacher->name;
-                \Mail::to($teacher->email)->send(new FlexiMail($content, 'instructorCourseSignUpMail', 'Student Course Sign Up'));
+                \Mail::to($teacher->email)->send(new FlexiMail($content, 'courseTeacherMail', 'Student Course Sign Up'));
             }
         }catch (\Exception $e){
             \Log::info($e);
