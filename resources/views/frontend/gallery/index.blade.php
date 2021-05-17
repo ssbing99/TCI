@@ -43,6 +43,15 @@
     <section>
         <div class="container">
             <div class="row clearfix">
+
+                @foreach($prev_gallery as $item)
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 thumb">
+                        <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="{{$item['title']}}" data-image="{{ $item['path'] }}" data-target="#gallery">
+                            <img class="img-full h180" src="{{ $item['path'] }}" alt="">
+                        </a>
+                    </div>
+                @endforeach
+                
                 @if(count($galleries)>0)
                     @foreach($galleries as $item)
                         @if(isset($item->media) && !$item->media->isEmpty())

@@ -213,7 +213,9 @@ class HomeController extends Controller
     {
         $galleries = Gallery::all();
 
-        return view($this->path . '.gallery.index', compact('galleries'));
+        $prev_gallery = $this->getPrevGallery();
+
+        return view($this->path . '.gallery.index', compact('galleries','prev_gallery'));
     }
 
     public function registerMentorship()
@@ -869,6 +871,77 @@ class HomeController extends Controller
 //            return back()->withFlashSuccess(trans('alerts.frontend.course.completed'));
         }
         return back();
+    }
+
+    public function getPrevGallery() {
+        $prev_gallery = [];
+
+        $title_arr = array(
+            'Course: Documentary Photography created by Vlad Sokhin',
+            'Course: Street Photography: Classic and Creative created by Kimberly Bryant',
+            'Course: Wide Angle Photography: And Engaging Perspecitive created by Nohemy  Adrian',
+            'Course: Documentary Photography created by Otto Grimm',
+            'Course: People Photography created by Anne Salminen-Cesari',
+            'Course: Wide Angle Photography: And Engaging Perspecitive created by Page Spencer',
+            'Course: Fashion and Model Photography created by Pearl Scott-Marten',
+            'Course: Lifestyle Photography created by Cher Chen',
+            'Course: People Photography created by Baryalai Khosha',
+            'Course: Wide Angle Photography: An Engaging Perspecitive created by Antoinette Addison',
+            'Course: Documentary Photography created by Vlad Sokhin',
+            'Course: Street Photography: Classic and Creative created by Vlad Sokhin',
+            'Course: Photographing Interior Spaces created by Mariella Candela',
+            'Course: Composition in Photography created by Tom Abisamra',
+            'Course: Digital Black and White Photography created by Pia Vachha',
+            'Course: Travel Photography created by Kelly Sobczak',
+            'Course: Morocco Workshop created by Student User',
+            'Course: Contemporary Fine Art Photography created by Brigit Baukal',
+            'Course: People Photography - with Confidence created by Jason  Sachs',
+            'Course: Power of the Black & White Image created by Lydia Noll Sachs',
+            'Course: Contemporary Fine Art Photography created by Mia Singer',
+            'Course: Travel Photography created by Anshul Raj Khurana',
+            'Course: Low Light Photography created by Amanda Shives',
+            'Course: People Photography created by Ashley  Ogrodowski',
+            'Course: People Photography - with Confidence! created by Troy Larson',
+            'Course: Travel Photography with Brenda Tharp created by pradeep Beniwal',
+            'Course: Portrait Photography created by Troy Larson',
+            'Course: People Photography - with Confidence! created by Carl Parker',
+            'Course: Street Photography with G.M.B. Akash created by Sarah McGrory',
+            'Course: Creating Unforgettable Photo Essays created by tammy mccloud',
+            'Course: Travel Photography with Brenda Tharp created by Soula Pefkaros',
+            'Course: Street Photography with G.M.B. Akash created by Dyuti Bhattacharyya',
+            'Course: The Art of Culinary Photography created by Ashley  Ogrodowski',
+            'Course: People Photography - with Confidence! created by Dave Priestley',
+            'Course: People Photography - with Confidence! created by ana kekelia',
+            'Course: The Art of Culinary Photography created by Bikram  Sarkar',
+            'Course: Street Photography with G.M.B. Akash created by Virginia Stadius',
+            'Course: Contemporary Fine Art Photography created by Michelle Wolschlager',
+            'Course: Creating Unforgettable Photo Essays created by Sarah McGrory',
+            'Course: Capturing Breathtaking Landscapes created by MP Reeve',
+            'Course: Street Photography with G.M.B. Akash created by Heather Ballinger',
+            'Course: Focus on Wide Angle Photography created by Gloria Joseph',
+            'Course: Low Light Photography created by Donya Raslan',
+            'Course: Wide Angle Photography created by Brian Eisenberg',
+            'Course: Street Photography with G.M.B. Akash created by Dyuti Bhattacharyya',
+            'Course: 50mm is All You Need created by Marie Wattier',
+            'Course: People Photography - With Confidence ! created by Frances Schwabenland',
+            'Course: Low Light Photography created by Moya  Neilson',
+            'Course: Telling the Story in Pictures created by Alex Zimmer',
+            'Course: Telling the Story in Pictures created by Caldwell Manners',
+            'Course: Telling the Story in Pictures created by Umberto Michelucci',
+            'Course: Telling the Story in Pictures created by Thomas Mangione',
+            'Course: Power of the Black & White Image created by Elizabeth Beall',
+            'Course: Street Photography with G.M.B. Akash created by Allison Bethea',
+            'Course: Capturing Breathtaking Landscapes created by Liz Hale'
+        );
+
+        for ($a = 0; $a<55; $a++) {
+            $prev_gallery[] = array(
+                'title' => $title_arr[$a],
+                'path' => asset('assets_new/images/gallery/img-'.($a+1).'.jpg')
+            );
+        }
+
+        return $prev_gallery;
     }
 }
 
