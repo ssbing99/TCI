@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Auth\Auth;
 use App\Mail\Frontend\LiveLesson\StudentMeetingSlotMail;
 use App\Models\Comment;
+use App\Mail\Frontend\FlexiMail;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\LessonSlotBooking;
@@ -35,6 +36,30 @@ class LessonsController extends Controller
             $path = 'frontend-rtl';
         }
         $this->path = $path;
+    }
+
+    private function studentPostedInCourseMail($teachers, $content)
+    {
+        try {
+            foreach ($teachers as $teacher) {
+                $content['receiver_name'] = $teacher->name;
+                \Mail::to($teacher->email)->send(new FlexiMail($content, 'studentPostedInCourseMail', 'Student Posted In Course'));
+            }
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
+    }
+
+    private function instructorPostedInCourseMultiMail($students)
+    {
+        try {
+            foreach ($students as $student) {
+                $content['receiver_name'] = $student->name;
+                \Mail::to($student->email)->send(new FlexiMail($content, 'instructorPostedInCourseMail', 'Instructor Posted In Course'));
+            }
+        }catch (\Exception $e){
+            \Log::info($e);
+        }
     }
 
     public function show($course_id, $lesson_slug)
