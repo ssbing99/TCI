@@ -256,6 +256,17 @@ class LessonsController extends Controller
         $review->content = $request->comment;
         $review->save();
 
+        dispatch(function () use ($lesson) {
+            if (auth()->user()->hasRole('student')) {
+                $content['student_name'] = auth()->user()->name;
+                $content['title'] = $lesson->lesson->course->title;
+                $this->studentPostedInCourseMail($lesson->lesson->course->teachers, $content);
+
+            } else {
+                $this->instructorPostedInCourseMultiMail($lesson->lesson->course->students);
+            }
+        })->afterResponse();
+
         return back();
     }
 }
