@@ -31,7 +31,7 @@
                     <div class="alert alert-success" role="alert">
                         Your payment is success.
                     </div>
-                    <h4><a href="{{route('courses.all')}}" class="btn btn-primary">Back</a></h4>
+                    <h4><a href="{{route('admin.student.dashboard')}}" class="btn btn-primary">Go To Dashboard</a></h4>
                 @endif
                 @if(Session::has('failure'))
                     <div class="alert alert-danger" role="alert">
