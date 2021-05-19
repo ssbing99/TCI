@@ -135,6 +135,8 @@
                     <input type="hidden" name="changeSeq" id="changeSeq" value="">
                     <button type="submit" name="btnSubmit" class="btn btn-primary btn-padding br-24">Save Position</button>
                 </form>
+                <br />
+                <h4><a href="{{route('submission.show', $assignment->id)}}" class="btn btn-primary btn-padding br-24">Back</a></h4>
             </div>
         </div>
     </section>

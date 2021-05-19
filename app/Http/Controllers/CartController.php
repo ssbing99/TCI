@@ -745,7 +745,7 @@ class CartController extends Controller
 
         if($request->paymentMethod == 'stripe'){
 
-            if ($this->checkDuplicateWithProduct($course, 'course')) {
+            if (!$request->has('gift_course') && $this->checkDuplicateWithProduct($course, 'course')) {
                 return $this->checkDuplicateWithProduct($course, 'course');
             }
             //Making Order
@@ -840,7 +840,7 @@ class CartController extends Controller
 
 
             \Log::info('paypalPayment 2');
-            if ($this->checkDuplicateWithProduct($course, 'bundle')) {
+            if (!$request->has('gift_course') && $this->checkDuplicateWithProduct($course, 'bundle')) {
                 return $this->checkDuplicateWithProduct($course, 'bundle');
             }
 

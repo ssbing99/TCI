@@ -31,7 +31,7 @@
                     <div class="alert alert-success" role="alert">
                         You have successfully enrolled for your course. Please check your mail.
                     </div>
-                    <h4><a href="{{route('courses.all')}}" class="btn btn-primary">Back</a></h4>
+                    <h4><a href="{{route('admin.student.dashboard')}}" class="btn btn-primary">Go To Dashboard</a></h4>
                 @endif
                 @if(Session::has('failure'))
                     <div class="alert alert-danger" role="alert">
