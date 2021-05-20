@@ -284,11 +284,11 @@ class LessonsController extends Controller
         dispatch(function () use ($lesson) {
             if (auth()->user()->hasRole('student')) {
                 $content['student_name'] = auth()->user()->name;
-                $content['title'] = $lesson->lesson->course->title;
-                $this->studentPostedInCourseMail($lesson->lesson->course->teachers, $content);
+                $content['title'] = $lesson->course->title;
+                $this->studentPostedInCourseMail($lesson->course->teachers, $content);
 
             } else {
-                $this->instructorPostedInCourseMultiMail($lesson->lesson->course->students);
+                $this->instructorPostedInCourseMultiMail($lesson->course->students);
             }
         })->afterResponse();
 
