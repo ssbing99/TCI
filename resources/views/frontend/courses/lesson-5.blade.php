@@ -142,9 +142,9 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                    <p class="assign-content clearfix">
+                    <p id="centent-p" class="assign-content clearfix">
                         <span class="bold">{{$lesson->course->title}}</span>
-                        <p> {!! $lesson->full_text !!} </p>
+                        <p> {!! str_replace('<img ','<img id="inImg" data-toggle="modal" data-target="#Photos"',$lesson->full_text) !!} </p>
                     </p>
 {{--                    <div class="row clearfix">--}}
 {{--                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">--}}
@@ -372,6 +372,15 @@
         $(document).ready(function () {
             $(document).on('click', '#gridPhotoImg', function () {
                 var imgSrc = $(this).children('img')[0].src;
+
+                if(imgSrc){
+                    $('#big-photo').attr('src',imgSrc);
+                    $('Photos').modal('show');
+                }
+            });
+
+            $(document).on('click', '#inImg', function () {
+                var imgSrc = $(this)[0].src;
 
                 if(imgSrc){
                     $('#big-photo').attr('src',imgSrc);
