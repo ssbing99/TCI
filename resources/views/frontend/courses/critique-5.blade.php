@@ -81,7 +81,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="Photos" tabindex="-1" role="dialog" aria-labelledby="photos" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal" aria-label="Close">
