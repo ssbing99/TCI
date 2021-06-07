@@ -74,6 +74,8 @@
 
                         <button type="submit" name="submit" id="submit" class="btn btn-primary br-24 btn-padding btn-lg" value="Submit">CREATE</button>
                     </form>
+                        <br />
+                        <h4><a href="{{route('submission.show', $assignment->id)}}" class="btn btn-primary btn-padding br-24">Back</a></h4>
                 </div>
             </div>
         </div>
