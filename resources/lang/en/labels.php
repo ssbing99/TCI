@@ -366,6 +366,7 @@ return array (
                       'media_audio' => 'Media Audio',
                       'media_pdf' => 'Media PDF',
                       'add_audio' => 'Add Audio',
+                      'rearrangement' => 'Rearrangement',
                   ),
               'max_file_size' => '(max file size 5MB)',
               'short_description_placeholder' => 'Input short description of lesson',

@@ -23,7 +23,7 @@
     <section>
         <div class="container">
             @include('includes.partials.messages')
-            <form action="{{route('submission.store',[$assignment->id])}}" method="POST" enctype="multipart/form-data" role="form" id="edit-assignment">
+            <form action="{{route('submission.store.normal',[$assignment->id])}}" method="POST" enctype="multipart/form-data" role="form" id="edit-assignment">
                 {{ csrf_field() }}
                 <div class="row clearfix">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">

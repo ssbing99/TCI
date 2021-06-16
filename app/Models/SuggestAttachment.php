@@ -13,47 +13,33 @@ use Mtownsend\ReadTime\ReadTime;
 
 
 /**
- * Class Lesson
+ * Class SuggestAttachment
  *
  * @package App
 // * @property string $course
- * @property string $title
- * @property string $slug
  * @property string $submission_id
  * @property string $a_group_id
  * @property string $user_id
+ * @property string $teacher_id
  * @property string $attach_file
  * @property string $attach_video
  * @property string $vimeo_id
  * @property string $youtube_id
  * @property text $full_text
  * @property integer $position
- * @property string $meta_title
  */
-class Attachment extends Model
+class SuggestAttachment extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['title', 'slug', 'attach_file', 'attach_video', 'vimeo_id', 'youtube_id',
-        'full_text', 'position', 'published', 'submission_id', 'a_group_id','user_id','meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['attach_file', 'attach_video', 'vimeo_id', 'youtube_id',
+        'full_text', 'position', 'published', 'submission_id', 'a_group_id','user_id','teacher_id'];
 
 
     public static function boot()
     {
         parent::boot();
 
-//        static::deleting(function ($attachment) { // before delete() method call this
-//            if ($attachment->isForceDeleting()) {
-//                $media = $attachment->media;
-//                foreach ($media as $item) {
-//                    if (File::exists(public_path('/storage/uploads/' . $item->name))) {
-//                        File::delete(public_path('/storage/uploads/' . $item->name));
-//                    }
-//                }
-//                $attachment->media()->delete();
-//            }
-//
-//        });
     }
 
 
@@ -88,6 +74,10 @@ class Attachment extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function teacher(){
+        return $this->belongsTo(User::class, 'teacher_id', 'id');
     }
 
     public function attachmentGroup()

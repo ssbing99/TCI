@@ -296,3 +296,85 @@ ADD CONSTRAINT log_submission_id_foreign
 FOREIGN KEY (`submission_id`) REFERENCES `submissions` (`id`);
 
 -- END FIX
+
+-- NEW FLOW
+alter table assignments
+add column `rearrangement` tinyint(4) DEFAULT '0' after published;
+
+alter table assignments
+add column `rearrangement_type` varchar(191) DEFAULT NULL after rearrangement;
+
+alter table attachments
+add column `a_group_id` int(10) unsigned DEFAULT NULL after submission_id;
+
+CREATE TABLE `assignment_attachment_groups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `assignment_id` int(10) unsigned DEFAULT NULL,
+  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `full_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `meta_title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `meta_description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `meta_keywords` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `assignment_attach_g_key` (`assignment_id`),
+  KEY `attachment_gs_deleted_at_index` (`deleted_at`),
+  CONSTRAINT `assignment_attach_g_key` FOREIGN KEY (`assignment_id`) REFERENCES `assignments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `aattachment_g_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `assignment_attachments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `group_id` int(10) unsigned DEFAULT NULL,
+  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `attach_file` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `attach_video` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `vimeo_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `youtube_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `full_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `meta_title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `meta_description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `meta_keywords` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `position` int(10) unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `assignment_attach_key` (`group_id`),
+  KEY `attachments_deleted_at_index` (`deleted_at`),
+  CONSTRAINT `assignment_attach_key` FOREIGN KEY (`group_id`) REFERENCES `assignment_attachment_groups` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `aattachment_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `suggest_attachments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `teacher_id` int(10) unsigned NOT NULL,
+  `submission_id` int(10) unsigned DEFAULT NULL,
+  `a_group_id` int(10) unsigned DEFAULT NULL,
+  `attach_file` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `attach_video` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `vimeo_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `youtube_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `full_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `position` int(10) unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ssubmission_key` (`submission_id`),
+  KEY `sattachments_deleted_at_index` (`deleted_at`),
+  KEY `sattachment_user_id_foreign` (`user_id`),
+  KEY `sattachment_teacher_id_foreign` (`teacher_id`),
+  CONSTRAINT `sattachment_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `sattachment_teacher_id_foreign` FOREIGN KEY (`teacher_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `ssubmission_key` FOREIGN KEY (`submission_id`) REFERENCES `submissions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- END NEW FLOW

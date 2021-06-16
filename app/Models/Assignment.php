@@ -10,12 +10,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\File;
 use Mtownsend\ReadTime\ReadTime;
 
-
+/**
+ * Class Assignment
+ *
+ * @package App
+ * @property string $title
+ * @property string $slug
+ * @property text $description
+ * @property decimal $price
+ * @property string $assignment_image
+ * @property string $summary
+ * @property string $full_text
+ * @property tinyInteger $published
+ * @property tinyInteger $rearrangement
+ * @property string $rearrangement_type
+ */
 class Assignment extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['title', 'slug', 'assignment_image', 'summary', 'full_text', 'position', 'downloadable_files', 'free_lesson', 'published', 'lesson_id'];
+    protected $fillable = ['title', 'slug', 'assignment_image', 'summary', 'full_text', 'position', 'downloadable_files', 'free_lesson', 'published', 'rearrangement', 'rearrangement_type', 'lesson_id'];
 
     public static function boot()
     {
@@ -118,6 +132,21 @@ class Assignment extends Model
     public function comments()
     {
         return $this->morphMany('App\Models\Comment', 'reviewable');
+    }
+
+    public function rearrangements()
+    {
+        return $this->hasMany(AssignmentAttachmentGroup::class)->orderBy('created_at');
+    }
+
+    public function rearrangementGroup()
+    {
+        return $this->hasMany(AssignmentAttachmentGroup::class)->orderBy('created_at')->first();
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(AssignmentAttachment::class)->orderBy('position');
     }
 
 }

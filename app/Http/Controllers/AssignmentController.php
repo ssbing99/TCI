@@ -6,11 +6,13 @@ use App\Http\Requests\Admin\StoreAttachmentsRequest;
 use App\Http\Requests\Admin\StoreSubmissionsRequest;
 use App\Mail\Frontend\FlexiMail;
 use App\Models\Assignment;
+use App\Models\AssignmentAttachmentGroup;
 use App\Models\Attachment;
 use App\Models\Comment;
 use App\Models\Log;
 use App\Models\Media;
 use App\Models\Submission;
+use App\Models\SuggestAttachment;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use App\Http\Traits\FileUploadTrait;
@@ -62,6 +64,28 @@ class AssignmentController extends Controller
         $log->description = $desc;
         $log->unread = 1;
         $log->save();
+    }
+
+    public function getAssgType($assignment, $type) {
+
+        $reType = $assignment->rearrangement != 0;
+
+        if($type == null) {
+            return  !$reType;
+        }
+
+        if($type == 'RE') {
+            return  $reType;
+        }
+
+        if($type == 'AD') {
+            return  ($reType && !is_null($assignment->rearrangement_type) && $assignment->rearrangement_type == 'admin' );
+        }
+
+        if($type == 'ST') {
+            return  ($reType && !is_null($assignment->rearrangement_type) && $assignment->rearrangement_type == 'student' );
+        }
+
     }
 
     /**
@@ -142,6 +166,10 @@ class AssignmentController extends Controller
     {
         $assignment = Assignment::where('id', $id)->where('published', '=', 1)->first();
 
+        $reTypeAD = $this->getAssgType($assignment, 'AD');
+        $reTypeST = $this->getAssgType($assignment, 'ST');
+        $groups = [];
+
         $course = $assignment->lesson->course;
         $lesson = $assignment->lesson;
 
@@ -149,25 +177,44 @@ class AssignmentController extends Controller
             ->where('assignment_id', $assignment->id)
             ->where('user_id', \Auth::user()->id)->first();
 
+        if($reTypeAD || $reTypeST) {
+
+            $collection = new Collection($submission->suggestions);
+            $groups = $collection->groupBy(function($item, $key) {
+                return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $item['created_at'])->format('m/d/Y H:i:s');
+            });
+
+        }
+
         $view_path = returnPathByTheme($this->path.'.courses.submission', 5,'-');
 
-        return view($view_path, compact('assignment', 'course','lesson', 'submission'));
+        return view($view_path, compact('assignment', 'course','lesson', 'submission', 'groups'));
     }
 
     public function showStudentSubmission($assignment_id, $submission_id)
     {
         $assignment = Assignment::where('id', $assignment_id)->where('published', '=', 1)->first();
-//
-//        $course = $assignment->lesson->course;
-//        $lesson = $assignment->lesson;
+
+        $reTypeAD = $this->getAssgType($assignment, 'AD');
+        $reTypeST = $this->getAssgType($assignment, 'ST');
+        $groups = [];
 
         $submission = Submission::withoutGlobalScope('filter')
             ->where('id', $submission_id)->first();
 
+        if($reTypeAD || $reTypeST) {
 
-        $view_path = returnPathByTheme($this->path.'.courses.student-submission', 5,'-');
+            $collection = new Collection($submission->suggestions);
+            $groups = $collection->groupBy(function($item, $key) {
+                return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $item['created_at'])->format('m/d/Y H:i:s');
+            });
 
-        return view($view_path, compact( 'submission','assignment'));
+            $view_path = returnPathByTheme($this->path . '.courses.student-re-submission', 5, '-');
+        }else {
+            $view_path = returnPathByTheme($this->path . '.courses.student-submission', 5, '-');
+        }
+
+        return view($view_path, compact( 'submission','assignment', 'groups'));
     }
 
     private function studentPostedInCourseMail($teachers, $content)
@@ -211,11 +258,25 @@ class AssignmentController extends Controller
      */
     public function createSubmission($id)
     {
+        $rearrangement = null;
+        $attachments = null;
         $assignment = Assignment::where('id', $id)->where('published', '=', 1)->first();
 
-        $view_path = returnPathByTheme($this->path.'.courses.add-submission', 5,'-');
+        $rearrangement = $assignment->rearrangementGroup();
 
-        return view($view_path, compact('assignment'));
+        if ($rearrangement != null) {
+            $attachments = $rearrangement->attachments;
+        }
+
+        $reTypeAD = $this->getAssgType($assignment, 'AD');
+
+        if($reTypeAD) {
+            $view_path = returnPathByTheme($this->path . '.courses.add-re-submission', 5, '-');
+        }else {
+            $view_path = returnPathByTheme($this->path . '.courses.add-submission', 5, '-');
+        }
+
+        return view($view_path, compact('assignment','attachments'));
     }
 
     public function storeSubmission(StoreSubmissionsRequest $request, $assignment_id)
@@ -483,6 +544,146 @@ class AssignmentController extends Controller
         return redirect()->route('submission.show', ['id' => $assignment_id])->withFlashSuccess('Submission created!');
     }
 
+    public function storeSubmissionRearrangement(StoreSubmissionsRequest $request, $assignment_id)
+    {
+        ini_set('memory_limit', '-1');
+        $request->all();
+        \Log::info($request->all());
+        \Log::info('storeSubmission');
+        $assignment = Assignment::find($assignment_id);
+
+        $submission = new Submission();
+        $submission->user_id = auth()->user()->id;
+        $submission->assignment_id = $assignment_id;
+        $submission->title = $request->title;
+        $submission->description = $request->description;
+        $submission->save();
+
+        $this->createLog(auth()->user()->full_name.' has submitted the assignment',NULL, auth()->user()->id, $assignment->lesson->course->teachers()->first()->id, $submission->id);
+
+        //TODO: attachment
+
+        $rearrangement = $assignment->rearrangementGroup();
+
+        if ($rearrangement != null) {
+            $changeSeq = json_decode($request->changeSeq);
+
+            $seqArray = [];
+            foreach ($changeSeq as $key => $val) {
+                $seqArray['d' . $key] = $val;
+            }
+
+            foreach ($rearrangement->attachments as $item) {
+                $new_seq = 0;
+                if (!empty($seqArray['d' . $item->id])) {
+                    $new_seq = $seqArray['d' . $item->id];
+                }
+
+                $new_attach = $this->createAttachmentClass(NULL, NULL, NULL, $submission->id);
+                $new_attach->a_group_id = $rearrangement->id;
+                $new_attach->position = $new_seq;
+                $new_attach->save();
+
+                if(isset($item->media) && !$item->media->isEmpty()) {
+                    $_media = $item->media->first();
+
+                    // copy from rearrangement attachment
+                    $media = new Media();
+                    $media->model_type = Attachment::class;
+                    $media->model_id = $new_attach->id;
+                    if($_media->type == 'upload' || str_contains($_media->type,'youtube') || str_contains($_media->type,'vimeo')){
+                        $media->url = $_media->url;
+                    } else {
+                        $media->name = $_media->name;
+                    }
+
+                    $media->type = $_media->type;
+                    $media->file_name = $_media->file_name;
+                    $media->size = 0;
+                    $media->save();
+
+                }
+
+            }
+        }
+
+        dispatch(function () use ($assignment) {
+            $content['student_name'] = auth()->user()->name;
+            $content['title'] = $assignment->lesson->course->title;
+            $this->studentPostedInCourseMail($assignment->lesson->course->teachers, $content);
+        })->afterResponse();
+
+        return redirect()->route('submission.show', ['id' => $assignment_id])->withFlashSuccess('Submission created!');
+    }
+
+    public function storeNewSequence(Request $request, $assignment_id, $submission_id, $groupId)
+    {
+        $assignment = Assignment::find($assignment_id);
+
+        $reType = $this->getAssgType($assignment, 'RE');
+        $reTypeAD = $this->getAssgType($assignment, 'AD');
+        $reTypeST = $this->getAssgType($assignment, 'ST');
+
+        $submission = Submission::where('id', $submission_id)->first();
+        $attachments = [];
+        $attachmentGroup = null;
+        $rearrangement = null;
+
+        if($reTypeAD) {
+            $attachmentGroup = AssignmentAttachmentGroup::findOrFail($groupId);
+            $rearrangement = $assignment->rearrangementGroup();
+            $attachments = $rearrangement->attachments;
+        }
+
+        if($reTypeST) {
+            $attachments = $submission->attachments;
+        }
+
+        \Log::info($request->changeSeq);
+
+        if (count($attachments) > 0) {
+            $changeSeq = json_decode($request->changeSeq);
+
+            $seqArray = [];
+            foreach ($changeSeq as $key => $val) {
+                $seqArray['d' . $key] = $val;
+            }
+
+            foreach ($attachments as $item) {
+                $new_seq = 0;
+                if (!empty($seqArray['d' . $item->id])) {
+                    $new_seq = $seqArray['d' . $item->id];
+                }
+
+                $new_attach = $this->createSuggestAttachmentClass($reTypeAD? $attachmentGroup->id: 0, $submission->id, $submission->user->id, auth()->user()->id);
+                $new_attach->position = $new_seq;
+                $new_attach->save();
+
+                if(isset($item->media) && !$item->media->isEmpty()) {
+                    $_media = $item->media->first();
+
+                    // copy from rearrangement attachment
+                    $media = new Media();
+                    $media->model_type = SuggestAttachment::class;
+                    $media->model_id = $new_attach->id;
+                    if($_media->type == 'upload' || str_contains($_media->type,'youtube') || str_contains($_media->type,'vimeo')){
+                        $media->url = $_media->url;
+                    } else {
+                        $media->name = $_media->name;
+                    }
+
+                    $media->type = $_media->type;
+                    $media->file_name = $_media->file_name;
+                    $media->size = 0;
+                    $media->save();
+
+                }
+
+            }
+        }
+
+        return redirect()->route('student.submission.show', ['assignment_id'=>$assignment->id, 'submission_id'=>$submission->id]);
+    }
 
     public function createAttachment($assignment_id, $submission_id)
     {
@@ -941,6 +1142,16 @@ class AssignmentController extends Controller
         return $attachment;
     }
 
+    public function createSuggestAttachmentClass($group_id, $submission_id, $user_id, $teacher_id){
+        $attachment = new SuggestAttachment();
+        $attachment->a_group_id = $group_id;
+        $attachment->submission_id = $submission_id;
+        $attachment->user_id = $user_id;
+        $attachment->teacher_id = $teacher_id;
+
+        return $attachment;
+    }
+
     public function editSubmission($assignment_id, $submission_id)
     {
         $assignment = Assignment::where('id', $assignment_id)->where('published', '=', 1)->first();
@@ -973,13 +1184,46 @@ class AssignmentController extends Controller
         $submission = Submission::where('id', $submission_id)->first();
         $attachments = $submission->attachmentsById(auth()->user()->id)->get();
 
-        $view_path = returnPathByTheme($this->path.'.courses.edit-sequence', 5,'-');
+        $reType = $assignment->rearrangement != 0;
+
+        $view_path = returnPathByTheme($this->path.($reType ? '.courses.edit-re-sequence' : '.courses.edit-sequence'), 5,'-');
 
         return view($view_path, compact('assignment','submission', 'attachments'));
     }
 
+    public function attachmentSuggestSequence($assignment_id, $submission_id, $groupId)
+    {
+        $assignment = Assignment::where('id', $assignment_id)->where('published', '=', 1)->first();
+
+        $reTypeAD = $this->getAssgType($assignment, 'AD');
+        $reTypeST = $this->getAssgType($assignment, 'ST');
+
+        $submission = Submission::where('id', $submission_id)->first();
+        $attachmentGroup = null;
+        $attachments = null;
+
+        if($reTypeAD) {
+            $attachmentGroup = AssignmentAttachmentGroup::findOrFail($groupId);
+            $attachments = $attachmentGroup->attachments;
+        }
+
+        if($reTypeST) {
+            $attachments = $submission->attachments;
+        }
+
+        $view_path = returnPathByTheme($this->path.'.courses.suggest-sequence', 5,'-');
+
+        return view($view_path, compact('assignment','submission', 'attachments','groupId'));
+    }
+
     public function updateSequence(Request $request, $assignment_id, $submission_id)
     {
+
+        $assignment = Assignment::where('id', $assignment_id)->where('published', '=', 1)->first();
+
+        $reType = $this->getAssgType($assignment, 'RE');
+        $reTypeAD = $this->getAssgType($assignment, 'AD');
+        $reTypeST = $this->getAssgType($assignment, 'ST');
 
         \Log::info($request->changeSeq);
 
@@ -994,15 +1238,27 @@ class AssignmentController extends Controller
             $submission = Submission::where('id', $submission_id)->first();
             $attachments = $submission->attachmentsById(auth()->user()->id)->get();
 
-            foreach ($attachments as $item) {
-                if (!empty($seqArray['d' . $item->id])) {
-                    $new_seq = $seqArray['d' . $item->id];
+            // cater for rearrangement
+            if(!$reType) {
+                foreach ($attachments as $item) {
+                    if (!empty($seqArray['d' . $item->id])) {
+                        $new_seq = $seqArray['d' . $item->id];
+                        $item->position = $new_seq;
+                        $item->save();
+                    }
+                }
+            }elseif($reTypeAD || $reTypeST){// == 1
+                foreach ($attachments as $item) {
+                    $new_seq = 0;
+                    if (!empty($seqArray['d' . $item->id])) {
+                        $new_seq = $seqArray['d' . $item->id];
+                    }
                     $item->position = $new_seq;
                     $item->save();
                 }
             }
         }
-        return redirect()->route('submission.attachment.sequence', ['assignment_id' => $assignment_id,'submission_id'=>$submission_id]);
+        return redirect()->route('submission.attachment.sequence', ['assignment_id' => $assignment_id, 'submission_id' => $submission_id]);
 
     }
 
@@ -1013,11 +1269,19 @@ class AssignmentController extends Controller
         $attachment = Attachment::findOrFail($id);
 
         if($attachment != null){
-            foreach ($attachment->media as $delItem) {
-                $this->deleteMedia($delItem);
-            }
+//            foreach ($attachment->media as $delItem) {
+//                $this->deleteMedia($delItem);
+//            }
 
-            $attachment->delete();
+//            $attachment->delete();
+
+            /*
+            1. for reset purpose
+            2. due to have reset feature so no need to delete the media & attachment, also
+            can save effort to create a table to store delete records
+            */
+            $attachment->position = 0;
+            $attachment->save();
         }
 
         return back();

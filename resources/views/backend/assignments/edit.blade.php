@@ -205,18 +205,35 @@
 {{--                    @lang('labels.backend.assignments.video_guide')--}}
 {{--                </div>--}}
 {{--            </div>--}}
-{{--            <div class="row">--}}
-{{--                <div class="col-12 col-lg-3  form-group">--}}
-{{--                    {!! Form::hidden('published', 0) !!}--}}
-{{--                    {!! Form::checkbox('published', 1, old('published'), []) !!}--}}
-{{--                    {!! Form::label('published', trans('labels.backend.assignments.fields.published'), ['class' => 'control-label control-label font-weight-bold']) !!}--}}
-{{--                </div>--}}
-{{--                <div class="col-12  text-left form-group">--}}
+            <div class="row">
+                <div class="col-12 col-lg-3  form-group">
+                    {!! Form::hidden('rearrangement', 0) !!}
+                    {!! Form::checkbox('rearrangement', 1, old('rearrangement'), ['onchange' => 'rearrangementCheck()']) !!}
+                    {!! Form::label('rearrangement', trans('labels.backend.assignments.fields.rearrangement'), ['class' => 'control-label control-label font-weight-bold']) !!}
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-12 col-lg-3 form-group" name="optionsRe" style="display: none;">
+                    <div class="radio">
+                        {!! Form::radio('rearrangement_type', 'admin', old('rearrangement_type') == 'admin', []) !!}
+                        {!! Form::label('rearrangement_type', 'Admin Upload', ['class' => 'checkbox control-label font-weight-bold']) !!}
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3 form-group" name="optionsRe" style="display: none;">
+                    <div class="radio">
+                        {!! Form::radio('rearrangement_type', 'student', old('rearrangement_type') == 'student', []) !!}
+                        {!! Form::label('rearrangement_type', 'Student Upload', ['class' => 'checkbox control-label font-weight-bold']) !!}
+                    </div>
+                </div>
+                <div class="col-12  text-left form-group">
                     {!! Form::submit(trans('strings.backend.general.app_update'), ['class' => 'btn  btn-primary']) !!}
-{{--                </div>--}}
-{{--            </div>--}}
+                </div>
+            </div>
         </div>
     </div>
+
+    <input type="hidden" name="lesson_id" value="{{request('lesson_id')}}"/>
     {!! Form::close() !!}
 @stop
 
@@ -227,6 +244,21 @@
     <script type="text/javascript" src="{{asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js')}}"></script>
     <script src="{{asset('/vendor/laravel-filemanager/js/lfm.js')}}"></script>
     <script>
+
+        function rearrangementCheck(){
+            var chk = document.getElementsByName('rearrangement')[1];
+            var opts = document.getElementsByName('optionsRe');
+
+            for (var i=0; i<opts.length; i++) {
+                if(chk.checked){
+                    opts[i].style.display = 'block';
+                }else{
+                    opts[i].style.display = 'none';
+                }
+            }
+
+        }
+
         $('.editor').each(function () {
 
             CKEDITOR.replace($(this).attr('id'), {
@@ -253,6 +285,8 @@
         });
 
         $(document).ready(function () {
+            rearrangementCheck();
+
             $(document).on('click', '.delete', function (e) {
                 e.preventDefault();
                 var parent = $(this).parent('.form-group');

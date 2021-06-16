@@ -24,6 +24,7 @@ class UpdateAssignmentsRequest extends FormRequest
     {
         return [
             'title' => 'required',
+            'rearrangement_type'  => ['required_if:rearrangement,1'],
         ];
     }
 }

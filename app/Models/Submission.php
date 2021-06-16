@@ -58,9 +58,19 @@ class Submission extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function attachmentsOrderById()
+    {
+        return $this->hasMany(Attachment::class)->orderBy('id');
+    }
+
     public function attachments()
     {
         return $this->hasMany(Attachment::class)->orderBy('position');
+    }
+
+    public function suggestions()
+    {
+        return $this->hasMany(SuggestAttachment::class)->orderBy('a_group_id')->orderBy('created_at')->orderBy('position');
     }
 
     public function attachmentsById($user_id)

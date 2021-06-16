@@ -252,6 +252,26 @@ Route::post('assignment_mass_destroy', ['uses' => 'Admin\AssignmentsController@m
 Route::post('assignment_restore/{id}', ['uses' => 'Admin\AssignmentsController@restore', 'as' => 'assignments.restore']);
 Route::delete('assignment_perma_del/{id}', ['uses' => 'Admin\AssignmentsController@perma_del', 'as' => 'assignments.perma_del']);
 
+//rearrangement
+Route::get('get-attachment-data', ['uses' => 'Admin\AssignmentsController@getDataAttachment', 'as' => 'assignments.rearrangement.get_data']);
+Route::get('assignments/{assignment_id}/rearrangement/list', ['uses' => 'Admin\AssignmentsController@rearrangementList', 'as' => 'assignments.rearrangement.list']);
+Route::get('assignments/{assignment_id}/rearrangement', ['uses' => 'Admin\AssignmentsController@rearrangement', 'as' => 'assignments.rearrangement']);
+Route::post('assignments/{assignment_id}/rearrangement', ['uses' => 'Admin\AssignmentsController@storeRearrangement', 'as' => 'assignments.rearrangement.create']);
+Route::get('assignments/{assignment_id}/rearrangement/edit/{id}', ['uses' => 'Admin\AssignmentsController@editRearrangement', 'as' => 'assignments.rearrangement.edit']);
+Route::post('assignments/{assignment_id}/rearrangement/update/{id}', ['uses' => 'Admin\AssignmentsController@updateRearrangement', 'as' => 'assignments.rearrangement.update']);
+Route::get('assignments/{assignment_id}/rearrangement/delete/{id}', ['uses' => 'Admin\AssignmentsController@deleteRearrangement', 'as' => 'assignments.rearrangement.delete']);
+
+//attachment
+Route::get('assignments/{assignment_id}/attachment/list/{group_id}', ['uses' => 'Admin\AssignmentsController@attachmentList', 'as' => 'assignments.attachment.list']);
+Route::get('assignments/{assignment_id}/attachment/{group_id}', ['uses' => 'Admin\AssignmentsController@attachment', 'as' => 'assignments.attachment']);
+Route::post('assignments/{assignment_id}/attachment/{group_id}', ['uses' => 'Admin\AssignmentsController@storeAttachment', 'as' => 'assignments.attachment.create']);
+Route::get('assignments/{assignment_id}/attachment/{group_id}/edit/{id}', ['uses' => 'Admin\AssignmentsController@editAttachment', 'as' => 'assignments.attachment.edit']);
+Route::post('assignments/{assignment_id}/attachment/{group_id}/update/{id}', ['uses' => 'Admin\AssignmentsController@updateAttachment', 'as' => 'assignments.attachment.update']);
+Route::get('assignments/{assignment_id}/attachment/delete/{id}', ['uses' => 'Admin\AssignmentsController@deleteAttachment', 'as' => 'assignments.attachment.delete']);
+
+//sequence
+Route::get('assignments/{assignment_id}/attachment/sequence/{id}', ['uses' => 'Admin\AssignmentsController@attachmentSequence', 'as' => 'assignments.attachment.sequence']);
+Route::post('assignments/{assignment_id}/attachment/sequence/{group_id}/update', ['uses' => 'Admin\AssignmentsController@updateSequence', 'as' => 'assignments.attachment.sequence.update']);
 
 //===== Questions Routes =====//
 Route::resource('questions', 'Admin\QuestionsController');

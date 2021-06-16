@@ -6,10 +6,10 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="page-title d-inline">@lang('labels.backend.assignments.title')</h3>
+            <h3 class="page-title d-inline">Rearrangement</h3>
             @can('lesson_create')
                 <div class="float-right">
-                    <a href="{{ route('admin.assignments.create') }}@if(request('lesson_id')){{'?lesson_id='.request('lesson_id')}}@endif"
+                    <a href="{{ route('admin.assignments.rearrangement.create', [$assignment_id]) }}"
                        class="btn btn-success">@lang('strings.backend.general.app_add_new')</a>
 
                 </div>
@@ -45,8 +45,6 @@
 
                                 <th>@lang('labels.general.id')</th>
                             <th>@lang('labels.backend.assignments.fields.title')</th>
-                                <th>Rearrangement</th>
-                            <th>@lang('labels.backend.assignments.fields.published')</th>
                             @if( request('show_deleted') == 1 )
                                 <th>@lang('strings.backend.general.actions') &nbsp;</th>
                             @else
@@ -69,13 +67,12 @@
     <script>
 
         $(document).ready(function () {
-            var route = '{{route('admin.assignments.get_data')}}';
+            var route = '{{route('admin.assignments.rearrangement.get_data',['assignment_id' => $assignment_id])}}';
 
 
             @php
                 $show_deleted = (request('show_deleted') == 1) ? 1 : 0;
-                $lesson_id = (request('lesson_id') != "") ? request('lesson_id') : 0;
-            $route = route('admin.assignments.get_data',['show_deleted' => $show_deleted,'lesson_id' => $lesson_id]);
+            $route = route('admin.assignments.rearrangement.get_data',['show_deleted' => $show_deleted,'assignment_id' => $assignment_id]);
             @endphp
 
             route = '{{$route}}';
@@ -91,13 +88,13 @@
                     {
                         extend: 'csv',
                         exportOptions: {
-                            columns: [ 1, 2, 3, 5]
+                            columns: [ 1, 2, 3]
                         }
                     },
                     {
                         extend: 'pdf',
                         exportOptions: {
-                            columns: [ 1, 2, 3, 5]
+                            columns: [ 1, 2, 3]
                         }
                     },
                     'colvis'
@@ -115,8 +112,6 @@
                     {data: "id", name: 'id'},
 
                     {data: "title", name: 'title'},
-                    {data: "sequence", name: "sequence"},
-                    {data: "published", name: "published"},
                     {data: "actions", name: "actions"}
                 ],
                 @if(request('show_deleted') != 1)
