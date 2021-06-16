@@ -25,6 +25,7 @@ class StoreAssignmentsRequest extends FormRequest
         return [
             'lesson_id' => 'required',
             'title' => 'required',
+            'rearrangement_type' => ['required_if:rearrangement,1'],
         ];
     }
 }

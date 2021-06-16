@@ -54,84 +54,33 @@
                       <button type="button" class="btn btn-outline-secondary">Edit Assignment Submission</button>
                     </div> -->
 
+                    <!-- SUBMISSION COMMENT -->
+
                     @if(isset($submission))
-                    <div class="border-box clearfix">
-                        <p class="assign-content clearfix">
-                                <span>
-                                    {{ $submission->title }}<br/>
-                                {!! nl2br($submission->description) !!}
-                                </span>
-                        </p>
-                        @php
-                            $sub_attachments = isset($submission) ? $submission->attachments : [];
-                        @endphp
-                        <ul class="vertical-list clearfix">
+                        @if($assignment->rearrangement == 0)
+                            @include('frontend.courses.partials.submission-normal-comment')
+                        @elseif($assignment->rearrangement == 1 && !is_null($assignment->rearrangement_type) && $assignment->rearrangement_type == 'admin' || ( $assignment->rearrangement == 1 && !is_null($assignment->rearrangement_type) && $assignment->rearrangement_type == 'student'))
+                            @include('frontend.courses.partials.submission-rearrange-comment')
+                        @endif
 
-                            @foreach($sub_attachments as $sAttachment)
-
-                                @if(count($sAttachment->comments) > 0)
-                                    <li>
-                                        <p class="assign-content clearfix">
-                                            <span>
-                                                {{ $sAttachment->title }}<br/>
-                                            {!! nl2br($sAttachment->full_text) !!}
-                                            </span>
-
-                                            @if(isset($sAttachment->media) && !$sAttachment->media->isEmpty())
-                                                @foreach($sAttachment->media as $_media)
-                                                    @if($_media->type == 'upload')
-                                                        <a href="{{$_media->url}}" target="_blank"><img width="200px" src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a>
-                                                    @elseif(str_contains($_media->type,'image'))
-                                                        <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img width="200px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a>
-                                                    @elseif(str_contains($_media->type,'youtube'))
-                                                        <a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img width="200px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a>
-
-                                                    @elseif(str_contains($_media->type,'vimeo'))
-                                                        <a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img width="200px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a>
-
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </p>
-                                        <!-- Comment -->
-                                    @foreach($sAttachment->comments as $comm)
-                                        <p class="assign-content clearfix">
-                                            Critique by {{ $comm->user->full_name }}<br /><br />
-                                            {!! nl2br($comm->content) !!}
-
-                                            @if(isset($comm->media) && !$comm->media->isEmpty())
-                                                <br/>
-                                                @foreach($comm->media as $_media)
-                                                    @if($_media->type == 'upload')
-                                                        <a href="{{$_media->url}}" target="_blank"><img width="100px" src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a>
-                                                    @elseif(str_contains($_media->type,'image'))
-                                                        <a id="gridPhotoImg" href="#" data-toggle="modal" data-target="#Photos"><img width="100px" src="{{ asset('storage/uploads/'.$_media->name) }}" alt="" /></a>
-                                                    @elseif(str_contains($_media->type,'youtube'))
-                                                        <a href="https://www.youtube.com/embed/{{$_media->url}}" target="_blank"><img width="100px" src="https://img.youtube.com/vi/{{$_media->url}}/0.jpg" alt="" /></a>
-
-                                                    @elseif(str_contains($_media->type,'vimeo'))
-                                                        <a href="https://player.vimeo.com/video/{{$_media->url}}" target="_blank"><img width="100px" src="https://i.vimeocdn.com/video/{{$_media->url}}/0.jpg" alt="" /></a>
-
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </p>
-                                        <a href="{{route('submission.all.critique',['assignment_id' => $assignment->id, 'submission_id' => $submission->id, 'attachment_id' => $sAttachment->id])}}" class="btn btn-primary btn-padding btn-sm mb-15">Respond to this Critique</a>
-                                    @endforeach
-                                    </li>
-                                @endif
-
-                            @endforeach
-
-                        </ul>
-                    </div>
                     @endif
+                    <!-- END SUBMISSION COMMENT -->
                 </div>
                 <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                     @if(isset($submission))
-                    <a href="{{route('submission.attachment.create', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id])}}" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Add an attachment</a>
-                    <a href="{{ route('submission.attachment.sequence', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id]) }}" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Sequence your Images</a>
-                    <a href="{{ route('submission.edit', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id]) }}" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Edit Assignment Submission</a>
+                        @if($assignment->rearrangement == 0)
+                            <a href="{{route('submission.attachment.create', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id])}}" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Add an attachment</a>
+                            <a href="{{ route('submission.edit', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id]) }}" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Edit Assignment Submission</a>
+                        @elseif($assignment->rearrangement == 1)
+                            @if(!is_null($assignment->rearrangement_type) && $assignment->rearrangement_type == 'admin' )
+                                <a href="{{ route('submission.attachment.sequence', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id]) }}" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Sequence your Images</a>
+                                <a href="{{ route('submission.edit', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id]) }}" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Edit Assignment Submission</a>
+                            @elseif(!is_null($assignment->rearrangement_type) && $assignment->rearrangement_type == 'student' )
+                                <a href="{{route('submission.attachment.create', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id])}}" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Add an attachment</a>
+                                <a href="{{ route('submission.attachment.sequence', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id]) }}" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Sequence your Images</a>
+                                <a href="{{ route('submission.edit', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id]) }}" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Edit Assignment Submission</a>
+                            @endif
+                        @endif
                     @else
                         <a href="#" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Add an attachment</a>
                         <a href="#" class="btn btn-primary br-24 btn-paddiing btn-block mb-15">Sequence your Images</a>
@@ -158,11 +107,12 @@
                     @php
                         $sub_attachments = isset($submission) ? $submission->attachments : [];
                     @endphp
+                        @if($assignment->rearrangement == 0)
                     <div class="side-bg clearfix">
                         <div class="side-title clearfix">Photo's</div>
                         <div class="photos clearfix">
                             @foreach($sub_attachments as $item)
-                                @if(isset($item->media) && !$item->media->isEmpty())
+                                @if((!is_null($item->position) && $item->position != 0) && isset($item->media) && !$item->media->isEmpty())
                                     @foreach($item->media as $_media)
                                         @if($_media->type == 'upload')
                                             <a href="#" data-toggle="modal" data-target="#gridPhotos"><img src="{{asset('assets_new/images/play-button.png')}}" alt="" /></a>
@@ -182,6 +132,7 @@
                             @endforeach
                         </div>
                     </div>
+                            @endif
                 </div>
             </div>
         </div>
