@@ -128,6 +128,7 @@
                         @endif
                     <!-- END SUGGESTION -->
 
+                        @if($all_attachments->first() !== null )
                         <div class="box-ededed clearfix">
                             <p class="head clearfix">Comments</p>
                             @if(count($all_attachments->first()->comments) > 0)
@@ -179,6 +180,7 @@
 
                     <input type="button" name="submitBtn" id="submitBtn" class="btn btn-primary br-24 btn-padding" value="Save Changes"  onclick="this.form.submit()"/>
 
+                            @endif
                     </form>
                 </div>
             </div>
