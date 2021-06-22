@@ -570,7 +570,11 @@ class AssignmentsController extends Controller
             return abort(401);
         }
 
-        return view('backend.assignments.rearrangement', compact('assignment_id'));
+        $assignment = Assignment::findOrFail($assignment_id);
+
+        $groupCount = AssignmentAttachmentGroup::query()->where('assignment_id', $assignment_id)->count();
+
+        return view('backend.assignments.rearrangement', compact('assignment_id', 'groupCount', 'assignment'));
     }
 
     public function rearrangement($assignment_id)
@@ -640,7 +644,11 @@ class AssignmentsController extends Controller
             return abort(401);
         }
 
-        return view('backend.assignments.rearrangement', compact('assignment_id'));
+        $assignment = Assignment::findOrFail($assignment_id);
+
+        $groupCount = AssignmentAttachmentGroup::query()->where('assignment_id', $assignment_id)->count();
+
+        return view('backend.assignments.rearrangement', compact('assignment_id', 'groupCount', 'assignment'));
     }
 
 

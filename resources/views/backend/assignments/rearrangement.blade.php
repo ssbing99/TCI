@@ -7,6 +7,7 @@
     <div class="card">
         <div class="card-header">
             <h3 class="page-title d-inline">Rearrangement</h3>
+            @if($groupCount == 0)
             @can('lesson_create')
                 <div class="float-right">
                     <a href="{{ route('admin.assignments.rearrangement.create', [$assignment_id]) }}"
@@ -14,6 +15,12 @@
 
                 </div>
             @endcan
+                @endif
+                <div class="float-right mr-2">
+                    <a href="{{ route('admin.assignments.index', ['lesson_id' => $assignment->lesson->id]) }}@if(request('lesson_id')){{'?lesson_id='.request('lesson_id')}}@endif"
+                       class="btn btn-danger">Back</a>
+
+                </div>
         </div>
         <div class="card-body">
             <div class="d-block">
