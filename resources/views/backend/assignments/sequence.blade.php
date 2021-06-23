@@ -172,6 +172,12 @@
                 <a href="{{ route('admin.assignments.attachment', ['assignment_id'=>$assignment->id, 'group_id' => $attachment->id]) }}"
                    class="btn btn-success">Add Attachment</a>
             </div>
+
+            <div class="float-right mr-2">
+                <a href="{{ route('admin.assignments.rearrangement.list', ['assignment_id' => $assignment->id]) }}"
+                   class="btn btn-danger">Back</a>
+
+            </div>
         </div>
         <div class="card-body">
 

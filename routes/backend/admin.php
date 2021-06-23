@@ -259,7 +259,7 @@ Route::get('assignments/{assignment_id}/rearrangement', ['uses' => 'Admin\Assign
 Route::post('assignments/{assignment_id}/rearrangement', ['uses' => 'Admin\AssignmentsController@storeRearrangement', 'as' => 'assignments.rearrangement.create']);
 Route::get('assignments/{assignment_id}/rearrangement/edit/{id}', ['uses' => 'Admin\AssignmentsController@editRearrangement', 'as' => 'assignments.rearrangement.edit']);
 Route::post('assignments/{assignment_id}/rearrangement/update/{id}', ['uses' => 'Admin\AssignmentsController@updateRearrangement', 'as' => 'assignments.rearrangement.update']);
-Route::get('assignments/{assignment_id}/rearrangement/delete/{id}', ['uses' => 'Admin\AssignmentsController@deleteRearrangement', 'as' => 'assignments.rearrangement.delete']);
+Route::delete('assignments/{assignment_id}/rearrangement/delete/{id}', ['uses' => 'Admin\AssignmentsController@deleteRearrangement', 'as' => 'assignments.rearrangement.delete']);
 
 //attachment
 Route::get('assignments/{assignment_id}/attachment/list/{group_id}', ['uses' => 'Admin\AssignmentsController@attachmentList', 'as' => 'assignments.attachment.list']);
