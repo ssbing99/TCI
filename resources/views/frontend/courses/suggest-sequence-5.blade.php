@@ -33,7 +33,7 @@
         <div class="container">
             <div class="col-12">
                 <p class="assign-content clearfix">Drag and drop the images then click on ' Save Position ' button to rearrange the sequence</p>
-                <a href="{{ route('submission.attachment.suggest.sequence', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id, 'groupId' => $groupId,'resetPic' => 1]) }}" class="btn btn-primary btn-padding br-24 mb-2">Reset</a>
+                <a href="{{ route('submission.attachment.suggest.sequence', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id,'resetPic' => 1]) }}" class="btn btn-primary btn-padding br-24 mb-2">Reset</a>
                 <div id="imageListId">
                     @foreach($attachments as $item)
                         @if(
@@ -79,7 +79,7 @@
                     @endforeach
                 </div>
 
-                <form id="seqForm" name="seqForm" method="post" action="{{route('submission.attachment.suggest.sequence.new', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id, 'groupId' => $groupId])}}">
+                <form id="seqForm" name="seqForm" method="post" action="{{route('submission.attachment.suggest.sequence.new', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id])}}">
                     @csrf
                     <input type="hidden" name="changeSeq" id="changeSeq" value="">
                     <button type="button" onclick="seqFormSubmit(this.form)" name="btnSubmit" class="btn btn-primary btn-padding br-24">Save Position</button>

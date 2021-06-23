@@ -89,7 +89,7 @@
                                     <div class="flexbox clearfix mb-5">
                                         <img src="{{$item->user->picture}}" alt="" />
                                         <div class="flexcontent clearfix">
-                                            <div class="student-name clearfix">Critique by {{$item->user->full_name}}<div class="bottom">September 14, 2020</div></div>
+                                            <div class="student-name clearfix">Critique by {{$item->user->full_name}}<div class="bottom">{{$item->created_at->diffforhumans()}}</div></div>
                                             <p class="assign-content clearfix">{!! nl2br($item->content) !!}</p>
                                             @if(isset($item->media) && !$item->media->isEmpty())
                                                 @foreach($item->media as $_media)

@@ -85,9 +85,9 @@
 {{--                        <a href="{{ route('submission.attachment.suggest.sequence', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id, 'groupId' => $sub_attachments->first()->a_group_id]) }}" class="btn btn-primary btn-padding br-24 mb-2">Suggest New Sequence</a>--}}
 
                         @if($assignment->rearrangement == 0 || ( $assignment->rearrangement == 1 && !is_null($assignment->rearrangement_type) && $assignment->rearrangement_type == 'student'))
-                            <a href="{{ route('submission.attachment.suggest.sequence', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id, 'groupId' => '0']) }}" class="btn btn-primary btn-padding br-24 mb-2">Suggest New Sequence</a>
+                            <a href="{{ route('submission.attachment.suggest.sequence', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id]) }}" class="btn btn-primary btn-padding br-24 mb-2">Suggest New Sequence</a>
                         @elseif($assignment->rearrangement == 1 && !is_null($assignment->rearrangement_type) && $assignment->rearrangement_type == 'admin')
-                            <a href="{{ route('submission.attachment.suggest.sequence', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id, 'groupId' => $sub_attachments->first()->a_group_id]) }}" class="btn btn-primary btn-padding br-24 mb-2">Suggest New Sequence</a>
+                            <a href="{{ route('submission.attachment.suggest.sequence', ['assignment_id' => $assignment->id, 'submission_id' => $submission->id]) }}" class="btn btn-primary btn-padding br-24 mb-2">Suggest New Sequence</a>
                         @endif
 
                         <!-- SUGGESTION -->
@@ -137,7 +137,7 @@
                                     <div class="flexbox clearfix mb-5">
                                         <img src="{{$item->user->picture}}" alt="" />
                                         <div class="flexcontent clearfix">
-                                            <div class="student-name clearfix">Critique by {{$item->user->full_name}}<div class="bottom">September 14, 2020</div></div>
+                                            <div class="student-name clearfix">Critique by {{$item->user->full_name}}<div class="bottom">{{$item->created_at->diffforhumans()}}</div></div>
                                             <p class="assign-content clearfix">{!! nl2br($item->content) !!}</p>
                                             @if(isset($item->media) && !$item->media->isEmpty())
                                                 @foreach($item->media as $_media)

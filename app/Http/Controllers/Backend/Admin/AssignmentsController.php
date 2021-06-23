@@ -186,6 +186,13 @@ class AssignmentsController extends Controller
                     $view .= $edit;
                 }
 
+                if ($has_delete) {
+                    $delete = view('backend.datatable.action-delete')
+                        ->with(['route' => route('admin.assignments.rearrangement.delete', ['id' => $q->id, 'assignment_id' => $request->assignment_id])])
+                        ->render();
+                    $view .= $delete;
+                }
+
                 return $view;
             })
             ->rawColumns(['actions'])
@@ -977,6 +984,17 @@ class AssignmentsController extends Controller
 
             // Only delete attachment as the media might be using by student
             $attachment->delete();
+        }
+
+        return back();
+    }
+
+    public function deleteRearrangement($assignment_id, $id)
+    {
+        $attach_group = AssignmentAttachmentGroup::findOrFail($id);
+
+        if($attach_group != null){
+            $attach_group->delete();
         }
 
         return back();

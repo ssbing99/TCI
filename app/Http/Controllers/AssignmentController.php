@@ -616,7 +616,7 @@ class AssignmentController extends Controller
         return redirect()->route('submission.show', ['id' => $assignment_id])->withFlashSuccess('Submission created!');
     }
 
-    public function storeNewSequence(Request $request, $assignment_id, $submission_id, $groupId)
+    public function storeNewSequence(Request $request, $assignment_id, $submission_id)
     {
         $assignment = Assignment::find($assignment_id);
 
@@ -629,15 +629,17 @@ class AssignmentController extends Controller
         $attachmentGroup = null;
         $rearrangement = null;
 
-        if($reTypeAD) {
-            $attachmentGroup = AssignmentAttachmentGroup::findOrFail($groupId);
-            $rearrangement = $assignment->rearrangementGroup();
-            $attachments = $rearrangement->attachments;
-        }
+//        if($reTypeAD) {
+//            $attachmentGroup = AssignmentAttachmentGroup::findOrFail($groupId);
+//            $rearrangement = $assignment->rearrangementGroup();
+//            $attachments = $rearrangement->attachments;
+//        }
+//
+//        if($reTypeST) {
+//            $attachments = $submission->attachments;
+//        }
 
-        if($reTypeST) {
-            $attachments = $submission->attachments;
-        }
+        $attachments = $submission->attachments;
 
         \Log::info($request->changeSeq);
 
@@ -655,7 +657,7 @@ class AssignmentController extends Controller
                     $new_seq = $seqArray['d' . $item->id];
                 }
 
-                $new_attach = $this->createSuggestAttachmentClass($reTypeAD? $attachmentGroup->id: 0, $submission->id, $submission->user->id, auth()->user()->id);
+                $new_attach = $this->createSuggestAttachmentClass($item->a_group_id, $submission->id, $submission->user->id, auth()->user()->id);
                 $new_attach->position = $new_seq;
                 $new_attach->save();
 
@@ -1191,7 +1193,7 @@ class AssignmentController extends Controller
         return view($view_path, compact('assignment','submission', 'attachments'));
     }
 
-    public function attachmentSuggestSequence($assignment_id, $submission_id, $groupId)
+    public function attachmentSuggestSequence($assignment_id, $submission_id)
     {
         $assignment = Assignment::where('id', $assignment_id)->where('published', '=', 1)->first();
 
@@ -1202,18 +1204,20 @@ class AssignmentController extends Controller
         $attachmentGroup = null;
         $attachments = null;
 
-        if($reTypeAD) {
-            $attachmentGroup = AssignmentAttachmentGroup::findOrFail($groupId);
-            $attachments = $attachmentGroup->attachments;
-        }
+//        if($reTypeAD) {
+//            $attachmentGroup = AssignmentAttachmentGroup::findOrFail($groupId);
+//            $attachments = $attachmentGroup->attachments;
+//        }
+//
+//        if($reTypeST) {
+//            $attachments = $submission->attachments;
+//        }
 
-        if($reTypeST) {
-            $attachments = $submission->attachments;
-        }
+        $attachments = $submission->attachments;
 
         $view_path = returnPathByTheme($this->path.'.courses.suggest-sequence', 5,'-');
 
-        return view($view_path, compact('assignment','submission', 'attachments','groupId'));
+        return view($view_path, compact('assignment','submission', 'attachments'));
     }
 
     public function updateSequence(Request $request, $assignment_id, $submission_id)

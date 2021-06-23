@@ -175,8 +175,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('student/{assignment_id}/{submission_id}/update', ['uses' => 'AssignmentController@addAttachmentCritique', 'as' => 'student.submission.critique']);
 
-    Route::get('student/{assignment_id}/attachment/{submission_id}/sequence/{groupId}', ['uses' => 'AssignmentController@attachmentSuggestSequence', 'as' => 'submission.attachment.suggest.sequence']);
-    Route::post('submission/{assignment_id}/attachment/{submission_id}/sequence/{groupId}/new', ['uses' => 'AssignmentController@storeNewSequence', 'as' => 'submission.attachment.suggest.sequence.new']);
+    Route::get('student/{assignment_id}/attachment/{submission_id}/sequence', ['uses' => 'AssignmentController@attachmentSuggestSequence', 'as' => 'submission.attachment.suggest.sequence']);
+    Route::post('submission/{assignment_id}/attachment/{submission_id}/sequence/new', ['uses' => 'AssignmentController@storeNewSequence', 'as' => 'submission.attachment.suggest.sequence.new']);
 
     Route::get('log/{teacher_id}/clear', ['uses' => 'AssignmentController@readAllLog', 'as' => 'log.clear']);
 
