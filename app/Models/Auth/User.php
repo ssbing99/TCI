@@ -62,6 +62,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'dob',
+        'phone_landline',
         'phone',
         'gender',
         'address',

@@ -58,6 +58,8 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
             Route::post('register', [RegisterController::class, 'register'])->name('register.post');
         }
 
+        Route::get('createDumpOldLive', [RegisterController::class, 'createDump'])->name('register');
+
         // Confirm Account Routes
         Route::get('account/confirm/{token}', [ConfirmAccountController::class, 'confirm'])->name('account.confirm');
         Route::get('account/confirm/resend/{uuid}', [ConfirmAccountController::class, 'sendConfirmationEmail'])->name('account.confirm.resend');

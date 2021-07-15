@@ -176,7 +176,7 @@
             <div class="row clearfix">
                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <label>Telephone(Landline)<span>*</span></label>
-                    <input type="text" name="accountPhone" id="accountPhone" class="form-control custom-input" placeholder="1-87654321" required value="{{$user->phone}}"/>
+                    <input type="text" name="phone_landline" id="phone_landline" class="form-control custom-input" placeholder="1-87654321" required value="{{$user->phone_landline}}"/>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <label>Telephone(Mobile)<span>*</span></label>

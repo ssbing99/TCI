@@ -88,7 +88,7 @@ class ProfileController extends Controller
         \Log::info($request->all());
         $output = $this->userRepository->update(
             $request->user()->id,
-            $request->only('first_name', 'last_name','dob', 'phone', 'gender', 'address', 'city', 'postal', 'pincode', 'state', 'country', 'avatar_type', 'avatar_location'),
+            $request->only('first_name', 'last_name','dob', 'phone', 'phone_landline', 'gender', 'address', 'city', 'postal', 'pincode', 'state', 'country', 'avatar_type', 'avatar_location'),
             $request->has('avatar_location') ? $request->file('avatar_location') : false
         );
         if($request->user()->hasRole('teacher')){
