@@ -60,7 +60,7 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <img src="{{asset("assets_new/images/gift.png")}}" alt="Gift">
                     <p>A virtual classroom / social-interactive experience... As a TCI student, you’ll receive valuable critiques and advice from your instructor, timely answers to your questions and be able to discuss all that is happening on your course with fellow classmates. Sign up for a no-strings-attached account, enroll for a course and you are set to begin!</p>
-                    <center><a class="btn btn-outline-primary btn-lg" href="gifts.html">Gift a Course</a></center>
+                    <center><a class="btn btn-outline-primary btn-lg" href="{{route('gifts.all')}}">Gift a Course</a></center>
                 </div>
             </div>
         </div>
