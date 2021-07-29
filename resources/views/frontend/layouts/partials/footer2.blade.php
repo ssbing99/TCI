@@ -120,7 +120,12 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="copyright1">
                         <a href="/privacy-policy">Privacy Policy</a> | <a href="/sitemap">Sitemap</a> | <a href="/enquiries/new">Contact</a> |
-                        Copyright©2020.TheCompellingImage | Powered by : <a href="http://www.digiinteracts.com/" target="_blank">DigiInteracts.com</a>
+                        @if($footer_data->copyright_text->status == 1 && strlen($footer_data->copyright_text->text) >0)
+                            {!!  $footer_data->copyright_text->text !!}
+                        @else
+                            Copyright©2020.TheCompellingImage
+                        @endif
+                        | Powered by : <a href="http://www.digiinteracts.com/" target="_blank">DigiInteracts.com</a>
                     </div>
                 </div>
             </div>

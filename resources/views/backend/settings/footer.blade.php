@@ -65,7 +65,7 @@
 
         <div class="card-body" id="footer">
             <input type="hidden" id="footer_data" name="footer_data">
-            <div class="form-group row">
+            <div class="form-group row" style="display: none;">
                 {{ html()->label(__('labels.backend.general_settings.footer.short_description'))->class('col-md-2 form-control-label')->for('short_description') }}
                 <div class="col-md-8">
                     {{ html()->textarea()
@@ -84,7 +84,7 @@
                 </div>
             </div>
             @for($i=1; $i<=3; $i++)
-                <div class="form-group row">
+                <div class="form-group row" style="display: none;">
                     {{ html()->label(__('labels.backend.general_settings.footer.section_'.$i))->class('col-md-2 form-control-label')->for('section'.$i) }}
                     <div class="col-md-8 options">
                         <div class="row">
@@ -178,18 +178,18 @@
                 </div>
             </div>
 
-            <div class="form-group row">
-                {{ html()->label(__('labels.backend.general_settings.footer.newsletter_form'))->class('col-md-2 form-control-label')->for('newsletter_form') }}
+{{--            <div class="form-group row">--}}
+{{--                {{ html()->label(__('labels.backend.general_settings.footer.newsletter_form'))->class('col-md-2 form-control-label')->for('newsletter_form') }}--}}
 
-                <div class="col-md-2">
-                    <p style="line-height: 35px">
-                        <span class="mr-2">{{__('labels.backend.general_settings.contact.show')}}</span> {{ html()->label(html()->checkbox('')
-                                        ->checked()->class('switch-input newsletter-form status')->value(1)->checked()
-                                  . '<span class="switch-label"></span><span class="switch-handle"></span>')
-                              ->class('switch switch-sm switch-3d switch-primary')
-                          }} </p>
-                </div>
-            </div>
+{{--                <div class="col-md-2">--}}
+{{--                    <p style="line-height: 35px">--}}
+{{--                        <span class="mr-2">{{__('labels.backend.general_settings.contact.show')}}</span> {{ html()->label(html()->checkbox('')--}}
+{{--                                        ->checked()->class('switch-input newsletter-form status')->value(1)->checked()--}}
+{{--                                  . '<span class="switch-label"></span><span class="switch-handle"></span>')--}}
+{{--                              ->class('switch switch-sm switch-3d switch-primary')--}}
+{{--                          }} </p>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
             <div class="form-group row">
                 {{ html()->label(__('labels.backend.general_settings.footer.bottom_footer'))->class('col-md-2 form-control-label')->for('newsletter_form') }}
@@ -228,42 +228,42 @@
                 </div>
             </div>
 
-            <div class="form-group row">
-                {{ html()->label(__('labels.backend.general_settings.footer.footer_links'))->class('col-md-2 form-control-label')->for('footer_links') }}
+{{--            <div class="form-group row">--}}
+{{--                {{ html()->label(__('labels.backend.general_settings.footer.footer_links'))->class('col-md-2 form-control-label')->for('footer_links') }}--}}
 
-                <div class="col-md-4">
-                    {{ html()->text('')
-                        ->id('footer_link_url')
-                        ->class('form-control')
-                        ->placeholder(__('labels.backend.general_settings.footer.link_url'))
-                        }}
-                    <span class="error text-danger"></span>
+{{--                <div class="col-md-4">--}}
+{{--                    {{ html()->text('')--}}
+{{--                        ->id('footer_link_url')--}}
+{{--                        ->class('form-control')--}}
+{{--                        ->placeholder(__('labels.backend.general_settings.footer.link_url'))--}}
+{{--                        }}--}}
+{{--                    <span class="error text-danger"></span>--}}
 
-                </div>
-                <div class="col-md-2">
-                    {{ html()->text('')
-                        ->id('footer_link_label')
-                        ->class('form-control')
-                        ->placeholder(__('labels.backend.general_settings.footer.link_label'))
-                        }}
-                </div>
-                <div class="col-md-2">
-                    <button type="button"
-                            class="btn btn-block btn-light add-footer-link border">{{ trans('strings.backend.general.app_add')}}
-                        <i class="fa fa-plus"></i></button>
-                </div>
-                <div class="col-md-2">
-                    <p style="line-height: 35px">
-                        <span class="mr-2">{{__('labels.backend.general_settings.contact.show')}}</span> {{ html()->label(html()->checkbox('')
-                                        ->checked()->class('switch-input status')->value(1)
-                                  . '<span class="switch-label"></span><span class="switch-handle"></span>')
-                              ->class('switch switch-sm switch-3d switch-primary')
-                          }} </p>
-                </div>
-                <div class="col-md-8 offset-2 footer-links-container">
+{{--                </div>--}}
+{{--                <div class="col-md-2">--}}
+{{--                    {{ html()->text('')--}}
+{{--                        ->id('footer_link_label')--}}
+{{--                        ->class('form-control')--}}
+{{--                        ->placeholder(__('labels.backend.general_settings.footer.link_label'))--}}
+{{--                        }}--}}
+{{--                </div>--}}
+{{--                <div class="col-md-2">--}}
+{{--                    <button type="button"--}}
+{{--                            class="btn btn-block btn-light add-footer-link border">{{ trans('strings.backend.general.app_add')}}--}}
+{{--                        <i class="fa fa-plus"></i></button>--}}
+{{--                </div>--}}
+{{--                <div class="col-md-2">--}}
+{{--                    <p style="line-height: 35px">--}}
+{{--                        <span class="mr-2">{{__('labels.backend.general_settings.contact.show')}}</span> {{ html()->label(html()->checkbox('')--}}
+{{--                                        ->checked()->class('switch-input status')->value(1)--}}
+{{--                                  . '<span class="switch-label"></span><span class="switch-handle"></span>')--}}
+{{--                              ->class('switch switch-sm switch-3d switch-primary')--}}
+{{--                          }} </p>--}}
+{{--                </div>--}}
+{{--                <div class="col-md-8 offset-2 footer-links-container">--}}
 
-                </div>
-            </div>
+{{--                </div>--}}
+{{--            </div>--}}
         </div>
         <div class="card-footer clearfix">
             <div class="row">
