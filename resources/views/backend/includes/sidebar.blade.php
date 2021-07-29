@@ -265,24 +265,24 @@
 {{--                                    <span class="title">@lang('menus.backend.sidebar.forums-category.title')</span>--}}
 {{--                                </a>--}}
 {{--                            </li>--}}
-                            <li class="nav-item ">
-                                <a class="nav-link {{ $request->segment(2) == 'faqs' ? 'active' : '' }}"
-                                   href="{{ route('admin.faqs.index') }}">
-                                    <span class="title">@lang('menus.backend.sidebar.faqs.title')</span>
-                                </a>
-                            </li>
+{{--                            <li class="nav-item ">--}}
+{{--                                <a class="nav-link {{ $request->segment(2) == 'faqs' ? 'active' : '' }}"--}}
+{{--                                   href="{{ route('admin.faqs.index') }}">--}}
+{{--                                    <span class="title">@lang('menus.backend.sidebar.faqs.title')</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
                             <li class="nav-item ">
                                 <a class="nav-link {{ $request->segment(2) == 'contact' ? 'active' : '' }}"
                                    href="{{ route('admin.contact-settings') }}">
                                     <span class="title">@lang('menus.backend.sidebar.contact.title')</span>
                                 </a>
                             </li>
-                            <li class="nav-item ">
-                                <a class="nav-link {{ $request->segment(2) == 'newsletter' ? 'active' : '' }}"
-                                   href="{{ route('admin.newsletter-settings') }}">
-                                    <span class="title">@lang('menus.backend.sidebar.newsletter-configuration.title')</span>
-                                </a>
-                            </li>
+{{--                            <li class="nav-item ">--}}
+{{--                                <a class="nav-link {{ $request->segment(2) == 'newsletter' ? 'active' : '' }}"--}}
+{{--                                   href="{{ route('admin.newsletter-settings') }}">--}}
+{{--                                    <span class="title">@lang('menus.backend.sidebar.newsletter-configuration.title')</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
                             <li class="nav-item ">
                                 <a class="nav-link {{ $request->segment(2) == 'footer' ? 'active' : '' }}"
                                    href="{{ route('admin.footer-settings') }}">
