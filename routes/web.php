@@ -57,18 +57,18 @@ Route::get('blog/{slug?}', 'BlogController@getIndex')->name('blogs.index');
 Route::post('blog/{id}/comment', 'BlogController@storeComment')->name('blogs.comment');
 Route::get('blog/comment/delete/{id}', 'BlogController@deleteComment')->name('blogs.comment.delete');
 
-Route::get('teachers', 'Frontend\HomeController@getTeachers')->name('teachers.index');
-Route::get('teachers/{id}/show', 'Frontend\HomeController@showTeacher')->name('teachers.show');
+Route::get('instructors', 'Frontend\HomeController@getTeachers')->name('teachers.index');
+Route::get('instructors/{id}/show', 'Frontend\HomeController@showTeacher')->name('teachers.show');
 
 
 Route::post('newsletter/subscribe', 'Frontend\HomeController@subscribe')->name('subscribe');
 
 //============Course Routes=================//
 Route::get('courses', ['uses' => 'CoursesController@all', 'as' => 'courses.all']);
-Route::get('course/{slug}', ['uses' => 'CoursesController@show', 'as' => 'courses.show']);
-Route::get('course/{slug}/addreview', ['uses' => 'CoursesController@reviewShow', 'as' => 'courses.review.show']);
-//Route::post('course/payment', ['uses' => 'CoursesController@payment', 'as' => 'courses.payment']);
-Route::post('course/{course_id}/rating', ['uses' => 'CoursesController@rating', 'as' => 'courses.rating']);
+Route::get('courses/{slug}', ['uses' => 'CoursesController@show', 'as' => 'courses.show']);
+Route::get('courses/{slug}/addreview', ['uses' => 'CoursesController@reviewShow', 'as' => 'courses.review.show']);
+//Route::post('courses/payment', ['uses' => 'CoursesController@payment', 'as' => 'courses.payment']);
+Route::post('courses/{course_id}/rating', ['uses' => 'CoursesController@rating', 'as' => 'courses.rating']);
 Route::get('category/{category}/courses', ['uses' => 'CoursesController@getByCategory', 'as' => 'courses.category']);
 Route::post('courses/{id}/review', ['uses' => 'CoursesController@addReview', 'as' => 'courses.review']);
 Route::get('courses/review/{id}/edit', ['uses' => 'CoursesController@editReview', 'as' => 'courses.review.edit']);
@@ -80,7 +80,7 @@ Route::get('reviews', ['uses' => 'CoursesController@allReviews', 'as' => 'course
 //============Longterm Program Routes=================//
 Route::get('programs', ['uses' => 'ProgramsController@all', 'as' => 'programs.all']);
 Route::get('programs/{slug}', ['uses' => 'ProgramsController@show', 'as' => 'programs.show']);
-//Route::post('course/payment', ['uses' => 'CoursesController@payment', 'as' => 'courses.payment']);
+//Route::post('courses/payment', ['uses' => 'CoursesController@payment', 'as' => 'courses.payment']);
 Route::post('programs/{course_id}/rating', ['uses' => 'ProgramsController@rating', 'as' => 'programs.rating']);
 Route::get('category/{category}/programs', ['uses' => 'ProgramsController@getByCategory', 'as' => 'programs.category']);
 Route::post('programs/{id}/review', ['uses' => 'ProgramsController@addReview', 'as' => 'programs.review']);
@@ -91,7 +91,7 @@ Route::get('programs/review/{id}/delete', ['uses' => 'ProgramsController@deleteR
 //============Store Routes=================//
 Route::get('store', ['uses' => 'StoreController@all', 'as' => 'store.all']);
 Route::get('store/{slug}', ['uses' => 'StoreController@show', 'as' => 'store.show']);
-//Route::post('course/payment', ['uses' => 'CoursesController@payment', 'as' => 'store.payment']);
+//Route::post('courses/payment', ['uses' => 'CoursesController@payment', 'as' => 'store.payment']);
 //Route::post('store/{course_id}/rating', ['uses' => 'StoreController@rating', 'as' => 'store.rating']);
 //Route::get('category/{category}/courses', ['uses' => 'StoreController@getByCategory', 'as' => 'store.category']);
 //Route::post('store/{id}/review', ['uses' => 'StoreController@addReview', 'as' => 'store.review']);
@@ -101,9 +101,9 @@ Route::get('store/{slug}', ['uses' => 'StoreController@show', 'as' => 'store.sho
 
 //============Workshop Routes=================//
 Route::get('workshops', ['uses' => 'WorkshopsController@all', 'as' => 'workshops.all']);
-Route::get('workshop/{slug}', ['uses' => 'WorkshopsController@show', 'as' => 'workshops.show']);
-//Route::post('workshop/payment', ['uses' => 'WorkshopsController@payment', 'as' => 'workshops.payment']);
-Route::post('workshop/{workshop_id}/rating', ['uses' => 'WorkshopsController@rating', 'as' => 'workshops.rating']);
+Route::get('workshops/{slug}', ['uses' => 'WorkshopsController@show', 'as' => 'workshops.show']);
+//Route::post('workshops/payment', ['uses' => 'WorkshopsController@payment', 'as' => 'workshops.payment']);
+Route::post('workshops/{workshop_id}/rating', ['uses' => 'WorkshopsController@rating', 'as' => 'workshops.rating']);
 //Route::get('category/{category}/workshops', ['uses' => 'WorkshopsController@getByCategory', 'as' => 'workshops.category']);
 Route::post('workshops/{id}/review', ['uses' => 'WorkshopsController@addReview', 'as' => 'workshops.review']);
 Route::get('workshops/review/{id}/edit', ['uses' => 'WorkshopsController@editReview', 'as' => 'workshops.review.edit']);
@@ -123,7 +123,7 @@ Route::get('gifts/purchase/status', ['uses' => 'GiftsController@status'])->name(
 //============Bundle Routes=================//
 Route::get('bundles', ['uses' => 'BundlesController@all', 'as' => 'bundles.all']);
 Route::get('bundle/{slug}', ['uses' => 'BundlesController@show', 'as' => 'bundles.show']);
-//Route::post('course/payment', ['uses' => 'CoursesController@payment', 'as' => 'courses.payment']);
+//Route::post('courses/payment', ['uses' => 'CoursesController@payment', 'as' => 'courses.payment']);
 Route::post('bundle/{bundle_id}/rating', ['uses' => 'BundlesController@rating', 'as' => 'bundles.rating']);
 Route::get('category/{category}/bundles', ['uses' => 'BundlesController@getByCategory', 'as' => 'bundles.category']);
 Route::post('bundles/{id}/review', ['uses' => 'BundlesController@addReview', 'as' => 'bundles.review']);
@@ -200,9 +200,9 @@ Route::get('/faqs', 'Frontend\HomeController@getFaqs')->name('faqs');
 
 Route::get('/how-it-works', [HomeController::class, 'howItWork'])->name('howitwork');
 
-Route::get('/gallery', [HomeController::class, 'showGallery'])->name('gallery');
+Route::get('/student_galleries', [HomeController::class, 'showGallery'])->name('gallery');
 
-Route::get('/mentorship', [HomeController::class, 'showMentorship'])->name('mentorship');
+Route::get('pages/mentorship', [HomeController::class, 'showMentorship'])->name('mentorship');
 Route::get('/mentorship-register', ['uses' => 'CartController@singleCheckoutMentorship', 'as' => 'mentorship.enroll.get']);
 Route::post('/mentorship-register', ['uses' => 'CartController@singleCheckoutMentorship', 'as' => 'mentorship.enroll']);
 
@@ -285,5 +285,6 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']
 });
 
 Route::group(['namespace' => 'Frontend', 'as' => 'frontend.'], function () {
-    Route::get('/{page?}', [HomeController::class, 'index'])->name('index');
+    Route::get('{page?}', [HomeController::class, 'index'])->name('index');
+    Route::get('pages/{page?}', [HomeController::class, 'indexForPages'])->name('indexForPages');
 });
