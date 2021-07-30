@@ -768,6 +768,7 @@ return array (
       array (
         'name' => 'Name',
         'bg_image' => 'BG Image',
+        'bg_video' => 'BG Video',
         'overlay' =>
         array (
           'title' => 'Overlay',

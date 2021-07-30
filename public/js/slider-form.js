@@ -56,7 +56,7 @@ function validateForm(form) {
         success = false;
     }
 
-    if ($('input[name="image"]').val() == "") {
+    if ($('input[name="image"]').val() == "" && $('input[name="video_file"]').val() == "") {
         if($('input[name="old_image"]').length == 0){
             $('.error-list').append('<p class="mb-0">The BG Image field is required</p>')
             success = false;

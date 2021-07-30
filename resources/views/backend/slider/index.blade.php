@@ -50,6 +50,7 @@
                                 <th>@lang('labels.general.id')</th>
                                 <th>@lang('labels.backend.hero_slider.fields.name')</th>
                                 <th>@lang('labels.backend.hero_slider.fields.bg_image')</th>
+                                <th>@lang('labels.backend.hero_slider.fields.bg_video')</th>
                                 <th>@lang('labels.backend.hero_slider.fields.sequence')</th>
                                 <th>@lang('labels.backend.hero_slider.fields.status')</th>
                                 @if( request('show_deleted') == 1 )
@@ -73,7 +74,14 @@
                                         {{$item->name}}
                                     </td>
                                     <td>
+                                        @if($item->bg_image != null)
                                         <img src="{{asset('storage/uploads/'.$item->bg_image)}}" height="50px">
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($item->bg_video != null)
+                                        <img src="{{asset('assets_new/images/play-button.png')}}" alt="" height="50px"/>
+                                        @endif
                                     </td>
                                     <td>
                                         {{ $item->sequence }}

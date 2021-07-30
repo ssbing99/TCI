@@ -669,7 +669,8 @@ return array (
       'fields' => 
       array (
         'bg_image' => 'BG Image',
-        'buttons' => 
+          'bg_video' => 'BG Video',
+        'buttons' =>
         array (
           'add' => 'Add',
           'label' => 'Étiquette',

@@ -339,7 +339,8 @@ return array (
       array (
         'status' => 'الحالة',
         'bg_image' => 'صورة BG',
-        'buttons' => 
+          'bg_video' => 'BG Video',
+        'buttons' =>
         array (
           'add' => 'إضافة',
           'label' => 'ضع الكلمة المناسبة',
