@@ -42,17 +42,29 @@ class SliderController extends Controller
      */
     public function store(Request $request)
     {
+        ini_set('memory_limit', '-1');
+        if (!file_exists(public_path('storage/uploads'))) {
+            mkdir(public_path('storage/uploads'), 0777);
+            mkdir(public_path('storage/upload/thumb'), 0777);
+        }
+
         $this->validate($request, [
             'name' => 'required',
-            'image' => 'required|file',
+            'image' => 'required_without:video_file|file',
+            'video_file' => 'required_without:image|file',
         ]);
 
         $request = $this->saveFiles($request);
+
+        \Log::info($request->video_file);
         $sequence = Slider::max('sequence');
         $sequence += 1;
         $slide = new Slider();
         $slide->name = $request->name;
         $slide->bg_image = $request->image;
+        if ($request->video_file != null) {
+            $slide->bg_video = $request->video_file;
+        }
         $slide->overlay = $request->overlay;
         $slide->sequence = $sequence;
         $slide->content = $request->dataJson;
@@ -94,6 +106,12 @@ class SliderController extends Controller
      */
     public function update(Request $request, $id)
     {
+        ini_set('memory_limit', '-1');
+        if (!file_exists(public_path('storage/uploads'))) {
+            mkdir(public_path('storage/uploads'), 0777);
+            mkdir(public_path('storage/upload/thumb'), 0777);
+        }
+
         $this->validate($request, [
             'name' => 'required',
         ]);
@@ -102,6 +120,10 @@ class SliderController extends Controller
         $slide = Slider::findOrFail($id);
         if($request->image != ""){
             $slide->bg_image = $request->image;
+        }
+
+        if ($request->video_file != null) {
+            $slide->bg_video = $request->video_file;
         }
         $slide->name = $request->name;
         $slide->overlay = ($request->overlay == "") ? 0 : 1 ;

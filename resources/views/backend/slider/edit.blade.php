@@ -67,10 +67,26 @@
                     <input type="hidden" value="{{$slide->bg_image}}" name="old_image">
                 </div>
                 <div class="col-md-2">
+                    @if($slide->bg_image != null)
                     <img src="{{asset('storage/uploads/'.$slide->bg_image)}}" height="50px">
+                    @endif
                 </div>
             </div>
             <div class="row form-group">
+                {{ html()->label('Video')->class('col-md-2 form-control-label')->for('video') }}
+
+                <div class="col-md-8">
+                    {!! Form::file('video_file', ['class' => 'form-control d-inline-block', 'placeholder' => trans('labels.backend.lessons.enter_video_url'),'id'=>'video_file', 'accept' => "video/avi,video/mpeg,video/quicktime,video/mp4"  ]) !!}
+                    <input type="hidden" value="{{$slide->bg_video}}" name="old_video">
+                    <p class="help-text mb-0 font-italic">*Video must not more than 5 MB. Only accept MP4, MPEG, AVI type.</p>
+                </div>
+                <div class="col-md-2">
+                    @if($slide->bg_video != null)
+                        <img src="{{asset('assets_new/images/play-button.png')}}" alt="" height="50px"/>
+                    @endif
+                </div>
+            </div>
+            <div class="row form-group" style="display: none;">
                 {{ html()->label(__('labels.backend.hero_slider.fields.overlay.title'))->class('col-md-2 form-control-label')->for('overlay') }}
 
                 <div class="col-md-10">
@@ -101,7 +117,7 @@
                          }}
                 </div><!--col-->
             </div>
-            <div class="row form-group">
+            <div class="row form-group" style="display: none;">
                 {{ html()->label(__('labels.backend.hero_slider.fields.widget.title'))->class('col-md-2 form-control-label')->for('widget') }}
                 <div class="col-md-10">
                     {!! Form::select('widget', [""=>trans('labels.backend.hero_slider.fields.widget.select_widget'),1=>trans('labels.backend.hero_slider.fields.widget.search_bar'),2=>trans('labels.backend.hero_slider.fields.widget.countdown_timer')],  (request('widget')) ? request('widget') : old('widget'), ['class' => 'form-control ', 'id'=>'widget']) !!}
@@ -163,7 +179,15 @@
             });
 
 
-
+            $(document).on('change', 'input[name="video_file"]', function () {
+                var $this = $(this);
+                $(this.files).each(function (key, value) {
+                    if (value.size > 5000000) {
+                        alert('"' + value.name + '"' + 'exceeds limit of maximum file upload size')
+                        $this.val("");
+                    }
+                })
+            });
 
             $(document).on('change', '#widget', function () {
                 if ($(this).val() == 2) {
