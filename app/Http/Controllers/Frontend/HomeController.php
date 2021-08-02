@@ -327,7 +327,7 @@ class HomeController extends Controller
     public function getTeachers()
     {
         $recent_news = Blog::orderBy('created_at', 'desc')->take(2)->get();
-        $teachers = User::role('teacher')->paginate(12);
+        $teachers = User::role('teacher')->where('active','=','1')->get();
         return view($this->path . '.teachers.index', compact('teachers', 'recent_news'));
     }
 
