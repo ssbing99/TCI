@@ -26,6 +26,7 @@ use Carbon\Traits\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Newsletter;
 
 /**
@@ -883,6 +884,20 @@ class HomeController extends Controller
 //            return back()->withFlashSuccess(trans('alerts.frontend.course.completed'));
         }
         return back();
+    }
+
+    /**
+     * Generate certificate for completed course
+     */
+    public function sitemaps()
+    {
+
+        try{
+            return Storage::disk('local')->get('sitemap-'.str_slug(config('app.name')).'/sitemap-index.xml');
+        }
+        catch (\Exception $e){
+            abort(404);
+        }
     }
 
     public function getPrevGallery() {
