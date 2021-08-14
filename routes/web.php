@@ -247,6 +247,7 @@ Route::group(['middleware' => 'auth'], function () {
 //    Route::get('pdf/raw', function () {
 //        return view('pdf.index');
 //    })->name('status');
+    Route::get('sitemap', 'Frontend\HomeController@sitemaps')->name('getSitemap');
     Route::post('pdf', 'Frontend\HomeController@generatePdf')->name('generate.pdf');
 
     Route::post('cart/offline-payment', ['uses' => 'CartController@offlinePayment', 'as' => 'cart.offline.payment']);

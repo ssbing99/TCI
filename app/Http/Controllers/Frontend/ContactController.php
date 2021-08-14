@@ -72,8 +72,7 @@ class ContactController extends Controller
         $contact->save();
 
         Mail::send(new SendContact($request));
-        Session::flash('alert','Response received successfully!');
-
+        \Session::flash('alert','Response received successfully!');
 
 
         return redirect()->back();

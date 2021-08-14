@@ -119,7 +119,13 @@
             <div class="row clearfix">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="copyright1">
-                        <a href="/privacy-policy">Privacy Policy</a> | <a href="/sitemap">Sitemap</a> | <a href="/enquiries/new">Contact</a> |
+                        @if(($footer_data->bottom_footer_links->status == 1) && (count($footer_data->bottom_footer_links->links) > 0))
+                            @foreach($footer_data->bottom_footer_links->links as $item)
+                                <a href="{{url($item->link)}}">{{$item->label}}</a> |
+                            @endforeach
+                        @endif
+
+                        <a href="{{route('getSitemap')}}">Sitemap</a> | <a href="/contact">Contact</a> |
                         @if($footer_data->copyright_text->status == 1 && strlen($footer_data->copyright_text->text) >0)
                             {!!  $footer_data->copyright_text->text !!}
                         @else

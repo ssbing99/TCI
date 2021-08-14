@@ -153,7 +153,7 @@
                                         <div class="course-content clearfix">
                                             <p class="title clearfix"><a href="{{ route('courses.show', [$course->slug]) }}">{{$course->title}}</a></p>
                                             <div class="desc clearfix">By :
-                                                @foreach($course->teachers as $teacher){{$teacher->first_name}}&nbsp;@endforeach<span class="duration">{{$course->duration}} Days</span></div>
+                                                @foreach($course->teachers as $teacher){{$teacher->full_name}}&nbsp;@endforeach<span class="duration">{{$course->duration}} Days</span></div>
                                         </div>
                                     </div>
                                 </div>

@@ -44,7 +44,7 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-12">
-                    @if(session('alert'))
+                    @if(session()->has('alert'))
                         <div class="alert alert-success">
                             {{ session('alert') }}
                         </div>
