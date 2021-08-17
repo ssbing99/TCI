@@ -78,46 +78,9 @@
         </div>
     </section>
 
-    <section class="bg-f9f9f9 clearfix">
-        <div class="container">
-            <div class="row clearfix">
-                <div class="col-12">
-                    <div class="test-title clearfix">Testimonial</div>
-                    <div id="testcarousel" class="carousel slide" data-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="test-items clearfix">
-                                    <img src="{{asset('assets_new/images/quote.jpg')}}" alt="Images goes here" />
-                                    <p class="clearfix">A great introduction to the genre of street photography, taught by legendary photographer, "Akash." I felt Akash's enthusiasm and passion for capturing life on the street throughout this online-interactive course. Akash showed me how to "see" photos amid the chaos, how to capture the emotion and energy of life on the street and how to edit my images for greatest impact. An online course that will build your confidence, hone your skills, and load your photography with an enthusiastic vision. Thanks G.M.B. Akash. You're the master.</p>
-                                    <div class="test-name">
-                                        <img src="{{asset('assets_new/images/paul-lavergne.jpg')}}" alt="Images goes here" />
-                                        <p>Paul Lavergne<span>Street Photography with G.M.B.</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="test-items clearfix">
-                                    <img src="{{asset('assets_new/images/quote.jpg')}}" alt="Images goes here" />
-                                    <p class="clearfix">A great introduction to the genre of street photography, taught by legendary photographer, "Akash." I felt Akash's enthusiasm and passion for capturing life on the street throughout this online-interactive course. Akash showed me how to "see" photos amid the chaos, how to capture the emotion and energy of life on the street and how to edit my images for greatest impact. An online course that will build your confidence, hone your skills, and load your photography with an enthusiastic vision. Thanks G.M.B. Akash. You're the master.</p>
-                                    <div class="test-name">
-                                        <img src="{{asset('assets_new/images/paul-lavergne.jpg')}}" alt="Images goes here" />
-                                        <p>Paul Lavergne<span>Street Photography with G.M.B.</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <a class="carousel-control-prev" href="#testcarousel" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#testcarousel" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <!-- Start recent testimonial section
+        ============================================= -->
+    @include('frontend.layouts.partials.custom_testimonial');
+    <!-- End recent blogs section
+        ============================================= -->
 @endsection

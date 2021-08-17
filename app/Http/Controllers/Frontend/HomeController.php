@@ -204,7 +204,8 @@ class HomeController extends Controller
     public function howItWork()
     {
         $faq_categories = Category::has('faqs', '>', 0)->get();
-        return view($this->path . '.how-it-work', compact('faq_categories'));
+        $testimonials = Testimonial::where('status', '=', 1)->orderBy('created_at', 'desc')->get();
+        return view($this->path . '.how-it-work', compact('faq_categories', 'testimonials'));
     }
 
     public function facebookDeleteData(Request $request){
